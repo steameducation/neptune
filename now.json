@@ -1,0 +1,7 @@
+{
+    "version": 1,
+    "name": "Neptune",
+    "type": "static",
+    "alias": "v1.neptune",
+    "files": ["dist"]
+}

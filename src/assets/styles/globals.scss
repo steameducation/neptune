@@ -1,0 +1,21 @@
+* {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent !important;
+    &:focus {
+        outline: none !important;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i');
