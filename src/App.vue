@@ -15,6 +15,7 @@
                     :height="pianoHeight"
                     :x="canvas.width - pianoWidth - 25"
                     :y="-12 + 25"
+                    opacity="0.4"
                 />
             </svg>
         </div>

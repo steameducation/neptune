@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.16",
-    "@fortawesome/free-regular-svg-icons": "^5.8.0",
     "@fortawesome/free-solid-svg-icons": "^5.8.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "gsap": "^2.1.2",

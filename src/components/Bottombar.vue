@@ -1,20 +1,18 @@
 <template>
     <div class="bottombar">
-        <div class="btnMute">
-            <!-- <Volume /> -->
-            <FontAwesomeIcon icon="volume-up" color="white"></FontAwesomeIcon>
+        <div class="btnMute" @click="toggleMute">
+            <FontAwesomeIcon
+                :icon="muted ? 'volume-mute' : 'volume-up'"
+                color="white"
+            ></FontAwesomeIcon>
         </div>
 
-        <div class="pianoMode">
-            <!-- <Arrow
-                orientation="left"
-                class="arrow"
-                @click.native="changePianoMode(-1)"
-            /> -->
+        <div class="pianoMode" :class="{ hide: mode !== 'piano' }">
             <FontAwesomeIcon
                 icon="arrow-circle-left"
                 color="white"
-                @click.native="changePianoMode(-1)"
+                class="arrow"
+                @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
             <div class="pianoModeText">
                 {{ pianoMode }}
@@ -22,13 +20,9 @@
             <FontAwesomeIcon
                 icon="arrow-circle-right"
                 color="white"
-                @click.native="changePianoMode(1)"
-            ></FontAwesomeIcon>
-            <!-- <Arrow
-                orientation="right"
                 class="arrow"
-                @click.native="changePianoMode(1)"
-            /> -->
+                @click="changePianoMode(1)"
+            ></FontAwesomeIcon>
         </div>
 
         <div class="modes">
@@ -55,12 +49,15 @@
             </div>
         </div>
 
-        <div class="btnPiano" @click="togglePiano">
-            <Piano width="50px" height="50px" />
+        <div
+            class="btnPiano"
+            :class="{ active: showPiano, hide: mode !== 'piano' }"
+            @click="togglePiano"
+        >
+            <Piano fill="black" width="30" />
         </div>
 
         <div class="btnLock" :class="{ active: locked }" @click="toggleLock">
-            <!-- <Lock :locked="locked" /> -->
             <FontAwesomeIcon
                 :icon="locked ? 'unlock' : 'lock'"
                 color="white"
@@ -68,17 +65,16 @@
         </div>
 
         <div class="btnShare" @click="toggleShare">
-            <!-- <Share /> -->
             <FontAwesomeIcon icon="link" color="white"></FontAwesomeIcon>
         </div>
 
         <div class="btnFullscreen" @click="toggleFullscreen">
-            <!-- <Resize /> -->
+            <!-- <FontAwesomeIcon icon="expand" color="white"></FontAwesomeIcon> -->
+            <Resize />
         </div>
 
         <div class="btnInfo" @click="toggleInfo">
             <FontAwesomeIcon icon="info" color="white"></FontAwesomeIcon>
-            <!-- <Info /> -->
         </div>
     </div>
 </template>
@@ -88,6 +84,7 @@ import Vue from 'vue'
 import store from '@/store.js'
 
 import Piano from '@/components/Piano'
+import Resize from '@/components/deprecated/Resize'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -103,6 +100,7 @@ import {
     faLink,
     faArrowCircleLeft,
     faArrowCircleRight,
+    faExpand,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(
@@ -117,7 +115,8 @@ library.add(
     faShareSquare,
     faLink,
     faArrowCircleLeft,
-    faArrowCircleRight
+    faArrowCircleRight,
+    faExpand
 )
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
@@ -127,6 +126,7 @@ import screenfull from 'screenfull'
 export default {
     components: {
         Piano,
+        Resize,
     },
 
     computed: {
@@ -143,13 +143,18 @@ export default {
         },
 
         muted() {
-            return Howler.mute()
+            return store.muted
+        },
+
+        showPiano() {
+            return store.showPiano
         },
     },
 
     methods: {
         toggleMute() {
-            Howler.mute(!Howler.mute())
+            store.muted = !store.muted
+            Howler.mute(store.muted)
         },
 
         togglePiano() {
@@ -231,24 +236,28 @@ export default {
         cursor: pointer;
     }
     div {
-        width: 80px;
+        width: 70px;
         background: var(--white);
-        border: 1px solid black;
+        border: 0.1px solid var(--greyish);
         &.active {
             background: var(--active);
         }
         img {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
+            padding: 10px;
         }
     }
     .modePiano {
-        border-top-left-radius: 50%;
-        border-bottom-left-radius: 50%;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
     }
     .modeRecord {
-        border-top-right-radius: 50%;
-        border-bottom-right-radius: 50%;
+        img {
+            padding: 10px;
+        }
+        border-top-right-radius: 30px;
+        border-bottom-right-radius: 30px;
     }
 }
 
@@ -258,8 +267,6 @@ export default {
 .btnShare,
 .btnFullscreen,
 .btnInfo {
-    width: 30px;
-    height: 30px;
     fill: var(--white);
     border: 1px solid var(--greyish);
     border-radius: 50%;
@@ -275,5 +282,9 @@ export default {
             border-color: var(--active);
         }
     }
+}
+
+.hide {
+    visibility: hidden;
 }
 </style>

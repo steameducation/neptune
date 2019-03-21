@@ -129,7 +129,7 @@ export default {
     stroke: #707070 !important;
 }
 
-.active {
+g .active {
     fill: var(--active);
 }
 </style>
