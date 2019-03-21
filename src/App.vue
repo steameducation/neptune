@@ -9,6 +9,13 @@
                     :key="planet.name"
                     :index="index"
                 />
+                <Piano
+                    v-if="showPiano"
+                    :width="pianoWidth"
+                    :height="pianoHeight"
+                    :x="canvas.width - pianoWidth - 25"
+                    :y="-12 + 25"
+                />
             </svg>
         </div>
         <Bottombar ref="bottombar" />
@@ -18,6 +25,7 @@
 <script>
 import Planet from '@/components/Planet.vue'
 import Bottombar from '@/components/Bottombar.vue'
+import Piano from '@/components/Piano.vue'
 import Vue from 'vue'
 
 import store from '@/store.js'
@@ -28,6 +36,7 @@ export default {
 
     components: {
         Planet,
+        Piano,
         Bottombar,
     },
 
@@ -37,6 +46,16 @@ export default {
         },
         canvas() {
             return store.canvas
+        },
+        pianoWidth() {
+            // return 426.629
+            return this.canvas.width * 0.2
+        },
+        pianoHeight() {
+            return 243.788
+        },
+        showPiano() {
+            return store.showPiano
         },
     },
 

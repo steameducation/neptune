@@ -49,7 +49,7 @@ const store = new Vue.observable({
             size: 84,
         },
     ],
-    modes: [
+    pianoModes: [
         'ionian',
         'dorian',
         'phrygian',
@@ -58,10 +58,12 @@ const store = new Vue.observable({
         'aeolian',
         'locrian',
     ],
-    mode: 'ionian',
-    scale: 'c-major',
+    pianoMode: 'ionian',
+    mode: 'piano', // 'piano', 'nasa', 'record'
     showPiano: true,
-    isLocked: false,
+    showShare: false,
+    showInfo: false,
+    locked: false,
     sounds: {},
 })
 
@@ -87,9 +89,7 @@ notes.forEach(note => {
         autoplay: false,
         volume: 0.6,
         loop: false,
-        onend: function() {
-            console.log('ended')
-        },
+        onend: function() {},
     })
 })
 

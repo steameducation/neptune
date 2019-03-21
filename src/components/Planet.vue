@@ -1,5 +1,5 @@
 <template>
-    <svg :x="x" :y="y" width="300px" height="300px">
+    <svg :id="`planet-${name}`" :x="x" :y="y" width="300px" height="300px">
         <defs>
             <filter
                 :id="`shadow-${name}`"
@@ -24,7 +24,7 @@
                 :filter="`url(#shadow-${name})`"
                 @click="click"
             ></circle>
-            <text :y="size / 2 + 20" class="planetLabel">
+            <text :y="size / 2 + 30" class="planetLabel">
                 {{ $t(name) }}
             </text>
         </g>
@@ -35,6 +35,8 @@
 import teoria from 'teoria'
 import store from '@/store.js'
 import utils from '@/utils.js'
+
+import Draggable from 'gsap/Draggable'
 
 export default {
     name: 'Planet',
@@ -67,9 +69,21 @@ export default {
         },
         note() {
             const idx = this.index === 7 ? 0 : this.index
-            const n = teoria.scale('c', store.mode).simple()[idx]
+            let note = teoria.scale('c', store.pianoMode).simple()[idx]
+
+            // If it's sharp, convert to flat
+            if (note.includes('#'))
+                note = teoria
+                    .note(note)
+                    .enharmonics()
+                    .find(en => en.accidentalValue === -1) // find the one with just one flat
+                    .scientific()
+                    .slice(0, -1) // remove octave
+
+            note = note[0].toUpperCase() + note.slice(1, note.length)
             const octave = this.index !== 7 ? '3' : '4'
-            return `${n.toUpperCase()}${octave}`
+            const ret = `${note.toUpperCase()}${octave}`
+            return ret
         },
         amplitude() {
             return utils.map(this.y, 0, store.canvas.height, 1, 0)
@@ -80,19 +94,26 @@ export default {
     },
 
     watch: {
-        note() {
-            console.log('note is now', this.note)
-        },
         amplitude() {
             this.sound.volume(this.amplitude)
         },
     },
 
+    mounted() {
+        const id = `#planet-${this.name}`
+        Draggable.create(id, {
+            cursor: 'pointer',
+            type: 'top,left',
+            // onDrag: e => {
+            //     store.planets[this.index].x = e.x
+            //     store.planets[this.index].y = e.y
+            // },
+        })
+    },
+
     methods: {
         click() {
-            const v = this.sound.volume()
             this.sound.play()
-            this.sound.fade(v, 0, 1000)
         },
     },
 }
@@ -104,6 +125,7 @@ svg {
     text {
         text-anchor: middle;
         fill: #707070;
+        font-size: 24px;
     }
 }
 </style>
