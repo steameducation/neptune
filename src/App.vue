@@ -29,12 +29,18 @@
                 <FontAwesomeIcon icon="times" color="white"></FontAwesomeIcon>
             </div>
         </div>
+        <div v-show="showShare || showInfo" class="overlay">
+            <ShareOverlay v-if="showShare" />
+            <InfoOverlay v-if="showInfo" />
+        </div>
     </div>
 </template>
 
 <script>
 import Planet from '@/components/Planet.vue'
 import Bottombar from '@/components/Bottombar.vue'
+import ShareOverlay from '@/components/ShareOverlay.vue'
+import InfoOverlay from '@/components/InfoOverlay.vue'
 import Piano from '@/components/Piano.vue'
 import Vue from 'vue'
 
@@ -50,6 +56,8 @@ export default {
         Planet,
         Piano,
         Bottombar,
+        ShareOverlay,
+        InfoOverlay,
     },
 
     computed: {
@@ -76,6 +84,14 @@ export default {
 
         isFullscreen() {
             return store.isFullscreen
+        },
+
+        showInfo() {
+            return store.showInfo
+        },
+
+        showShare() {
+            return store.showShare
         },
     },
 
@@ -199,7 +215,8 @@ export default {
     border: 1px solid lightgrey;
 }
 
-#canvas {
+#canvas,
+.overlay {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -222,5 +239,11 @@ export default {
             color: var(--active) !important;
         }
     }
+}
+
+.overlay {
+    background: black;
+    opacity: 0.8;
+    color: var(--active);
 }
 </style>

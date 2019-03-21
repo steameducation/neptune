@@ -9,6 +9,15 @@ export default {
         saturn: 'Saturno',
         uranus: 'Urano',
         neptune: 'Neptuno',
+        modes: {
+            ionian: 'jónico',
+            dorian: 'dórico',
+            phrygian: 'frígio',
+            lydian: 'lídio',
+            mixolydian: 'mixolídio',
+            aeolian: 'aelóio',
+            locrian: 'lócrio',
+        },
     },
 
     en: {
@@ -21,5 +30,14 @@ export default {
         saturn: 'Saturn',
         uranus: 'Uranus',
         neptune: 'Neptune',
+        modes: {
+            ionian: 'ionian',
+            dorian: 'dorian',
+            phrygian: 'phrygian',
+            lydian: 'lydian',
+            mixolydian: 'mixolydian',
+            aeolian: 'aeolian',
+            locrian: 'locrian',
+        },
     },
 }

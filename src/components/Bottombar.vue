@@ -8,6 +8,10 @@
             ></FontAwesomeIcon>
         </div>
 
+        <div class="btnLanguage" @click="toggleLanguage">
+            <div>{{ locale.toUpperCase() }}</div>
+        </div>
+
         <div class="pianoMode" :class="{ hide: mode !== 'piano' }">
             <FontAwesomeIcon
                 icon="arrow-circle-left"
@@ -16,7 +20,7 @@
                 @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
             <div class="pianoModeText">
-                {{ pianoMode | modify }}
+                {{ $t(`modes.${pianoMode}`) }}
             </div>
             <FontAwesomeIcon
                 icon="arrow-circle-right"
@@ -93,7 +97,7 @@ import Vue from 'vue'
 import store from '@/store.js'
 
 import Piano from '@/components/Piano'
-import Resize from '@/components/deprecated/Resize'
+import Resize from '@/components/Resize'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -114,6 +118,9 @@ import {
     faMicrophone,
     faSatellite,
 } from '@fortawesome/free-solid-svg-icons'
+
+import { faFacebookF, faTwitter } from '@fortawesome/fontawesome-free-brands'
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(
     faInfo,
@@ -131,7 +138,9 @@ library.add(
     faExpand,
     faTimes,
     faMicrophone,
-    faSatellite
+    faSatellite,
+    faFacebookF,
+    faTwitter
 )
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
@@ -177,6 +186,10 @@ export default {
 
         isFullscreen() {
             return store.isFullscreen
+        },
+
+        locale() {
+            return this.$i18n.locale
         },
     },
 
@@ -233,6 +246,13 @@ export default {
         changeMode(mode) {
             store.mode = mode
         },
+
+        toggleLanguage() {
+            const idx = store.locales.findIndex(
+                locale => locale === this.$i18n.locale
+            )
+            this.$i18n.locale = store.locales[(idx + 1) % store.locales.length]
+        },
     },
 }
 </script>
@@ -260,7 +280,7 @@ export default {
 }
 
 .pianoMode {
-    grid-column: span 4;
+    grid-column: span 3;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -338,6 +358,7 @@ export default {
 }
 
 .btnMute,
+.btnLanguage,
 .btnPiano,
 .btnLock,
 .btnShare,
@@ -369,6 +390,10 @@ export default {
             // }
         }
     }
+}
+
+.btnLanguage {
+    color: var(--white);
 }
 
 .hide {

@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 import { Howl } from 'howler'
 
+import messages from '@/messages.js'
+
 const store = new Vue.observable({
     canvas: {
         width: 1920,
@@ -49,16 +51,8 @@ const store = new Vue.observable({
             size: 84,
         },
     ],
-    pianoModes: [
-        'ionian',
-        'dorian',
-        'phrygian',
-        'lydian',
-        'mixolydian',
-        'aeolian',
-        'locrian',
-    ],
-    pianoMode: 'ionian',
+    pianoModes: Object.keys(messages.en.modes),
+    pianoMode: Object.keys(messages.en.modes)[0],
     mode: 'piano', // 'piano', 'nasa', 'record'
     showPiano: true,
     showShare: false,
@@ -67,6 +61,8 @@ const store = new Vue.observable({
     muted: false,
     isFullscreen: false,
     sounds: {},
+    soundscapes: {},
+    locales: Object.keys(messages),
 })
 
 const notes = [
@@ -85,6 +81,7 @@ const notes = [
     'C4',
 ]
 
+// Load note sounds
 notes.forEach(note => {
     store.sounds[note] = new Howl({
         src: `sounds/piano/${note}.mp3`,
@@ -92,6 +89,16 @@ notes.forEach(note => {
         volume: 0.6,
         loop: false,
         onend: function() {},
+    })
+})
+
+// Load planet's sounds (soundscapes)
+store.planets.forEach(planet => {
+    store.soundscapes[planet] = new Howl({
+        src: `sounds/nasa/${planet}.mp3`,
+        autoplay: false,
+        volume: 0.6,
+        loop: true,
     })
 })
 
