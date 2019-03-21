@@ -65,6 +65,7 @@ const store = new Vue.observable({
     showInfo: false,
     locked: false,
     muted: false,
+    isFullscreen: false,
     sounds: {},
 })
 

@@ -76,13 +76,13 @@ export default {
                 note = teoria
                     .note(note)
                     .enharmonics()
-                    .find(en => en.accidentalValue === -1) // find the one with just one flat
+                    .find(en => en.accidentalValue() === -1) // find the one with just one flat
                     .scientific()
                     .slice(0, -1) // remove octave
 
             note = note[0].toUpperCase() + note.slice(1, note.length)
             const octave = this.index !== 7 ? '3' : '4'
-            const ret = `${note.toUpperCase()}${octave}`
+            const ret = `${note}${octave}`
             return ret
         },
         amplitude() {
@@ -113,7 +113,13 @@ export default {
 
     methods: {
         click() {
+            console.log('playing', this.note)
+            this.$root.$emit('noteOn', this.note)
             this.sound.play()
+            this.sound.on('end', () => {
+                console.log('ended')
+                this.$root.$emit('noteOff', this.note)
+            })
         },
     },
 }

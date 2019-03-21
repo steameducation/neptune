@@ -10,16 +10,25 @@
                     :index="index"
                 />
                 <Piano
-                    v-if="showPiano"
+                    v-show="showPiano"
                     :width="pianoWidth"
                     :height="pianoHeight"
                     :x="canvas.width - pianoWidth - 25"
                     :y="-12 + 25"
+                    :highlight="true"
                     opacity="0.4"
                 />
             </svg>
         </div>
         <Bottombar ref="bottombar" />
+        <div v-show="isFullscreen" class="grid">
+            <div
+                class="btnFullscreenClose btnFullscreen"
+                @click="toggleFullscreen"
+            >
+                <FontAwesomeIcon icon="times" color="white"></FontAwesomeIcon>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -28,6 +37,8 @@ import Planet from '@/components/Planet.vue'
 import Bottombar from '@/components/Bottombar.vue'
 import Piano from '@/components/Piano.vue'
 import Vue from 'vue'
+
+import screenfull from 'screenfull'
 
 import store from '@/store.js'
 import { sample, random } from 'lodash'
@@ -45,26 +56,43 @@ export default {
         planets() {
             return store.planets
         },
+
         canvas() {
             return store.canvas
         },
+
         pianoWidth() {
             // return 426.629
             return this.canvas.width * 0.2
         },
+
         pianoHeight() {
             return 243.788
         },
+
         showPiano() {
             return store.showPiano
+        },
+
+        isFullscreen() {
+            return store.isFullscreen
         },
     },
 
     mounted() {
-        this.positionPlanetsHorizontally()
+        // this.positionPlanetsHorizontally()
+        this.positionPlanetsSequentially()
     },
 
     methods: {
+        positionPlanetsSequentially() {
+            for (let i = 0; i < this.planets.length; i++) {
+                const x = i * (this.canvas.width / this.planets.length) + 100
+                const y = this.canvas.height / 2 - 100
+                Vue.set(this.planets[i], 'x', x)
+                Vue.set(this.planets[i], 'y', y)
+            }
+        },
         positionPlanetsHorizontally() {
             let indexes = this.planets.map((planet, index) => index)
             for (let i = 0; i < this.planets.length; i++) {
@@ -137,6 +165,10 @@ export default {
                 console.log(`Took ${t1 - t0} miliseconds`)
             }
         },
+
+        toggleFullscreen() {
+            screenfull.toggle()
+        },
     },
 }
 </script>
@@ -174,5 +206,21 @@ export default {
     left: 0;
     right: 0;
     height: 100%;
+}
+
+.grid {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.btnFullscreenClose {
+    grid-column: -2;
+    border: 0;
+    &:hover {
+        svg {
+            color: var(--active) !important;
+        }
+    }
 }
 </style>

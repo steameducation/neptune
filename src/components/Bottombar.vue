@@ -1,7 +1,8 @@
 <template>
-    <div class="bottombar">
+    <div class="bottombar grid" :class="{ fullscreen: isFullscreen }">
         <div class="btnMute" @click="toggleMute">
             <FontAwesomeIcon
+                class="arrow"
                 :icon="muted ? 'volume-mute' : 'volume-up'"
                 color="white"
             ></FontAwesomeIcon>
@@ -15,7 +16,7 @@
                 @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
             <div class="pianoModeText">
-                {{ pianoMode }}
+                {{ pianoMode | modify }}
             </div>
             <FontAwesomeIcon
                 icon="arrow-circle-right"
@@ -31,21 +32,31 @@
                 :class="{ active: mode === 'piano' }"
                 @click="changeMode('piano')"
             >
-                <Piano width="50" height="50" />
+                <Piano width="50" height="50" x="-250" :highlight="false" />
             </div>
             <div
                 class="modeNASA"
                 :class="{ active: mode === 'nasa' }"
                 @click="changeMode('nasa')"
             >
-                <img src="/img/svg/nasa.svg" alt="" />
+                <!-- <img src="/img/svg/nasa.svg" alt="" /> -->
+                <FontAwesomeIcon
+                    icon="satellite"
+                    fill="white"
+                    class="modeIcon"
+                ></FontAwesomeIcon>
             </div>
             <div
                 class="modeRecord"
                 :class="{ active: mode === 'record' }"
                 @click="changeMode('record')"
             >
-                <img src="/img/svg/microphone.svg" alt="" />
+                <!-- <img src="/img/svg/microphone.svg" alt="" /> -->
+                <FontAwesomeIcon
+                    class="modeIcon"
+                    icon="microphone"
+                    fill="white"
+                ></FontAwesomeIcon>
             </div>
         </div>
 
@@ -68,13 +79,13 @@
             <FontAwesomeIcon icon="link" color="white"></FontAwesomeIcon>
         </div>
 
+        <div class="btnInfo" @click="toggleInfo">
+            <FontAwesomeIcon icon="info" color="white"></FontAwesomeIcon>
+        </div>
+
         <div class="btnFullscreen" @click="toggleFullscreen">
             <!-- <FontAwesomeIcon icon="expand" color="white"></FontAwesomeIcon> -->
             <Resize />
-        </div>
-
-        <div class="btnInfo" @click="toggleInfo">
-            <FontAwesomeIcon icon="info" color="white"></FontAwesomeIcon>
         </div>
     </div>
 </template>
@@ -101,6 +112,9 @@ import {
     faArrowCircleLeft,
     faArrowCircleRight,
     faExpand,
+    faTimes,
+    faMicrophone,
+    faSatellite,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(
@@ -116,17 +130,30 @@ library.add(
     faLink,
     faArrowCircleLeft,
     faArrowCircleRight,
-    faExpand
+    faExpand,
+    faTimes,
+    faMicrophone,
+    faSatellite
 )
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
 import { Howler } from 'howler'
 import screenfull from 'screenfull'
 
+window.screenfull = screenfull
+
 export default {
     components: {
         Piano,
         Resize,
+    },
+
+    filters: {
+        modify(mode) {
+            if (mode === 'ionian') return mode + ' (major)'
+            else if (mode === 'aeolian') return mode + ' (minor)'
+            else return mode
+        },
     },
 
     computed: {
@@ -149,6 +176,23 @@ export default {
         showPiano() {
             return store.showPiano
         },
+
+        isFullscreen() {
+            return store.isFullscreen
+        },
+    },
+
+    watch: {
+        isFullscreen() {
+            console.log('isFullscreen is now', this.isFullscreen)
+        },
+    },
+
+    created() {
+        // NOTE: computed property is not picking up change automatically
+        screenfull.on('change', () => {
+            store.isFullscreen = screenfull.isFullscreen
+        })
     },
 
     methods: {
@@ -178,9 +222,14 @@ export default {
         },
 
         changePianoMode(dir) {
-            const idx = store.modes.findIndex(mode => mode === store.mode)
-            if (idx + dir < 0 || idx + dir >= store.modes.length) return
-            store.mode = store.modes[idx + dir]
+            const idx = store.pianoModes.findIndex(
+                mode => mode === store.pianoMode
+            )
+            const newIdx =
+                idx + dir < 0
+                    ? store.pianoModes.length - 1
+                    : (idx + dir) % store.pianoModes.length
+            store.pianoMode = store.pianoModes[newIdx]
         },
 
         changeMode(mode) {
@@ -191,19 +240,25 @@ export default {
 </script>
 
 <style lang="scss">
-.bottombar {
-    position: absolute;
-    bottom: 0;
-    background: rgba(168, 168, 168, 0.2);
-    border-top: 1px solid var(--greyish);
-    width: 100%;
-    height: 100px;
-    opacity: 0.8;
+.grid {
     display: grid;
     grid-template-columns: repeat(14, 1fr);
     grid-gap: 10px;
     justify-items: center;
     align-items: center;
+    width: 100%;
+    height: 100px;
+    bottom: 0;
+    position: absolute;
+}
+
+.bottombar {
+    background: rgba(168, 168, 168, 0.2);
+    border-top: 1px solid var(--greyish);
+    opacity: 0.8;
+    &.fullscreen {
+        display: none;
+    }
 }
 
 .pianoMode {
@@ -218,11 +273,17 @@ export default {
         width: 50%;
         color: var(--greyish);
         height: 26px;
+        font-size: 14px;
+        line-height: 26px;
     }
     .arrow {
-        width: 30px;
-        margin: 0 10px;
-        fill: var(--grey);
+        width: 25px;
+        height: 25px;
+        margin: 0 8px;
+        color: var(--grey);
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
 
@@ -236,9 +297,10 @@ export default {
         cursor: pointer;
     }
     div {
-        width: 70px;
+        width: 60px;
+        height: 60px;
         background: var(--white);
-        border: 0.1px solid var(--greyish);
+        // border: 0.1px solid var(--greyish);
         &.active {
             background: var(--active);
         }
@@ -246,6 +308,24 @@ export default {
             width: 55px;
             height: 55px;
             padding: 10px;
+        }
+        .modeNASA,
+        .modeRecord {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .modeIcon {
+            height: 75%;
+            width: 75%;
+            padding: 5px;
+            // border: 0.1px solid red;
+        }
+        .modeRecord svg,
+        .modeNASA svg {
+            width: 100%;
+            height: 50%;
         }
     }
     .modePiano {
@@ -279,7 +359,11 @@ export default {
     &:hover {
         cursor: pointer;
         &:not(.active) {
-            border-color: var(--active);
+            border-color: var(--active); // other hover alternative
+            // svg {
+            //     color: var(--active);
+            //     fill: var(--active); // because maximize
+            // }
         }
     }
 }

@@ -21,7 +21,8 @@
     "teoria": "^2.5.0",
     "tone": "^13.4.9",
     "vue": "^2.6.0",
-    "vue-i18n": "^8.9.0"
+    "vue-i18n": "^8.9.0",
+    "webmidi": "^2.3.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
