@@ -32,18 +32,17 @@
                 :class="{ active: mode === 'piano' }"
                 @click="changeMode('piano')"
             >
-                <Piano width="50" height="50" x="-250" :highlight="false" />
+                <Piano class="modeIcon" :highlight="false" />
             </div>
             <div
                 class="modeNASA"
                 :class="{ active: mode === 'nasa' }"
                 @click="changeMode('nasa')"
             >
-                <!-- <img src="/img/svg/nasa.svg" alt="" /> -->
                 <FontAwesomeIcon
                     icon="satellite"
-                    fill="white"
-                    class="modeIcon"
+                    color="white"
+                    class="modeIcon fa-lg"
                 ></FontAwesomeIcon>
             </div>
             <div
@@ -51,11 +50,10 @@
                 :class="{ active: mode === 'record' }"
                 @click="changeMode('record')"
             >
-                <!-- <img src="/img/svg/microphone.svg" alt="" /> -->
                 <FontAwesomeIcon
                     class="modeIcon"
                     icon="microphone"
-                    fill="white"
+                    color="white"
                 ></FontAwesomeIcon>
             </div>
         </div>
@@ -65,7 +63,7 @@
             :class="{ active: showPiano, hide: mode !== 'piano' }"
             @click="togglePiano"
         >
-            <Piano fill="black" width="30" />
+            <Piano fill="black" />
         </div>
 
         <div class="btnLock" :class="{ active: locked }" @click="toggleLock">
@@ -265,6 +263,7 @@ export default {
     grid-column: span 4;
     width: 100%;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     .pianoModeText {
@@ -297,30 +296,17 @@ export default {
         cursor: pointer;
     }
     div {
-        width: 60px;
-        height: 60px;
-        background: var(--white);
-        // border: 0.1px solid var(--greyish);
+        width: 65px;
+        height: 55px;
+        // background: var(--white);
         &.active {
             background: var(--active);
         }
-        img {
-            width: 55px;
-            height: 55px;
-            padding: 10px;
-        }
-        .modeNASA,
-        .modeRecord {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
         .modeIcon {
-            height: 75%;
-            width: 75%;
-            padding: 5px;
-            // border: 0.1px solid red;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            display: flex;
         }
         .modeRecord svg,
         .modeNASA svg {
@@ -331,6 +317,13 @@ export default {
     .modePiano {
         border-top-left-radius: 30px;
         border-bottom-left-radius: 30px;
+        --border-color: var(--greyish);
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        border-left: 1px solid var(--border-color);
+    }
+    .modeNASA {
+        border: 1px solid var(--greyish);
     }
     .modeRecord {
         img {
@@ -338,6 +331,9 @@ export default {
         }
         border-top-right-radius: 30px;
         border-bottom-right-radius: 30px;
+        border-top: 1px solid var(--greyish);
+        border-bottom: 1px solid var(--greyish);
+        border-right: 1px solid var(--greyish);
     }
 }
 
@@ -347,12 +343,19 @@ export default {
 .btnShare,
 .btnFullscreen,
 .btnInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     fill: var(--white);
     border: 1px solid var(--greyish);
     border-radius: 50%;
-    width: 52px;
-    height: 52px;
+    width: 55px;
+    height: 55px;
     padding: 15px;
+    svg {
+        width: 100%;
+        height: 100%;
+    }
     &.active {
         background: var(--active);
     }
