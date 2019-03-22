@@ -100,20 +100,54 @@ export default {
             return store.showShare
         },
 
-        mode() {
-            return store.mode
+        appMode() {
+            return store.appMode
         },
     },
 
     watch: {
-        mode() {
-            if (this.mode === 'record' && !store.recorder) this.initRecorder()
+        appMode() {
+            if (this.appMode === 'record' && !store.recorder)
+                this.initRecorder()
+        },
+
+        fullscreen() {
+            if (screenfull.enabled) screenfull.toggle()
         },
     },
 
     created() {
         this.$root.$on('recordStart', this.recordStart)
         this.$root.$on('recordStop', this.recordStop)
+        document.addEventListener('keyup', evt => {
+            // bottom bar
+            if (evt.key === 'l') store.locked = !store.locked
+            if (evt.key === 'p') store.showPiano = !store.showPiano
+            if (evt.key === 'i') store.showInfo = !store.showInfo
+            if (evt.key === 'v') store.muted = !store.muted
+            if (evt.key === 'm') {
+                if (!evt.shiftKey) this.$refs.bottombar.changePianoMode(1)
+                else this.$refs.bottombar.changePianoMode(-1)
+            }
+            // if (evt.key === 's') store.showShare = !store.showShare
+            // if (evt.key === 'f') store.fullscreen = !store.fullscreen
+
+            // app modes
+            if (evt.key === 't') this.$refs.bottombar.toggleLanguage()
+            if (evt.key === '1') store.appMode = 'piano'
+            if (evt.key === '2') store.appMode = 'nasa'
+            if (evt.key === '3') store.appMode = 'record'
+
+            // planets
+            if (evt.key === 'a') this.$root.$emit('noteOn', 0)
+            if (evt.key === 's') this.$root.$emit('noteOn', 1)
+            if (evt.key === 'd') this.$root.$emit('noteOn', 2)
+            if (evt.key === 'f') this.$root.$emit('noteOn', 3)
+            if (evt.key === 'g') this.$root.$emit('noteOn', 4)
+            if (evt.key === 'h') this.$root.$emit('noteOn', 5)
+            if (evt.key === 'j') this.$root.$emit('noteOn', 6)
+            if (evt.key === 'k') this.$root.$emit('noteOn', 7)
+        })
     },
 
     mounted() {

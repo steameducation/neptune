@@ -3,7 +3,6 @@
         id="mypiano"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 426.629 243.788"
-        @noteOn="noteOn"
     >
         <g id="Piano" transform="translate(-1474.033 -84.212)">
             <g
@@ -165,31 +164,25 @@ export default {
 
     created() {
         if (this.highlight) {
-            this.$root.$on('noteOn', this.noteOn)
-            this.$root.$on('noteOff', this.noteOff)
+            this.$root.$on('noteOn', this.pianoOn)
+            this.$root.$on('noteOff', this.pianoOff)
         }
     },
 
     methods: {
-        noteOn(note) {
-            console.log('noteOn', note)
-            this.toggleHighglight(note)
-        },
-
-        noteOff(note) {
-            console.log('noteOff', note)
-            this.toggleHighglight(note)
-        },
-
         pianoOn(note) {
+            return
             if (!this.highlight) return
-            console.log('pianoOn', note)
-            this.toggleHighglight(note)
+            this.setHighlight(note, true)
         },
 
-        toggleHighglight(note) {
+        pianoOff(note) {
+            return
+        },
+
+        setHighlight(note, bool) {
             const key = this.$el.querySelector(`#${note}`)
-            if (!key.classList.contains('active')) key.classList.add('active')
+            if (bool) key.classList.add('active')
             else key.classList.remove('active')
         },
     },

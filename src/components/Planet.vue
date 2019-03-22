@@ -12,7 +12,7 @@
                     dx="0"
                     dy="0"
                     stdDeviation="10"
-                    v-bind="{ 'flood-color': color }"
+                    v-bind="{ 'flood-color': floodColor }"
                     flood-opacity="1"
                 />
             </filter>
@@ -22,7 +22,7 @@
                 :r="size / 2"
                 :fill="color"
                 :filter="`url(#shadow-${name})`"
-                @click="click"
+                @click="play"
             ></circle>
             <text :y="size / 2 + 30" class="planetLabel">
                 {{ $t(name) }}
@@ -35,8 +35,6 @@
 import teoria from 'teoria'
 import store from '@/store.js'
 import utils from '@/utils.js'
-
-// import recorder from '@/recorder.js'
 
 import Draggable from 'gsap/Draggable'
 
@@ -54,21 +52,32 @@ export default {
         planet() {
             return store.planets[this.index]
         },
+
         x() {
             return this.planet.x
         },
+
         y() {
             return this.planet.y
         },
+
         name() {
             return this.planet.name
         },
+
         size() {
             return this.planet.size
         },
+
         color() {
             return this.planet.color
         },
+
+        floodColor() {
+            if (!this.playing) return this.color
+            else return 'var(--active)'
+        },
+
         note() {
             const idx = this.index === 7 ? 0 : this.index
             let note = teoria.scale('c', store.pianoMode).simple()[idx]
@@ -93,6 +102,10 @@ export default {
         sound() {
             return store.sounds[this.note]
         },
+
+        playing() {
+            return store.sounds[this.note].playing()
+        },
     },
 
     watch: {
@@ -113,20 +126,28 @@ export default {
         })
     },
 
+    created() {
+        this.$root.$on('noteOn', this.noteOn)
+    },
+
     methods: {
-        click() {
-            if (store.mode === 'piano') this.playPiano()
-            else if (store.mode === 'nasa') this.playNASA()
-            else if (store.mode === 'record') this.playRecord()
+        play() {
+            this.$root.$emit('noteOn', this.index)
+        },
+
+        noteOn(index) {
+            if (index !== this.index) return
+            if (store.appMode === 'piano') this.playPiano()
+            else if (store.appMode === 'nasa') this.playNASA()
+            else if (store.appMode === 'record') this.playRecord()
         },
 
         playPiano() {
             console.log('playing', this.note)
-            this.$root.$emit('noteOn', this.note)
             this.sound.play()
             this.sound.on('end', () => {
                 console.log('ended')
-                this.$root.$emit('noteOff', this.note)
+                this.$root.$emit('noteOff', this.index)
             })
         },
 

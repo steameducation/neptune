@@ -12,7 +12,7 @@
             <div>{{ locale.toUpperCase() }}</div>
         </div>
 
-        <div class="pianoMode" :class="{ hide: mode !== 'piano' }">
+        <div class="pianoMode" :class="{ hide: appMode !== 'piano' }">
             <FontAwesomeIcon
                 icon="arrow-circle-left"
                 color="white"
@@ -20,7 +20,7 @@
                 @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
             <div class="pianoModeText">
-                {{ $t(`modes.${pianoMode}`) }}
+                {{ $t(`modes.${pianoMode}`) | alternify }}
             </div>
             <FontAwesomeIcon
                 icon="arrow-circle-right"
@@ -30,17 +30,17 @@
             ></FontAwesomeIcon>
         </div>
 
-        <div class="modes">
+        <div class="appModes">
             <div
-                class="modePiano"
-                :class="{ active: mode === 'piano' }"
+                class="appModePiano"
+                :class="{ active: appMode === 'piano' }"
                 @click="changeMode('piano')"
             >
                 <Piano class="modeIcon" :highlight="false" />
             </div>
             <div
-                class="modeNASA"
-                :class="{ active: mode === 'nasa' }"
+                class="appModeNASA"
+                :class="{ active: appMode === 'nasa' }"
                 @click="changeMode('nasa')"
             >
                 <FontAwesomeIcon
@@ -50,8 +50,8 @@
                 ></FontAwesomeIcon>
             </div>
             <div
-                class="modeRecord"
-                :class="{ active: mode === 'record' }"
+                class="appModeRecord"
+                :class="{ active: appMode === 'record' }"
                 @click="changeMode('record')"
             >
                 <FontAwesomeIcon
@@ -64,7 +64,7 @@
 
         <div
             class="btnPiano"
-            :class="{ active: showPiano, hide: mode !== 'piano' }"
+            :class="{ active: showPiano, hide: appMode !== 'piano' }"
             @click="togglePiano"
         >
             <Piano fill="black" />
@@ -156,10 +156,10 @@ export default {
     },
 
     filters: {
-        modify(mode) {
-            if (mode === 'ionian') return mode + ' (major)'
-            else if (mode === 'aeolian') return mode + ' (minor)'
-            else return mode
+        alternify(pianoMode) {
+            if (pianoMode === 'ionian') return pianoMode + ' (major)'
+            else if (pianoMode === 'aeolian') return pianoMode + ' (minor)'
+            else return pianoMode
         },
     },
 
@@ -168,8 +168,8 @@ export default {
             return store.pianoMode
         },
 
-        mode() {
-            return store.mode
+        appMode() {
+            return store.appMode
         },
 
         locked() {
@@ -190,12 +190,6 @@ export default {
 
         locale() {
             return this.$i18n.locale
-        },
-    },
-
-    watch: {
-        fullscreen() {
-            console.log('fullscreen is now', this.fullscreen)
         },
     },
 
@@ -229,12 +223,12 @@ export default {
         },
 
         toggleFullscreen() {
-            if (screenfull.enabled) screenfull.toggle()
+            store.fullscreen = !store.fullscreen
         },
 
         changePianoMode(dir) {
             const idx = store.pianoModes.findIndex(
-                mode => mode === store.pianoMode
+                pianoMode => pianoMode === store.pianoMode
             )
             const newIdx =
                 idx + dir < 0
@@ -243,8 +237,8 @@ export default {
             store.pianoMode = store.pianoModes[newIdx]
         },
 
-        changeMode(mode) {
-            store.mode = mode
+        changeMode(appMode) {
+            store.appMode = appMode
         },
 
         toggleLanguage() {
@@ -306,7 +300,7 @@ export default {
     }
 }
 
-.modes {
+.appModes {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -328,13 +322,13 @@ export default {
             padding: 10px;
             display: flex;
         }
-        .modeRecord svg,
-        .modeNASA svg {
+        .appModeRecord svg,
+        .appModeNASA svg {
             width: 100%;
             height: 50%;
         }
     }
-    .modePiano {
+    .appModePiano {
         border-top-left-radius: 30px;
         border-bottom-left-radius: 30px;
         --border-color: var(--greyish);
@@ -342,10 +336,10 @@ export default {
         border-bottom: 1px solid var(--border-color);
         border-left: 1px solid var(--border-color);
     }
-    .modeNASA {
+    .appModeNASA {
         border: 1px solid var(--greyish);
     }
-    .modeRecord {
+    .appModeRecord {
         img {
             padding: 10px;
         }
