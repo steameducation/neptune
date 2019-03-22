@@ -59,9 +59,15 @@ const store = new Vue.observable({
     showInfo: false,
     locked: false,
     muted: false,
-    isFullscreen: false,
+    fullscreen: false,
+    recording: () => {
+        return this.recorder.recording
+    },
+    recordingTimeout: null,
+    recordingPlanet: '',
     sounds: {},
     soundscapes: {},
+    recordings: {},
     locales: Object.keys(messages),
 })
 
@@ -94,8 +100,8 @@ notes.forEach(note => {
 
 // Load planet's sounds (soundscapes)
 store.planets.forEach(planet => {
-    store.soundscapes[planet] = new Howl({
-        src: `sounds/nasa/${planet}.mp3`,
+    store.soundscapes[planet.name] = new Howl({
+        src: `sounds/nasa/${planet.name}.mp3`,
         autoplay: false,
         volume: 0.6,
         loop: true,

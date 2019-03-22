@@ -18,10 +18,11 @@
                     :highlight="true"
                     opacity="0.4"
                 />
+                <Sun />
             </svg>
         </div>
         <Bottombar ref="bottombar" />
-        <div v-show="isFullscreen" class="grid">
+        <div v-show="fullscreen" class="grid">
             <div
                 class="btnFullscreenClose btnFullscreen"
                 @click="toggleFullscreen"
@@ -42,6 +43,8 @@ import Bottombar from '@/components/Bottombar.vue'
 import ShareOverlay from '@/components/ShareOverlay.vue'
 import InfoOverlay from '@/components/InfoOverlay.vue'
 import Piano from '@/components/Piano.vue'
+import Sun from '@/components/Sun.vue'
+
 import Vue from 'vue'
 
 import screenfull from 'screenfull'
@@ -49,12 +52,15 @@ import screenfull from 'screenfull'
 import store from '@/store.js'
 import { sample, random } from 'lodash'
 
+import Recorder from '@/recorder.js'
+
 export default {
     name: 'App',
 
     components: {
         Planet,
         Piano,
+        Sun,
         Bottombar,
         ShareOverlay,
         InfoOverlay,
@@ -82,8 +88,8 @@ export default {
             return store.showPiano
         },
 
-        isFullscreen() {
-            return store.isFullscreen
+        fullscreen() {
+            return store.fullscreen
         },
 
         showInfo() {
@@ -93,6 +99,21 @@ export default {
         showShare() {
             return store.showShare
         },
+
+        mode() {
+            return store.mode
+        },
+    },
+
+    watch: {
+        mode() {
+            if (this.mode === 'record' && !store.recorder) this.initRecorder()
+        },
+    },
+
+    created() {
+        this.$root.$on('recordStart', this.recordStart)
+        this.$root.$on('recordStop', this.recordStop)
     },
 
     mounted() {
@@ -103,12 +124,13 @@ export default {
     methods: {
         positionPlanetsSequentially() {
             for (let i = 0; i < this.planets.length; i++) {
-                const x = i * (this.canvas.width / this.planets.length) + 100
-                const y = this.canvas.height / 2 - 100
+                const x = i * (this.canvas.width / this.planets.length) + 150
+                const y = this.canvas.height / 2
                 Vue.set(this.planets[i], 'x', x)
                 Vue.set(this.planets[i], 'y', y)
             }
         },
+
         positionPlanetsHorizontally() {
             let indexes = this.planets.map((planet, index) => index)
             for (let i = 0; i < this.planets.length; i++) {
@@ -128,6 +150,7 @@ export default {
                 Vue.set(this.planets[i], 'x', x)
             }
         },
+
         positionPlanetsRandomly() {
             const t0 = performance.now()
             let totalIterations = 0
@@ -184,6 +207,25 @@ export default {
 
         toggleFullscreen() {
             screenfull.toggle()
+        },
+
+        setRecordingTimeout() {
+            store.recordingTimeout = window.setTimeout(() => {
+                console.log(
+                    'timeout of 5 seconds reached, so forcefully stopping the recording'
+                )
+                store.recording = false
+            }, 5000)
+        },
+
+        clearRecordingTimeout() {
+            console.log('clearing recording timeout')
+            window.clearTimeout(store.recordingTimeout)
+        },
+
+        initRecorder() {
+            console.log('initting recorder')
+            store.recorder = new Recorder(5000) // max timeout of 5 seconds
         },
     },
 }

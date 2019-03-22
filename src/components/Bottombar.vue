@@ -1,5 +1,5 @@
 <template>
-    <div class="bottombar grid" :class="{ fullscreen: isFullscreen }">
+    <div class="bottombar grid" :class="{ fullscreen: fullscreen }">
         <div class="btnMute" @click="toggleMute">
             <FontAwesomeIcon
                 class="arrow"
@@ -184,8 +184,8 @@ export default {
             return store.showPiano
         },
 
-        isFullscreen() {
-            return store.isFullscreen
+        fullscreen() {
+            return store.fullscreen
         },
 
         locale() {
@@ -194,15 +194,15 @@ export default {
     },
 
     watch: {
-        isFullscreen() {
-            console.log('isFullscreen is now', this.isFullscreen)
+        fullscreen() {
+            console.log('fullscreen is now', this.fullscreen)
         },
     },
 
     created() {
         // NOTE: computed property is not picking up change automatically
         screenfull.on('change', () => {
-            store.isFullscreen = screenfull.isFullscreen
+            store.fullscreen = screenfull.isFullscreen
         })
     },
 

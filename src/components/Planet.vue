@@ -36,6 +36,8 @@ import teoria from 'teoria'
 import store from '@/store.js'
 import utils from '@/utils.js'
 
+// import recorder from '@/recorder.js'
+
 import Draggable from 'gsap/Draggable'
 
 export default {
@@ -99,7 +101,7 @@ export default {
         },
     },
 
-    mounted() {
+    async mounted() {
         const id = `#planet-${this.name}`
         Draggable.create(id, {
             cursor: 'pointer',
@@ -113,6 +115,12 @@ export default {
 
     methods: {
         click() {
+            if (store.mode === 'piano') this.playPiano()
+            else if (store.mode === 'nasa') this.playNASA()
+            else if (store.mode === 'record') this.playRecord()
+        },
+
+        playPiano() {
             console.log('playing', this.note)
             this.$root.$emit('noteOn', this.note)
             this.sound.play()
@@ -120,6 +128,19 @@ export default {
                 console.log('ended')
                 this.$root.$emit('noteOff', this.note)
             })
+        },
+
+        playNASA() {
+            console.log('playing NASA')
+            store.soundscapes[this.name].play()
+        },
+
+        playRecord() {
+            if (!store.recorder.recording) {
+                store.recorder.start(store.recordings, this.name)
+            } else {
+                store.recorder.stop()
+            }
         },
     },
 }
