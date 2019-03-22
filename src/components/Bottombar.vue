@@ -20,7 +20,7 @@
                 @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
             <div class="pianoModeText">
-                {{ $t(`modes.${pianoMode}`) | alternify }}
+                {{ pianoModeText }}
             </div>
             <FontAwesomeIcon
                 icon="arrow-circle-right"
@@ -155,14 +155,6 @@ export default {
         Resize,
     },
 
-    filters: {
-        alternify(pianoMode) {
-            if (pianoMode === 'ionian') return pianoMode + ' (major)'
-            else if (pianoMode === 'aeolian') return pianoMode + ' (minor)'
-            else return pianoMode
-        },
-    },
-
     computed: {
         pianoMode() {
             return store.pianoMode
@@ -190,6 +182,15 @@ export default {
 
         locale() {
             return this.$i18n.locale
+        },
+
+        pianoModeText() {
+            const mode = this.$t(`modes.${this.pianoMode}`)
+            if (this.pianoMode === 'ionian')
+                return mode + ` (${this.$t('major')})`
+            else if (this.pianoMode === 'aeolian')
+                return mode + ` (${this.$t('minor')})`
+            else return mode
         },
     },
 

@@ -151,8 +151,8 @@ export default {
     },
 
     mounted() {
-        // this.positionPlanetsHorizontally()
-        this.positionPlanetsSequentially()
+        this.positionPlanetsHorizontally()
+        // this.positionPlanetsSequentially()
     },
 
     methods: {

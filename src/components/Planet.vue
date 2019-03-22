@@ -11,7 +11,7 @@
                 <feDropShadow
                     dx="0"
                     dy="0"
-                    stdDeviation="10"
+                    :stdDeviation="stdDeviation"
                     v-bind="{ 'flood-color': floodColor }"
                     flood-opacity="1"
                 />
@@ -48,6 +48,12 @@ export default {
         },
     },
 
+    data() {
+        return {
+            playing: false,
+        }
+    },
+
     computed: {
         planet() {
             return store.planets[this.index]
@@ -73,11 +79,6 @@ export default {
             return this.planet.color
         },
 
-        floodColor() {
-            if (!this.playing) return this.color
-            else return 'var(--active)'
-        },
-
         note() {
             const idx = this.index === 7 ? 0 : this.index
             let note = teoria.scale('c', store.pianoMode).simple()[idx]
@@ -96,21 +97,33 @@ export default {
             const ret = `${note}${octave}`
             return ret
         },
+
         amplitude() {
             return utils.map(this.y, 0, store.canvas.height, 1, 0)
         },
+
         sound() {
             return store.sounds[this.note]
         },
 
-        playing() {
-            return store.sounds[this.note].playing()
+        floodColor() {
+            if (!this.playing) return this.color
+            else return 'var(--active)'
+        },
+
+        stdDeviation() {
+            if (!this.playing) return 10
+            else return 30
         },
     },
 
     watch: {
         amplitude() {
             this.sound.volume(this.amplitude)
+        },
+
+        playing() {
+            console.log('playing changed to', this.playing)
         },
     },
 
@@ -128,6 +141,7 @@ export default {
 
     created() {
         this.$root.$on('noteOn', this.noteOn)
+        this.$root.$on('noteOff', this.noteOff)
     },
 
     methods: {
@@ -140,6 +154,12 @@ export default {
             if (store.appMode === 'piano') this.playPiano()
             else if (store.appMode === 'nasa') this.playNASA()
             else if (store.appMode === 'record') this.playRecord()
+            this.playing = true
+        },
+
+        noteOff(index) {
+            if (index !== this.index) return
+            this.playing = false
         },
 
         playPiano() {

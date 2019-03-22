@@ -10,14 +10,16 @@ export default {
         uranus: 'Urano',
         neptune: 'Neptuno',
         modes: {
-            ionian: 'jónico',
+            ionian: 'jónio',
             dorian: 'dórico',
             phrygian: 'frígio',
             lydian: 'lídio',
             mixolydian: 'mixolídio',
-            aeolian: 'aelóio',
+            aeolian: 'eólio',
             locrian: 'lócrio',
         },
+        major: 'maior',
+        minor: 'menor',
     },
 
     en: {
@@ -39,5 +41,7 @@ export default {
             aeolian: 'aeolian',
             locrian: 'locrian',
         },
+        major: 'major',
+        minor: 'minor',
     },
 }
