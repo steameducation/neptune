@@ -234,9 +234,18 @@ export default {
             for (let i = 0; i < this.planets.length; i++) {
                 const x = i * (this.canvas.width / this.planets.length) + 150
                 const y = this.canvas.height / 2
-                Vue.set(this.planets[i], 'x', x)
-                Vue.set(this.planets[i], 'y', y)
+                this.setPlanetPosition(this.planets[i].name, x, y)
             }
+        },
+
+        setPlanetPosition(name, x, y) {
+            // x and y attr
+            // Vue.set(this.planets[i], 'x', x)
+            // Vue.set(this.planets[i], 'y', y)
+
+            // with transforms
+            const planet = document.querySelector(`#planet-${name}`)
+            planet.setAttribute('transform', `matrix(1,0,0,1,${x},${y})`)
         },
 
         positionPlanetsHorizontally() {
@@ -254,8 +263,7 @@ export default {
                 const x =
                     index * (this.canvas.width / this.planets.length) +
                     this.canvas.width / this.planets.length / 2
-                Vue.set(this.planets[i], 'y', y)
-                Vue.set(this.planets[i], 'x', x)
+                this.setPlanetPosition(this.planets[i].name, x, y)
             }
         },
 
