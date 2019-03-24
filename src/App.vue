@@ -1,16 +1,11 @@
 <template>
     <div id="app">
         <div class="stars"></div>
-        <!-- <div class="twinkling"></div> -->
         <div id="canvas">
             <svg viewBox="0 0 1920 1080">
-                <Planet
-                    v-for="(planet, index) in planets"
-                    :key="planet.name"
-                    :index="index"
-                />
+                <Sun />
                 <Piano
-                    v-show="showPiano"
+                    v-show="showPiano && appMode === 'piano'"
                     :width="pianoWidth"
                     :height="pianoHeight"
                     :x="canvas.width - pianoWidth - 25"
@@ -18,18 +13,20 @@
                     :highlight="true"
                     opacity="0.4"
                 />
-                <Sun />
+                <Planet
+                    v-for="(planet, index) in planets"
+                    :key="planet.name"
+                    :index="index"
+                />
             </svg>
         </div>
-        <Bottombar ref="bottombar" />
-        <div v-show="fullscreen" class="grid">
-            <div
-                class="btnFullscreenClose btnFullscreen"
-                @click="toggleFullscreen"
-            >
-                <FontAwesomeIcon icon="times" color="white"></FontAwesomeIcon>
-            </div>
-        </div>
+        <Bottombar v-show="!fullscreen" ref="bottombar" />
+        <FontAwesomeIcon
+            icon="times"
+            class="btnFullscreenClose btnFullscreen"
+            color="white"
+            @click="toggleFullscreen"
+        ></FontAwesomeIcon>
         <div v-show="showShare || showInfo" class="overlay">
             <ShareOverlay v-if="showShare" />
             <InfoOverlay v-if="showInfo" />
@@ -47,10 +44,10 @@ import Sun from '@/components/Sun.vue'
 
 import Vue from 'vue'
 
-import screenfull from 'screenfull'
-
 import store from '@/store.js'
-import { sample, random } from 'lodash'
+import { sample, random, debounce } from 'lodash'
+
+import Draggable from 'gsap/Draggable'
 
 import Recorder from '@/recorder.js'
 
@@ -64,6 +61,12 @@ export default {
         Bottombar,
         ShareOverlay,
         InfoOverlay,
+    },
+
+    data() {
+        return {
+            maxDragHeight: 0,
+        }
     },
 
     computed: {
@@ -90,6 +93,7 @@ export default {
 
         fullscreen() {
             return store.fullscreen
+            // return window.screenfull.isFullscreen // NOTE: can't get this one to work!
         },
 
         showInfo() {
@@ -111,51 +115,106 @@ export default {
                 this.initRecorder()
         },
 
-        fullscreen() {
-            if (screenfull.enabled) screenfull.toggle()
+        maxDragHeight() {
+            console.log('maxDragHeight is now', this.maxDragHeight)
         },
     },
 
     created() {
         this.$root.$on('recordStart', this.recordStart)
         this.$root.$on('recordStop', this.recordStop)
-        document.addEventListener('keyup', evt => {
-            // bottom bar
-            if (evt.key === 'l') store.locked = !store.locked
-            if (evt.key === 'p') store.showPiano = !store.showPiano
-            if (evt.key === 'i') store.showInfo = !store.showInfo
-            if (evt.key === 'v') store.muted = !store.muted
-            if (evt.key === 'm') {
-                if (!evt.shiftKey) this.$refs.bottombar.changePianoMode(1)
-                else this.$refs.bottombar.changePianoMode(-1)
-            }
-            // if (evt.key === 's') store.showShare = !store.showShare
-            // if (evt.key === 'f') store.fullscreen = !store.fullscreen
-
-            // app modes
-            if (evt.key === 't') this.$refs.bottombar.toggleLanguage()
-            if (evt.key === '1') store.appMode = 'piano'
-            if (evt.key === '2') store.appMode = 'nasa'
-            if (evt.key === '3') store.appMode = 'record'
-
-            // planets
-            if (evt.key === 'a') this.$root.$emit('noteOn', 0)
-            if (evt.key === 's') this.$root.$emit('noteOn', 1)
-            if (evt.key === 'd') this.$root.$emit('noteOn', 2)
-            if (evt.key === 'f') this.$root.$emit('noteOn', 3)
-            if (evt.key === 'g') this.$root.$emit('noteOn', 4)
-            if (evt.key === 'h') this.$root.$emit('noteOn', 5)
-            if (evt.key === 'j') this.$root.$emit('noteOn', 6)
-            if (evt.key === 'k') this.$root.$emit('noteOn', 7)
+        this.initKeyboardShortcuts()
+        window.screenfull.on('change', () => {
+            store.fullscreen = window.screenfull.isFullscreen
+            this.updateDragBounds()
+        })
+        window.addEventListener('resize', () => {
+            this.updateDragBounds()
         })
     },
 
     mounted() {
         this.positionPlanetsHorizontally()
         // this.positionPlanetsSequentially()
+
+        this.planets.forEach(planet => {
+            planet.draggable = Draggable.create(`#planet-${planet.name}`, {
+                cursor: 'pointer',
+            })[0]
+        })
+
+        this.updateDragBounds()
     },
 
     methods: {
+        resize() {
+            console.log('resizing')
+            debounce(() => {
+                console.log('resizing')
+            }, 100)
+        },
+
+        initKeyboardShortcuts() {
+            document.addEventListener('keyup', evt => {
+                // bottom bar
+                if (evt.key === 'l') store.locked = !store.locked
+                if (evt.key === 'p') store.showPiano = !store.showPiano
+                if (evt.key === 'i') store.showInfo = !store.showInfo
+                if (evt.key === 'v') store.muted = !store.muted
+                if (evt.key === 'm') {
+                    if (!evt.shiftKey) this.$refs.bottombar.changePianoMode(1)
+                    else this.$refs.bottombar.changePianoMode(-1)
+                }
+                // if (evt.key === 's') store.showShare = !store.showShare
+                // if (evt.key === 'f') store.fullscreen = !store.fullscreen
+
+                // app modes
+                if (evt.key === 't') this.$refs.bottombar.toggleLanguage()
+                if (evt.key === '1') store.appMode = 'piano'
+                if (evt.key === '2') store.appMode = 'nasa'
+                if (evt.key === '3') store.appMode = 'record'
+
+                // planets
+                if (evt.key === 'a') this.$root.$emit('noteOn', 0)
+                if (evt.key === 's') this.$root.$emit('noteOn', 1)
+                if (evt.key === 'd') this.$root.$emit('noteOn', 2)
+                if (evt.key === 'f') this.$root.$emit('noteOn', 3)
+                if (evt.key === 'g') this.$root.$emit('noteOn', 4)
+                if (evt.key === 'h') this.$root.$emit('noteOn', 5)
+                if (evt.key === 'j') this.$root.$emit('noteOn', 6)
+                if (evt.key === 'k') this.$root.$emit('noteOn', 7)
+            })
+        },
+
+        getMaxDragHeight() {
+            if (this.fullscreen) {
+                return this.canvas.height
+            } else {
+                try {
+                    const h1 = document.querySelector('.bottombar').clientHeight
+                    const h2 = document.querySelector('#canvas').clientHeight
+                    let ret = (1 - h1 / h2) * this.canvas.height
+                    console.log({ h1, h2, ret })
+                    return ret
+                } catch (e) {
+                    console.log('failing silently', e)
+                    return this.canvas.height
+                }
+            }
+        },
+
+        updateDragBounds() {
+            const maxDragHeight = this.getMaxDragHeight()
+            this.planets.forEach(planet => {
+                planet.draggable.applyBounds({
+                    top: 0,
+                    left: 0,
+                    width: this.canvas.width,
+                    height: maxDragHeight,
+                })
+            })
+        },
+
         positionPlanetsSequentially() {
             for (let i = 0; i < this.planets.length; i++) {
                 const x = i * (this.canvas.width / this.planets.length) + 150
@@ -240,7 +299,7 @@ export default {
         },
 
         toggleFullscreen() {
-            screenfull.toggle()
+            window.screenfull.toggle()
         },
 
         setRecordingTimeout() {

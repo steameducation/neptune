@@ -1,5 +1,5 @@
 <template>
-    <div class="bottombar grid" :class="{ fullscreen: fullscreen }">
+    <div class="bottombar grid">
         <div class="btnMute" @click="toggleMute">
             <FontAwesomeIcon
                 class="arrow"
@@ -72,7 +72,7 @@
 
         <div class="btnLock" :class="{ active: locked }" @click="toggleLock">
             <FontAwesomeIcon
-                :icon="locked ? 'unlock' : 'lock'"
+                :icon="locked ? 'lock' : 'unlock'"
                 color="white"
             ></FontAwesomeIcon>
         </div>
@@ -145,9 +145,6 @@ library.add(
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
 import { Howler } from 'howler'
-import screenfull from 'screenfull'
-
-window.screenfull = screenfull
 
 export default {
     components: {
@@ -176,10 +173,6 @@ export default {
             return store.showPiano
         },
 
-        fullscreen() {
-            return store.fullscreen
-        },
-
         locale() {
             return this.$i18n.locale
         },
@@ -192,13 +185,6 @@ export default {
                 return mode + ` (${this.$t('minor')})`
             else return mode
         },
-    },
-
-    created() {
-        // NOTE: computed property is not picking up change automatically
-        screenfull.on('change', () => {
-            store.fullscreen = screenfull.isFullscreen
-        })
     },
 
     methods: {
@@ -224,7 +210,7 @@ export default {
         },
 
         toggleFullscreen() {
-            store.fullscreen = !store.fullscreen
+            window.screenfull.toggle()
         },
 
         changePianoMode(dir) {
@@ -269,9 +255,6 @@ export default {
     background: rgba(168, 168, 168, 0.2);
     border-top: 1px solid var(--greyish);
     opacity: 0.8;
-    &.fullscreen {
-        display: none;
-    }
 }
 
 .pianoMode {

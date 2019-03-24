@@ -16,6 +16,7 @@
     "gsap": "^2.1.2",
     "howler": "^2.1.1",
     "lodash": "^4.17.11",
+    "lodash.debounce": "^4.0.8",
     "lodash.sample": "^4.2.1",
     "register-service-worker": "^1.5.2",
     "screenfull": "^4.1.0",

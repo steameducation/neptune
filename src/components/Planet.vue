@@ -1,5 +1,6 @@
 <template>
-    <svg :id="`planet-${name}`" :x="x" :y="y" width="300px" height="300px">
+    <!-- <svg :id="`planet-${name}`" :x="x" :y="y" width="300px" height="300px"> -->
+    <svg width="300px" height="300px">
         <defs>
             <filter
                 :id="`shadow-${name}`"
@@ -17,7 +18,7 @@
                 />
             </filter>
         </defs>
-        <g class="planet">
+        <g :id="`planet-${name}`" class="planet">
             <circle
                 :r="size / 2"
                 :fill="color"
@@ -35,8 +36,6 @@
 import teoria from 'teoria'
 import store from '@/store.js'
 import utils from '@/utils.js'
-
-import Draggable from 'gsap/Draggable'
 
 export default {
     name: 'Planet',
@@ -125,18 +124,6 @@ export default {
         playing() {
             console.log('playing changed to', this.playing)
         },
-    },
-
-    async mounted() {
-        const id = `#planet-${this.name}`
-        Draggable.create(id, {
-            cursor: 'pointer',
-            type: 'top,left',
-            // onDrag: e => {
-            //     store.planets[this.index].x = e.x
-            //     store.planets[this.index].y = e.y
-            // },
-        })
     },
 
     created() {
