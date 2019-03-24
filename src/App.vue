@@ -20,7 +20,7 @@
                 />
             </svg>
         </div>
-        <Bottombar v-show="!fullscreen" ref="bottombar" />
+        <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" />
         <FontAwesomeIcon
             icon="times"
             class="btnFullscreenClose btnFullscreen"
@@ -107,6 +107,10 @@ export default {
         appMode() {
             return store.appMode
         },
+
+        locked() {
+            return store.locked
+        },
     },
 
     watch: {
@@ -117,6 +121,13 @@ export default {
 
         maxDragHeight() {
             console.log('maxDragHeight is now', this.maxDragHeight)
+        },
+
+        locked() {
+            this.planets.forEach(planet => {
+                if (this.locked) planet.draggable.disable()
+                else planet.draggable.enable()
+            })
         },
     },
 
@@ -147,6 +158,10 @@ export default {
     },
 
     methods: {
+        lock(evt) {
+            store.locked = evt
+        },
+
         resize() {
             console.log('resizing')
             debounce(() => {

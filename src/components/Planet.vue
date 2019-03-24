@@ -183,4 +183,10 @@ svg {
         font-size: 24px;
     }
 }
+
+.planet {
+    &:hover {
+        cursor: pointer;
+    }
+}
 </style>

@@ -2,9 +2,8 @@
     <div class="bottombar grid">
         <div class="btnMute" @click="toggleMute">
             <FontAwesomeIcon
-                class="arrow"
+                class="arrow icon"
                 :icon="muted ? 'volume-mute' : 'volume-up'"
-                color="white"
             ></FontAwesomeIcon>
         </div>
 
@@ -15,8 +14,7 @@
         <div class="pianoMode" :class="{ hide: appMode !== 'piano' }">
             <FontAwesomeIcon
                 icon="arrow-circle-left"
-                color="white"
-                class="arrow"
+                class="arrow icon"
                 @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
             <div class="pianoModeText">
@@ -24,8 +22,7 @@
             </div>
             <FontAwesomeIcon
                 icon="arrow-circle-right"
-                color="white"
-                class="arrow"
+                class="arrow icon"
                 @click="changePianoMode(1)"
             ></FontAwesomeIcon>
         </div>
@@ -45,8 +42,7 @@
             >
                 <FontAwesomeIcon
                     icon="satellite"
-                    color="white"
-                    class="modeIcon fa-lg"
+                    class="modeIcon fa-lg icon"
                 ></FontAwesomeIcon>
             </div>
             <div
@@ -55,9 +51,8 @@
                 @click="changeMode('record')"
             >
                 <FontAwesomeIcon
-                    class="modeIcon"
+                    class="modeIcon icon"
                     icon="microphone"
-                    color="white"
                 ></FontAwesomeIcon>
             </div>
         </div>
@@ -70,19 +65,23 @@
             <Piano fill="black" />
         </div>
 
-        <div class="btnLock" :class="{ active: locked }" @click="toggleLock">
+        <div
+            class="btnLock"
+            :class="{ active: locked }"
+            @click="$emit('lock', !locked)"
+        >
             <FontAwesomeIcon
                 :icon="locked ? 'lock' : 'unlock'"
-                color="white"
+                class="icon"
             ></FontAwesomeIcon>
         </div>
 
         <div class="btnShare" @click="toggleShare">
-            <FontAwesomeIcon icon="link" color="white"></FontAwesomeIcon>
+            <FontAwesomeIcon icon="link" class="icon"></FontAwesomeIcon>
         </div>
 
         <div class="btnInfo" @click="toggleInfo">
-            <FontAwesomeIcon icon="info" color="white"></FontAwesomeIcon>
+            <FontAwesomeIcon icon="info" class="icon"></FontAwesomeIcon>
         </div>
 
         <div class="btnFullscreen" @click="toggleFullscreen">
@@ -195,10 +194,6 @@ export default {
 
         togglePiano() {
             store.showPiano = !store.showPiano
-        },
-
-        toggleLock() {
-            store.locked = !store.locked
         },
 
         toggleInfo() {
@@ -376,5 +371,9 @@ export default {
 
 .hide {
     visibility: hidden;
+}
+
+.icon {
+    color: white;
 }
 </style>
