@@ -145,8 +145,9 @@ export default {
     },
 
     mounted() {
-        this.positionPlanetsHorizontally()
-        // this.positionPlanetsSequentially()
+        // this.positionPlanetsHorizontally()
+        this.positionPlanetsSequentially()
+        // this.setPlanetPosition('neptune', 800, 400)
 
         this.planets.forEach(planet => {
             planet.draggable = Draggable.create(`#planet-${planet.name}`, {

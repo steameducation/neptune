@@ -24,10 +24,12 @@
                 :fill="color"
                 :filter="`url(#shadow-${name})`"
                 @click="play"
+                @dblclick="toggleFact"
             ></circle>
             <text :y="size / 2 + 30" class="planetLabel">
                 {{ $t(name) }}
             </text>
+            <Fact v-show="showFact" :fact="fact" :size="size" />
         </g>
     </svg>
 </template>
@@ -37,8 +39,14 @@ import teoria from 'teoria'
 import store from '@/store.js'
 import utils from '@/utils.js'
 
+import Fact from '@/components/Fact.vue'
+
 export default {
     name: 'Planet',
+
+    components: {
+        Fact,
+    },
 
     props: {
         index: {
@@ -50,6 +58,8 @@ export default {
     data() {
         return {
             playing: false,
+            factIndex: 0,
+            showFact: false,
         }
     },
 
@@ -114,6 +124,15 @@ export default {
             if (!this.playing) return 10
             else return 30
         },
+
+        fact() {
+            if (this.factIndex === -1) return ''
+            return this.facts[this.factIndex].fact
+        },
+
+        facts() {
+            return this.$t(`facts.${this.planet.name}`)
+        },
     },
 
     watch: {
@@ -169,6 +188,13 @@ export default {
             } else {
                 store.recorder.stop()
             }
+        },
+
+        toggleFact() {
+            console.log('detected double click')
+            if (this.showFact)
+                this.factIndex = (this.factIndex + 1) % this.facts.length
+            this.showFact = !this.showFact
         },
     },
 }
