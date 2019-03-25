@@ -159,6 +159,20 @@ export default {
             }
         },
 
+        lastInteractedPlanetId() {
+            utils.swap(
+                store.planets,
+                store.planets.length - 1,
+                store.planets.findIndex(
+                    planet => planet.name === this.lastInteractedPlanetId
+                )
+            )
+            // const planets = new Array.length()
+            // store.planets.forEach(planet => {
+            //     if (planet.name === lastInteractedPlanetId)
+            // })
+        },
+
         maxDragHeight() {
             console.log('maxDragHeight is now', this.maxDragHeight)
         },
@@ -182,6 +196,8 @@ export default {
         window.addEventListener('resize', () => {
             this.updateDragBounds()
         })
+
+        window.utils = utils
     },
 
     mounted() {
