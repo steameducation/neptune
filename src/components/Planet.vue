@@ -54,11 +54,6 @@ export default {
             type: Number,
             required: true,
         },
-
-        amplitude: {
-            type: Number,
-            default: 1,
-        },
     },
 
     data() {
@@ -68,6 +63,7 @@ export default {
             showFact: false,
             holding: false,
             dragging: false,
+            amplitude: 1,
         }
     },
 
@@ -193,6 +189,17 @@ export default {
     created() {
         this.$root.$on('noteOn', this.noteOn)
         this.$root.$on('noteOff', this.noteOff)
+        this.$root.$on('amplitude', evt => {
+            if (evt.name === this.name) {
+                this.amplitude = evt.amplitude
+                if (this.appMode === 'piano')
+                    store.sounds[this.note].volume(this.amplitude)
+                if (this.appMode === 'nasa')
+                    store.soundscapes[this.name].volume(this.amplitude)
+                if (this.appMode === 'record')
+                    store.recordings[this.name].volume = this.amplitude
+            }
+        })
     },
 
     mounted() {
@@ -215,7 +222,7 @@ export default {
                 () => {
                     if (this.appMode === 'piano' || this.appMode === 'nasa') {
                         if (!this.holding && !this.dragging) this.play()
-                    } else if (this.appMode === 'record') {
+                    } else if (this.appMode === 'record' && !this.dragging) {
                         if (!this.recording) this.play()
                     }
                     this.holding = false

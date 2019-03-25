@@ -82,6 +82,6 @@ export default {
 
 .factText {
     color: var(--active);
-    font-size: 18px;
+    font-size: 22px;
 }
 </style>

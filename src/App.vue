@@ -3,6 +3,17 @@
         <div class="stars"></div>
         <div id="canvas">
             <svg viewBox="0 0 1920 1080">
+                <defs>
+                    <filter id="greyscale">
+                        <feColorMatrix
+                            type="matrix"
+                            values="0.33 0.33 0.33 0 0
+                             0.33 0.33 0.33 0 0
+                             0.33 0.33 0.33 0 0
+                             0 0 0 1 0"
+                        />
+                    </filter>
+                </defs>
                 <Sun />
                 <Piano
                     v-show="showPiano && appMode === 'piano'"
@@ -17,7 +28,6 @@
                     v-for="(planet, index) in planets"
                     :key="planet.name"
                     :index="index"
-                    :amplitude="planet.amplitude"
                     @interaction="interaction"
                 />
                 <!-- <use
@@ -192,6 +202,7 @@ export default {
                     {
                         cursor: 'pointer',
                         onDrag: () => {
+                            console.log('this drag')
                             this.interaction(name)
                             const y =
                                 document.querySelector(`#planet-${name}`)
@@ -207,8 +218,12 @@ export default {
                             const mapped = utils.map(y, 0, height, 1, 0.01)
                             store.planets[i].amplitude =
                                 mapped >= 1 ? 1 : mapped
-                            // console.log({ mapped })
-                            // console.log('amplitude', store.planets[i].amplitude)
+                            console.log({ mapped })
+                            console.log('amplitude', store.planets[i].amplitude)
+                            this.$root.$emit('amplitude', {
+                                name,
+                                amplitude: mapped,
+                            })
                         },
                     }
                 )[0]
@@ -435,7 +450,7 @@ export default {
 
 .stars,
 #app {
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 #canvas,

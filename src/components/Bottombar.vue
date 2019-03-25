@@ -258,8 +258,8 @@ export default {
     background: rgba(168, 168, 168, 0.2);
     border-top: 1px solid var(--greyish);
     opacity: 0.8;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .pianoMode {
@@ -415,6 +415,7 @@ export default {
     svg {
         color: grey !important;
     }
+    fill: grey;
 }
 
 .btnLanguage {

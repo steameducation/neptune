@@ -3,6 +3,7 @@
         id="mypiano"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 426.629 243.788"
+        filter="url('#greyscale')"
     >
         <g id="Piano" transform="translate(-1474.033 -84.212)">
             <g
@@ -157,6 +158,10 @@
 export default {
     props: {
         highlight: {
+            type: Boolean,
+            default: false,
+        },
+        bw: {
             type: Boolean,
             default: false,
         },
