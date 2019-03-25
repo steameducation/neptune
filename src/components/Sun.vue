@@ -10,7 +10,7 @@
             <filter
                 id="sunFilter"
                 x="0"
-                y="0"
+                y="-50"
                 width="358.027"
                 height="937.357"
                 filterUnits="userSpaceOnUse"

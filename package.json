@@ -12,6 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.16",
     "@fortawesome/free-solid-svg-icons": "^5.8.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",
+    "@sentry/browser": "4.6.5",
     "axios": "^0.18.0",
     "gsap": "^2.1.2",
     "howler": "^2.1.1",

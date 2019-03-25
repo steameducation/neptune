@@ -54,9 +54,9 @@ const store = new Vue.observable({
     pianoModes: Object.keys(messages.en.modes),
     pianoMode: Object.keys(messages.en.modes)[0],
     appMode: 'piano', // 'piano', 'nasa', 'record'
-    showPiano: true,
+    showPiano: false,
     showShare: false,
-    showInfo: false,
+    showInfo: true,
     locked: false,
     muted: false,
     fullscreen: false,
@@ -69,6 +69,7 @@ const store = new Vue.observable({
     soundscapes: {},
     recordings: {},
     locales: Object.keys(messages),
+    zIndex: 1000,
 })
 
 const notes = [

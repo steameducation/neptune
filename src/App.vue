@@ -17,6 +17,13 @@
                     v-for="(planet, index) in planets"
                     :key="planet.name"
                     :index="index"
+                    @interaction="interaction"
+                    @updateDragBounds="updateDragBounds"
+                />
+                <use
+                    v-bind="{
+                        'xlink:href': `#planet-${lastInteractedPlanetId}`,
+                    }"
                 />
             </svg>
         </div>
@@ -47,8 +54,6 @@ import Vue from 'vue'
 import store from '@/store.js'
 import { sample, random, debounce } from 'lodash'
 
-import Draggable from 'gsap/Draggable'
-
 import Recorder from '@/recorder.js'
 
 export default {
@@ -66,6 +71,7 @@ export default {
     data() {
         return {
             maxDragHeight: 0,
+            lastInteractedPlanetId: '#planet-mercury',
         }
     },
 
@@ -148,17 +154,16 @@ export default {
         // this.positionPlanetsHorizontally()
         this.positionPlanetsSequentially()
         // this.setPlanetPosition('neptune', 800, 400)
-
-        this.planets.forEach(planet => {
-            planet.draggable = Draggable.create(`#planet-${planet.name}`, {
-                cursor: 'pointer',
-            })[0]
-        })
-
-        this.updateDragBounds()
+        console.log('app mounted')
+        // this.updateDragBounds()
     },
 
     methods: {
+        interaction(evt) {
+            console.log('interaction in app with evt', evt)
+            this.lastInteractedPlanetId = evt
+        },
+
         lock(evt) {
             store.locked = evt
         },
@@ -210,7 +215,6 @@ export default {
                     const h1 = document.querySelector('.bottombar').clientHeight
                     const h2 = document.querySelector('#canvas').clientHeight
                     let ret = (1 - h1 / h2) * this.canvas.height
-                    console.log({ h1, h2, ret })
                     return ret
                 } catch (e) {
                     console.log('failing silently', e)
@@ -402,7 +406,8 @@ export default {
 
 .overlay {
     background: black;
-    opacity: 0.8;
     color: var(--active);
+    opacity: 0.94;
+    width: 100%;
 }
 </style>

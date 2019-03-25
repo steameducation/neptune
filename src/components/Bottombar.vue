@@ -84,7 +84,11 @@
             <FontAwesomeIcon icon="info" class="icon"></FontAwesomeIcon>
         </div>
 
-        <div class="btnFullscreen" @click="toggleFullscreen">
+        <div
+            v-show="isFullscreenCapable"
+            class="btnFullscreen"
+            @click="toggleFullscreen"
+        >
             <!-- <FontAwesomeIcon icon="expand" color="white"></FontAwesomeIcon> -->
             <Resize />
         </div>
@@ -176,6 +180,10 @@ export default {
             return this.$i18n.locale
         },
 
+        isFullscreenCapable() {
+            return window.screenfull.enabled
+        },
+
         pianoModeText() {
             const mode = this.$t(`modes.${this.pianoMode}`)
             if (this.pianoMode === 'ionian')
@@ -265,8 +273,9 @@ export default {
         width: 50%;
         color: var(--greyish);
         height: 26px;
-        font-size: 14px;
+        font-size: 12px;
         line-height: 26px;
+        width: 100%;
     }
     .arrow {
         width: 25px;

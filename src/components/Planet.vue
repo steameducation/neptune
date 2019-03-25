@@ -1,24 +1,25 @@
 <template>
-    <!-- <svg :id="`planet-${name}`" :x="x" :y="y" width="300px" height="300px"> -->
-    <svg width="300px" height="300px">
+    <svg width="100%" height="100%" @click="$emit('interaction', name)">
         <defs>
             <filter
                 :id="`shadow-${name}`"
                 x="-50%"
                 y="-50%"
-                width="200%"
-                height="200%"
+                width="400%"
+                height="400%"
             >
                 <feDropShadow
                     dx="0"
                     dy="0"
                     :stdDeviation="stdDeviation"
-                    v-bind="{ 'flood-color': floodColor }"
+                    v-bind="{
+                        'flood-color': !playing ? color : 'var(--active)',
+                    }"
                     flood-opacity="1"
                 />
             </filter>
         </defs>
-        <g :id="`planet-${name}`" class="planet">
+        <g :id="`planet-${name}`" ref="planetGroup" class="planet">
             <circle
                 :r="size / 2"
                 :fill="color"
@@ -38,6 +39,7 @@
 import teoria from 'teoria'
 import store from '@/store.js'
 import utils from '@/utils.js'
+import Draggable from 'gsap/Draggable'
 
 import Fact from '@/components/Fact.vue'
 
@@ -68,12 +70,24 @@ export default {
             return store.planets[this.index]
         },
 
-        x() {
-            return this.planet.x
-        },
+        // x() {
+        //     // TODO:
+        // },
 
-        y() {
-            return this.planet.y
+        // y() {
+        //     // TODO:
+        // },
+
+        // amplitude() {
+        //     // TODO:
+        // },
+
+        // playing() {
+        //     // TODO:
+        // },
+
+        matrix() {
+            return this.$refs.planetGroup.transform.baseVal[0].matrix
         },
 
         name() {
@@ -107,22 +121,13 @@ export default {
             return ret
         },
 
-        amplitude() {
-            return utils.map(this.y, 0, store.canvas.height, 1, 0)
-        },
-
         sound() {
             return store.sounds[this.note]
         },
 
-        floodColor() {
-            if (!this.playing) return this.color
-            else return 'var(--active)'
-        },
-
         stdDeviation() {
-            if (!this.playing) return 10
-            else return 30
+            if (!this.playing) return 5
+            else return 15
         },
 
         fact() {
@@ -135,19 +140,17 @@ export default {
         },
     },
 
-    watch: {
-        amplitude() {
-            this.sound.volume(this.amplitude)
-        },
-
-        playing() {
-            console.log('playing changed to', this.playing)
-        },
-    },
-
     created() {
+        console.log('planet created')
         this.$root.$on('noteOn', this.noteOn)
         this.$root.$on('noteOff', this.noteOff)
+        store.planets[this.index].draggable = Draggable.create(
+            `#planet-${this.name}`,
+            {
+                cursor: 'pointer',
+            }
+        )[0]
+        this.$emit('updateDragBounds')
     },
 
     methods: {
@@ -157,10 +160,22 @@ export default {
 
         noteOn(index) {
             if (index !== this.index) return
+
+            // First determine amplitude
+            const y =
+                this.$refs.planetGroup.transform.baseVal[0].matrix.f - this.size
+
+            const height = window.screenfull.isFullscreen
+                ? store.canvas.height
+                : store.canvas.height - 2 * this.size
+            this.amplitude = utils.map(y, 0, height, 1, 0.01)
+            this.amplitude = this.amplitude >= 1 ? 1 : this.amplitude
+            console.log('amplitude', this.amplitude)
+
+            // Then play sound
             if (store.appMode === 'piano') this.playPiano()
             else if (store.appMode === 'nasa') this.playNASA()
             else if (store.appMode === 'record') this.playRecord()
-            this.playing = true
         },
 
         noteOff(index) {
@@ -170,7 +185,9 @@ export default {
 
         playPiano() {
             console.log('playing', this.note)
+            this.sound.volume(this.amplitude)
             this.sound.play()
+            this.playing = true
             this.sound.on('end', () => {
                 console.log('ended')
                 this.$root.$emit('noteOff', this.index)
@@ -178,8 +195,15 @@ export default {
         },
 
         playNASA() {
-            console.log('playing NASA')
-            store.soundscapes[this.name].play()
+            if (!this.playing) {
+                store.soundscapes[this.name].volume(this.amplitude)
+                store.soundscapes[this.name].play()
+                this.playing = true
+            } else {
+                console.log('stopping')
+                store.soundscapes[this.name].stop()
+                this.playing = false
+            }
         },
 
         playRecord() {
