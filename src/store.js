@@ -106,6 +106,7 @@ store.planets.forEach(planet => {
         autoplay: false,
         volume: 0.6,
         loop: true,
+        html5: true,
     })
 })
 
