@@ -44,7 +44,7 @@
             color="white"
             @click="toggleFullscreen"
         ></FontAwesomeIcon>
-        <div v-show="showShare || showInfo" class="overlay">
+        <div v-if="showShare || showInfo" class="overlay">
             <ShareOverlay v-if="showShare" />
             <InfoOverlay v-if="showInfo" />
         </div>
