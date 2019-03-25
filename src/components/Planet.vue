@@ -13,7 +13,7 @@
                     dy="0"
                     :stdDeviation="stdDeviation"
                     v-bind="{
-                        'flood-color': !playing ? color : 'var(--active)',
+                        'flood-color': floodColor,
                     }"
                     flood-opacity="1"
                 />
@@ -24,8 +24,7 @@
                 :r="size / 2"
                 :fill="color"
                 :filter="`url(#shadow-${name})`"
-                @click="play"
-                @dblclick="toggleFact"
+                :class="{ hasRecording: hasRecording }"
             ></circle>
             <text :y="size / 2 + 30" class="planetLabel">
                 {{ $t(name) }}
@@ -38,6 +37,8 @@
 <script>
 import teoria from 'teoria'
 import store from '@/store.js'
+
+import Vue from 'vue'
 
 import Fact from '@/components/Fact.vue'
 
@@ -65,6 +66,8 @@ export default {
             playing: false,
             factIndex: 0,
             showFact: false,
+            holding: false,
+            dragging: false,
         }
     },
 
@@ -89,6 +92,20 @@ export default {
         //     // TODO:
         // },
 
+        floodColor() {
+            if (this.appMode === 'piano' || this.appMode === 'nasa') {
+                if (!this.playing) return this.color
+                else return 'var(--active)'
+            } else if (this.appMode === 'record') {
+                if (this.holding) {
+                    return 'red'
+                } else {
+                    return 'blue'
+                }
+            }
+            return 'magenta'
+        },
+
         matrix() {
             return this.$refs.planetGroup.transform.baseVal[0].matrix
         },
@@ -103,6 +120,18 @@ export default {
 
         color() {
             return this.planet.color
+        },
+
+        appMode() {
+            return store.appMode
+        },
+
+        recording() {
+            return store.recordings[this.name]
+        },
+
+        hasRecording() {
+            return this.recording != null
         },
 
         note() {
@@ -143,12 +172,103 @@ export default {
         },
     },
 
+    watch: {
+        holding() {
+            if (this.appMode === 'piano' || this.appMode === 'nasa') {
+                if (this.holding) {
+                    console.log('toggling fact')
+                    console.log('toggling fact')
+                    this.toggleFact()
+                }
+            } else if (this.appMode === 'record') {
+                this.toggleRecording()
+            }
+        },
+
+        'store.recordings': () => {
+            console.log('recordings changed')
+        },
+    },
+
     created() {
         this.$root.$on('noteOn', this.noteOn)
         this.$root.$on('noteOff', this.noteOff)
     },
 
+    mounted() {
+        Vue.nextTick(() => {
+            console.log('nextTick mounted planet')
+
+            store.planets[this.index].draggable.addEventListener(
+                'press',
+                () => {
+                    this.holdingTimeoutId = window.setTimeout(() => {
+                        this.holding = true
+                        console.log('holding')
+                    }, 300)
+                    console.log('pressed')
+                }
+            )
+
+            store.planets[this.index].draggable.addEventListener(
+                'release',
+                () => {
+                    if (this.appMode === 'piano' || this.appMode === 'nasa') {
+                        if (!this.holding && !this.dragging) this.play()
+                    } else if (this.appMode === 'record') {
+                        if (!this.recording) this.play()
+                    }
+                    this.holding = false
+                    window.clearTimeout(this.holdingTimeoutId)
+                    console.log('holding canceled')
+                }
+            )
+
+            store.planets[this.index].draggable.addEventListener(
+                'dragstart',
+                () => {
+                    console.log('dragStart')
+                    this.dragging = true
+                }
+            )
+
+            store.planets[this.index].draggable.addEventListener(
+                'dragend',
+                () => {
+                    console.log('dragEnd')
+                    this.dragging = false
+                }
+            )
+        })
+
+        // this.initHammer()
+    },
+
     methods: {
+        initHammer() {
+            const el = document.querySelector(`#planet-${this.name}`)
+            console.log(el)
+            var mc = new window.Hammer.Manager(el)
+            // mc.add(new window.Hammer.Tap({ event: 'doubletap', taps: 2 }))
+            // mc.add(new window.Hammer.Tap({ event: 'singletap' }))
+            mc.add(new window.Hammer.Press({ time: 300 }))
+            // mc.get('doubletap').recognizeWith('singletap')
+            // mc.get('singletap').requireFailure('doubletap')
+            mc.on('press pressup', ev => {
+                console.log(ev.type)
+                if (this.appMode === 'piano' || this.appMode === 'nasa') {
+                    if (ev.type === 'press') {
+                        this.toggleFact()
+                    }
+                } else {
+                    if (ev.type === 'press') {
+                        this.play()
+                    } else if (ev.type === 'pressup') {
+                        this.play()
+                    }
+                }
+            })
+        },
         play() {
             this.$root.$emit('noteOn', this.index)
         },
@@ -168,7 +288,13 @@ export default {
         },
 
         playPiano() {
-            console.log('playing', this.note)
+            console.log(
+                'playing',
+                this.note,
+                '@',
+                this.amplitude,
+                this.sound.volume()
+            )
             this.sound.volume(this.amplitude)
             this.sound.play()
             this.playing = true
@@ -176,6 +302,15 @@ export default {
                 console.log('ended')
                 this.$root.$emit('noteOff', this.index)
             })
+        },
+
+        toggleRecording() {
+            if (!store.recorder.recording) {
+                store.recorder.start(store.recordings, this.name)
+            } else {
+                store.recorder.stop()
+                // store.recordings[this.name].loop = true
+            }
         },
 
         playNASA() {
@@ -191,11 +326,8 @@ export default {
         },
 
         playRecord() {
-            if (!store.recorder.recording) {
-                store.recorder.start(store.recordings, this.name)
-            } else {
-                store.recorder.stop()
-            }
+            this.playing = true
+            if (store.recordings[this.name]) store.recordings[this.name].play()
         },
 
         toggleFact() {
@@ -211,6 +343,10 @@ export default {
 <style lang="scss">
 svg {
     overflow: visible;
+    circle.hasRecording {
+        stroke: var(--active);
+        stroke-width: 3px;
+    }
     text {
         text-anchor: middle;
         fill: #707070;

@@ -400,6 +400,23 @@ export default {
     }
 }
 
+// NOTE: disable share for now
+.btnShare {
+    &:hover {
+        cursor: default;
+        border: 1px solid var(--greyish) !important;
+        svg {
+            color: grey !important;
+            &:hover {
+                color: grey !important;
+            }
+        }
+    }
+    svg {
+        color: grey !important;
+    }
+}
+
 .btnLanguage {
     // color: var(--white);
     // }

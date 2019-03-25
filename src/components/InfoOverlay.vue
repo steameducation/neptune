@@ -30,23 +30,23 @@
         </section>
 
         <section class="furtherCredits">
-            <!-- <div class="wrapper"> -->
-            <h2>Further Credits</h2>
-            <p>
-                A simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum
-            </p>
-            <a target="_blank" href="https://digitopia.casadamusica.com/">
-                <img
-                    src="/img/logos/digitopia.png"
-                    class="logo digitopia"
-                    alt=""
-                />
-            </a>
-            <a target="_blank" href="http://www.casadamusica.com/"
-                ><img src="/img/logos/cdm.png" class="logo cdm" alt=""
-            /></a>
-            <!-- </div> -->
+            <div class="wrapper">
+                <h2>Further Credits</h2>
+                <p>
+                    A simply dummy text of the printing and typesetting
+                    industry. Lorem Ipsum.
+                </p>
+                <a target="_blank" href="https://digitopia.casadamusica.com/">
+                    <img
+                        src="/img/logos/digitopia.png"
+                        class="logo digitopia"
+                        alt=""
+                    />
+                </a>
+                <a target="_blank" href="http://www.casadamusica.com/"
+                    ><img src="/img/logos/cdm.png" class="logo cdm" alt=""
+                /></a>
+            </div>
         </section>
     </Overlay>
 </template>
@@ -119,5 +119,6 @@ section {
     font-size: 14px;
     display: flex;
     flex: 2;
+    margin: 0;
 }
 </style>

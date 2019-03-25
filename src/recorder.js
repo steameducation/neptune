@@ -46,6 +46,7 @@ export default class Recorder {
             const audioBlob = new Blob(this.mediaRecorderChunks)
             const audioUrl = URL.createObjectURL(audioBlob)
             const audio = new Audio(audioUrl)
+            audio.loop = false
             this.arr[this.key] = audio
         })
     }

@@ -20,11 +20,11 @@
                     :amplitude="planet.amplitude"
                     @interaction="interaction"
                 />
-                <use
+                <!-- <use
                     v-bind="{
                         'xlink:href': `#planet-${lastInteractedPlanetId}`,
                     }"
-                />
+                /> -->
             </svg>
         </div>
         <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" />
@@ -123,9 +123,21 @@ export default {
     },
 
     watch: {
-        appMode() {
+        appMode(newMode, oldMode) {
+            console.log({ oldMode, newMode })
             if (this.appMode === 'record' && !store.recorder)
                 this.initRecorder()
+
+            if (oldMode === 'nasa') {
+                Object.keys(store.soundscapes).forEach(soundscapeKey =>
+                    store.soundscapes[soundscapeKey].fade(1, 0, 500)
+                )
+            } else if (oldMode === 'piano') {
+                Object.keys(store.sounds).forEach(soundKey =>
+                    store.sounds[soundKey].fade(1, 0, 500)
+                )
+            }
+
         },
 
         maxDragHeight() {
@@ -159,6 +171,7 @@ export default {
         // this.setPlanetPosition('neptune', 800, 400)
         this.initDraggables()
         this.updateDragBounds()
+        console.log('app finished mounting')
     },
 
     methods: {
@@ -170,24 +183,23 @@ export default {
                     {
                         cursor: 'pointer',
                         onDrag: () => {
-                            console.log('emitting interaction', name)
                             this.interaction(name)
-                            //     const y =
-                            //         document.querySelector(`#planet-${name}`)
-                            //             .transform.baseVal[0].matrix.f -
-                            //         store.planets[i].size
+                            const y =
+                                document.querySelector(`#planet-${name}`)
+                                    .transform.baseVal[0].matrix.f -
+                                store.planets[i].size
 
-                            //     const height = window.screenfull.isFullscreen
-                            //         ? store.canvas.height - store.planets[i].size
-                            //         : store.canvas.height -
-                            //           2 * store.planets[i].size
+                            const height = window.screenfull.isFullscreen
+                                ? store.canvas.height - store.planets[i].size
+                                : store.canvas.height -
+                                  2 * store.planets[i].size
 
-                            //     // console.log({ height, y })
-                            //     const mapped = utils.map(y, 0, height, 1, 0.01)
-                            //     store.planets[i].amplitude =
-                            //         mapped >= 1 ? 1 : mapped
-                            //     // console.log({ mapped })
-                            //     console.log('amplitude', store.planets[i].amplitude)
+                            // console.log({ height, y })
+                            const mapped = utils.map(y, 0, height, 1, 0.01)
+                            store.planets[i].amplitude =
+                                mapped >= 1 ? 1 : mapped
+                            // console.log({ mapped })
+                            // console.log('amplitude', store.planets[i].amplitude)
                         },
                     }
                 )[0]
@@ -248,7 +260,7 @@ export default {
                 try {
                     const h1 = document.querySelector('.bottombar').clientHeight
                     const h2 = document.querySelector('#canvas').clientHeight
-                    let ret = (1 - h1 / h2) * this.canvas.height
+                    let ret = (1 - h1 / h2) * this.canvas.height - 18
                     return ret
                 } catch (e) {
                     console.log('failing silently', e)

@@ -182,8 +182,7 @@ export default {
 
         setHighlight(note, bool) {
             const key = this.$el.querySelector(`#${note}`)
-            if (bool) key.classList.add('active')
-            else key.classList.remove('active')
+            key.classList.toggle('active')
         },
     },
 }
