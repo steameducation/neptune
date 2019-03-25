@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                background: #1d1d1d;
+                color: white;
+            }
+            h1 {
+                margin: 5px 0;
+            }
+
+            .box {
+                background-color: #91e600;
+                text-align: center;
+                font-family: Asap, Avenir, Arial, sans-serif;
+                width: 196px;
+                height: 100px;
+                line-height: 100px;
+                color: black;
+                position: absolute;
+                border-radius: 10px;
+            }
+
+            #demo {
+                width: 800px;
+                height: 400px;
+                background-color: black;
+                position: relative;
+                margin-top: 10px;
+            }
+
+            label {
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Fork this demo and add your code</h1>
+        <div id="demo">
+            <div class="box">drag me</div>
+        <script>
+            Draggable.create('.box', {
+                bounds: '#demo',
+                //allowNativeTouchScrolling:false,
+                type: 'x',
+            })
+
+            console.log(Draggable.version)
+            /* This Pen Loads the Following
+
+  TweenMax: latest version
+    -TweenLite
+    -TweenMax
+    -TimelineLite
+    -TimelineMax
+    -CSSPlugin
+    -BezierPlugin
+    -DirectionalRotationPlugin
+    -AttrPlugin
+    -RoundPropsPlugin
+    -EasePack
+  Draggable
+
+  ** Bonus Plugins **
+    -ThrowPropsPlugin
+
+  Please use the minimal amount of code
+  possible to recreate the problem you
+  are experiencing.
+
+*/
+        </script>
+        </div>
+    </body>
+</html>

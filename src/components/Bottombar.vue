@@ -258,8 +258,8 @@ export default {
     background: rgba(168, 168, 168, 0.2);
     border-top: 1px solid var(--greyish);
     opacity: 0.8;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
 }
 
 .pianoMode {

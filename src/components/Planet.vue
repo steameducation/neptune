@@ -1,5 +1,5 @@
 <template>
-    <svg width="100%" height="100%" @click="$emit('interaction', name)">
+    <svg width="100%" height="100%">
         <defs>
             <filter
                 :id="`shadow-${name}`"
@@ -214,11 +214,13 @@ export default {
             store.planets[this.index].draggable.addEventListener(
                 'press',
                 () => {
-                    this.holdingTimeoutId = window.setTimeout(() => {
-                        this.holding = true
-                        console.log('holding')
-                    }, 300)
-                    console.log('pressed')
+                    console.log('press')
+                    this.$emit('interaction', name)
+                    // this.holdingTimeoutId = window.setTimeout(() => {
+                    //     this.holding = true
+                    //     console.log('holding')
+                    // }, 300)
+                    // console.log('pressed')
                 }
             )
 

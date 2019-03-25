@@ -256,6 +256,7 @@ export default {
         },
 
         interaction(evt) {
+            console.log('interaction callback')
             this.lastInteractedPlanetId = evt
         },
 
@@ -457,11 +458,11 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    margin-top: 60px;
+    // margin-top: 60px;
     --ratio: calc(16 / 9); // TODO: this should be inferred from image
-    --percentage: 97; // percentage of viewport to use (better than using 100%)
+    --percentage: 100; // percentage of viewport to use (better than using 100%)
     width: calc(var(--percentage) * 1vw);
-    height: calc(1 / var(--ratio) * 95vw);
+    height: calc(1 / var(--ratio) * var(--percentage) * 1vw);
     max-height: calc(var(--percentage) * 1vh);
     max-width: calc(var(--ratio) * var(--percentage) * 1vh);
     margin: auto;
@@ -475,7 +476,9 @@ export default {
 
 .stars,
 #app {
-    border-radius: 15px;
+    --border-radius: 0;
+    border-radius: var(--border-radius);
+    border: none;
 }
 
 #canvas,

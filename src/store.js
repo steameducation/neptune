@@ -10,41 +10,41 @@ const store = new Vue.observable({
         height: 1080,
     },
     planets: [
-        {
-            name: 'mercury',
-            color: '#FF8D02',
-            size: 48,
-        },
-        {
-            name: 'venus',
-            color: '#F8B763',
-            size: 73,
-        },
-        {
-            name: 'earth',
-            color: '#0274FF',
-            size: 100,
-        },
-        {
-            name: 'mars',
-            color: '#FF4A02',
-            size: 146,
-        },
-        {
-            name: 'jupiter',
-            color: '#FFCF54',
-            size: 166,
-        },
-        {
-            name: 'saturn',
-            color: '#FFE9B3',
-            size: 112,
-        },
-        {
-            name: 'uranus',
-            color: '#01AE83',
-            size: 112,
-        },
+        // {
+        //     name: 'mercury',
+        //     color: '#FF8D02',
+        //     size: 48,
+        // },
+        // {
+        //     name: 'venus',
+        //     color: '#F8B763',
+        //     size: 73,
+        // },
+        // {
+        //     name: 'earth',
+        //     color: '#0274FF',
+        //     size: 100,
+        // },
+        // {
+        //     name: 'mars',
+        //     color: '#FF4A02',
+        //     size: 146,
+        // },
+        // {
+        //     name: 'jupiter',
+        //     color: '#FFCF54',
+        //     size: 166,
+        // },
+        // {
+        //     name: 'saturn',
+        //     color: '#FFE9B3',
+        //     size: 112,
+        // },
+        // {
+        //     name: 'uranus',
+        //     color: '#01AE83',
+        //     size: 112,
+        // },
         {
             name: 'neptune',
             color: '#1842FF',
