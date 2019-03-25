@@ -3,7 +3,7 @@
         <FontAwesomeIcon
             class="btnOverlayClose"
             icon="times"
-            @click="dismiss3"
+            @click="dismiss"
         ></FontAwesomeIcon>
         <slot />
     </div>
@@ -13,28 +13,20 @@
 import store from '@/store.js'
 
 export default {
-    data() {
-        return {
-            dismiss3: null,
-        }
-    },
     mounted() {
         document.addEventListener('keyup', evt => {
             console.log('pressing a key')
-            if (evt.key === 'Escape') this.dismiss2()
+            if (evt.key === 'Escape') this.dismiss()
         })
     },
 
     methods: {
-        dismiss2() {
+        dismiss() {
             store.showInfo = false
             store.showShare = false
         },
     },
 }
-</script>
-<script>
-export default {}
 </script>
 
 <style lang="scss">
@@ -44,14 +36,24 @@ export default {}
     right: 50px;
     border: 1px solid var(--grey);
     border-radius: 50%;
-    width: 30px !important;
-    height: 30px;
-    padding: 5px;
+    width: 40px !important;
+    height: 40px;
+    padding: 10px;
     color: white;
+    &:hover {
+        border: 1px solid var(--active);
+        color: var(--active);
+    }
 }
 
-.overlay {
-    // display: flex;
-    // flex-direction: column;
+.btnOverlayClose {
+    &:hover {
+        cursor: pointer;
+    }
 }
+
+// .overlay {
+// display: flex;
+// flex-direction: column;
+// }
 </style>

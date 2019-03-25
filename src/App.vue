@@ -20,11 +20,11 @@
                     :amplitude="planet.amplitude"
                     @interaction="interaction"
                 />
-                <!-- <use
+                <use
                     v-bind="{
                         'xlink:href': `#planet-${lastInteractedPlanetId}`,
                     }"
-                /> -->
+                />
             </svg>
         </div>
         <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" />
@@ -170,22 +170,23 @@ export default {
                     {
                         cursor: 'pointer',
                         onDrag: () => {
-                            const y =
-                                document.querySelector(`#planet-${name}`)
-                                    .transform.baseVal[0].matrix.f -
-                                store.planets[i].size
+                            this.$emit('interaction', name)
+                            //     const y =
+                            //         document.querySelector(`#planet-${name}`)
+                            //             .transform.baseVal[0].matrix.f -
+                            //         store.planets[i].size
 
-                            const height = window.screenfull.isFullscreen
-                                ? store.canvas.height - store.planets[i].size
-                                : store.canvas.height -
-                                  2 * store.planets[i].size
+                            //     const height = window.screenfull.isFullscreen
+                            //         ? store.canvas.height - store.planets[i].size
+                            //         : store.canvas.height -
+                            //           2 * store.planets[i].size
 
-                            // console.log({ height, y })
-                            const mapped = utils.map(y, 0, height, 1, 0.01)
-                            store.planets[i].amplitude =
-                                mapped >= 1 ? 1 : mapped
-                            // console.log({ mapped })
-                            console.log('amplitude', store.planets[i].amplitude)
+                            //     // console.log({ height, y })
+                            //     const mapped = utils.map(y, 0, height, 1, 0.01)
+                            //     store.planets[i].amplitude =
+                            //         mapped >= 1 ? 1 : mapped
+                            //     // console.log({ mapped })
+                            //     console.log('amplitude', store.planets[i].amplitude)
                         },
                     }
                 )[0]

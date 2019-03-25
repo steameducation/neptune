@@ -7,7 +7,7 @@
             ></FontAwesomeIcon>
         </div>
 
-        <div class="btnLanguage" @click="toggleLanguage">
+        <div class="btnLanguage icon" @click="toggleLanguage">
             <div>{{ locale.toUpperCase() }}</div>
         </div>
 
@@ -284,6 +284,7 @@ export default {
         color: var(--grey);
         &:hover {
             cursor: pointer;
+            color: var(--active);
         }
     }
 }
@@ -365,6 +366,10 @@ export default {
     &:hover {
         cursor: pointer;
         &:not(.active) {
+            svg {
+                color: var(--active);
+                fill: var(--active);
+            }
             border-color: var(--active); // other hover alternative
             // svg {
             //     color: var(--active);
@@ -375,7 +380,11 @@ export default {
 }
 
 .btnLanguage {
-    color: var(--white);
+    // color: var(--white);
+    // }
+    &:hover {
+        color: var(--active);
+    }
 }
 
 .hide {
