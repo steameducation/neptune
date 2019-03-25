@@ -209,7 +209,7 @@ export default {
         },
 
         toggleShare() {
-            store.showShare = !store.showShare
+            // store.showShare = !store.showShare
         },
 
         toggleFullscreen() {
@@ -258,6 +258,8 @@ export default {
     background: rgba(168, 168, 168, 0.2);
     border-top: 1px solid var(--greyish);
     opacity: 0.8;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .pianoMode {
@@ -289,6 +291,18 @@ export default {
     }
 }
 
+.appModePiano,
+.appModeRecord,
+.appModeNASA {
+    &.active {
+        .modeIcon {
+            &:hover {
+                color: white;
+            }
+        }
+    }
+}
+
 .appModes {
     display: flex;
     align-items: center;
@@ -304,12 +318,19 @@ export default {
         // background: var(--white);
         &.active {
             background: var(--active);
+            &:hover {
+                // color: white !important;
+            }
         }
         .modeIcon {
             width: 100%;
             height: 100%;
             padding: 10px;
             display: flex;
+            &:hover {
+                color: var(--active);
+                fill: var(--active);
+            }
         }
         .appModeRecord svg,
         .appModeNASA svg {

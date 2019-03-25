@@ -52,8 +52,10 @@ export default {
     }
 }
 
-// .overlay {
-// display: flex;
-// flex-direction: column;
-// }
+.overlay {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
 </style>

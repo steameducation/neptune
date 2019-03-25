@@ -74,7 +74,7 @@ export default {
     data() {
         return {
             maxDragHeight: 0,
-            lastInteractedPlanetId: '#planet-mercury',
+            lastInteractedPlanetId: 'mercury',
         }
     },
 
@@ -170,7 +170,8 @@ export default {
                     {
                         cursor: 'pointer',
                         onDrag: () => {
-                            this.$emit('interaction', name)
+                            console.log('emitting interaction', name)
+                            this.interaction(name)
                             //     const y =
                             //         document.querySelector(`#planet-${name}`)
                             //             .transform.baseVal[0].matrix.f -
@@ -194,7 +195,6 @@ export default {
         },
 
         interaction(evt) {
-            console.log('interaction in app with evt', evt)
             this.lastInteractedPlanetId = evt
         },
 
@@ -398,7 +398,7 @@ export default {
     text-align: center;
     margin-top: 60px;
     --ratio: calc(16 / 9); // TODO: this should be inferred from image
-    --percentage: 100; // percentage of viewport to use (better than using 100%)
+    --percentage: 97; // percentage of viewport to use (better than using 100%)
     width: calc(var(--percentage) * 1vw);
     height: calc(1 / var(--ratio) * 95vw);
     max-height: calc(var(--percentage) * 1vh);
@@ -410,6 +410,11 @@ export default {
     left: 0;
     right: 0;
     border: 1px solid lightgrey;
+}
+
+.stars,
+#app {
+    border-radius: 20px;
 }
 
 #canvas,
@@ -441,7 +446,7 @@ export default {
 .overlay {
     background: black;
     color: var(--active);
-    opacity: 0.94;
+    // opacity: 0.94;
     width: 100%;
 }
 </style>
