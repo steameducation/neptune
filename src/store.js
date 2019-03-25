@@ -10,45 +10,53 @@ const store = new Vue.observable({
         height: 1080,
     },
     planets: [
-        // {
-        //     name: 'mercury',
-        //     color: '#FF8D02',
-        //     size: 48,
-        // },
-        // {
-        //     name: 'venus',
-        //     color: '#F8B763',
-        //     size: 73,
-        // },
-        // {
-        //     name: 'earth',
-        //     color: '#0274FF',
-        //     size: 100,
-        // },
-        // {
-        //     name: 'mars',
-        //     color: '#FF4A02',
-        //     size: 146,
-        // },
-        // {
-        //     name: 'jupiter',
-        //     color: '#FFCF54',
-        //     size: 166,
-        // },
-        // {
-        //     name: 'saturn',
-        //     color: '#FFE9B3',
-        //     size: 112,
-        // },
-        // {
-        //     name: 'uranus',
-        //     color: '#01AE83',
-        //     size: 112,
-        // },
+        {
+            name: 'mercury',
+            color: '#FF8D02',
+            size: 48,
+            index: 0, // need index since the order of the planets in the array will change
+        },
+        {
+            name: 'venus',
+            color: '#F8B763',
+            size: 73,
+            index: 1,
+        },
+        {
+            name: 'earth',
+            color: '#0274FF',
+            size: 100,
+            index: 2,
+        },
+        {
+            name: 'mars',
+            color: '#FF4A02',
+            size: 146,
+            index: 3,
+        },
+        {
+            name: 'jupiter',
+            color: '#FFCF54',
+            size: 166,
+            index: 4,
+        },
+        {
+            name: 'saturn',
+            color: '#FFE9B3',
+            size: 112,
+            index: 5,
+        },
+        {
+            name: 'uranus',
+            color: '#01AE83',
+            size: 112,
+            index: 6,
+        },
         {
             name: 'neptune',
             color: '#1842FF',
             size: 84,
+            index: 7,
         },
     ],
     pianoModes: Object.keys(messages.en.modes),

@@ -25,16 +25,11 @@
                     opacity="0.4"
                 />
                 <Planet
-                    v-for="(planet, index) in planets"
+                    v-for="planet in planets"
                     :key="planet.name"
-                    :index="index"
+                    :name="planet.name"
                     @interaction="interaction"
                 />
-                <!-- <use
-                    v-bind="{
-                        'xlink:href': `#planet-${lastInteractedPlanetId}`,
-                    }"
-                /> -->
             </svg>
         </div>
         <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" />

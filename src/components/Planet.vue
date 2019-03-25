@@ -55,8 +55,8 @@ export default {
     },
 
     props: {
-        index: {
-            type: Number,
+        name: {
+            type: String,
             required: true,
         },
     },
@@ -74,7 +74,11 @@ export default {
 
     computed: {
         planet() {
-            return store.planets[this.index]
+            return store.planets.find(planet => planet.name === this.name)
+        },
+
+        index() {
+            return this.planet.index
         },
 
         // x() {
@@ -109,10 +113,6 @@ export default {
 
         matrix() {
             return this.$refs.planetGroup.transform.baseVal[0].matrix
-        },
-
-        name() {
-            return this.planet.name
         },
 
         size() {
@@ -216,11 +216,11 @@ export default {
                 () => {
                     console.log('press')
                     this.$emit('interaction', name)
-                    // this.holdingTimeoutId = window.setTimeout(() => {
-                    //     this.holding = true
-                    //     console.log('holding')
-                    // }, 300)
-                    // console.log('pressed')
+                    this.holdingTimeoutId = window.setTimeout(() => {
+                        this.holding = true
+                        console.log('holding')
+                    }, 300)
+                    console.log('pressed')
                 }
             )
 
