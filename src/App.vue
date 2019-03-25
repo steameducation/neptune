@@ -17,14 +17,14 @@
                     v-for="(planet, index) in planets"
                     :key="planet.name"
                     :index="index"
+                    :amplitude="planet.amplitude"
                     @interaction="interaction"
-                    @updateDragBounds="updateDragBounds"
                 />
-                <use
+                <!-- <use
                     v-bind="{
                         'xlink:href': `#planet-${lastInteractedPlanetId}`,
                     }"
-                />
+                /> -->
             </svg>
         </div>
         <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" />
@@ -50,6 +50,9 @@ import Piano from '@/components/Piano.vue'
 import Sun from '@/components/Sun.vue'
 
 import Vue from 'vue'
+
+import utils from '@/utils.js'
+import Draggable from 'gsap/Draggable'
 
 import store from '@/store.js'
 import { sample, random, debounce } from 'lodash'
@@ -154,11 +157,41 @@ export default {
         // this.positionPlanetsHorizontally()
         this.positionPlanetsSequentially()
         // this.setPlanetPosition('neptune', 800, 400)
-        console.log('app mounted')
-        // this.updateDragBounds()
+        this.initDraggables()
+        this.updateDragBounds()
     },
 
     methods: {
+        initDraggables() {
+            for (let i = 0; i < store.planets.length; i++) {
+                const name = store.planets[i].name
+                store.planets[i].draggable = Draggable.create(
+                    `#planet-${name}`,
+                    {
+                        cursor: 'pointer',
+                        onDrag: () => {
+                            const y =
+                                document.querySelector(`#planet-${name}`)
+                                    .transform.baseVal[0].matrix.f -
+                                store.planets[i].size
+
+                            const height = window.screenfull.isFullscreen
+                                ? store.canvas.height - store.planets[i].size
+                                : store.canvas.height -
+                                  2 * store.planets[i].size
+
+                            // console.log({ height, y })
+                            const mapped = utils.map(y, 0, height, 1, 0.01)
+                            store.planets[i].amplitude =
+                                mapped >= 1 ? 1 : mapped
+                            // console.log({ mapped })
+                            console.log('amplitude', store.planets[i].amplitude)
+                        },
+                    }
+                )[0]
+            }
+        },
+
         interaction(evt) {
             console.log('interaction in app with evt', evt)
             this.lastInteractedPlanetId = evt
@@ -225,7 +258,7 @@ export default {
 
         updateDragBounds() {
             const maxDragHeight = this.getMaxDragHeight()
-            this.planets.forEach(planet => {
+            store.planets.forEach(planet => {
                 planet.draggable.applyBounds({
                     top: 0,
                     left: 0,
@@ -364,7 +397,7 @@ export default {
     text-align: center;
     margin-top: 60px;
     --ratio: calc(16 / 9); // TODO: this should be inferred from image
-    --percentage: 95; // percentage of viewport to use (better than using 100%)
+    --percentage: 100; // percentage of viewport to use (better than using 100%)
     width: calc(var(--percentage) * 1vw);
     height: calc(1 / var(--ratio) * 95vw);
     max-height: calc(var(--percentage) * 1vh);

@@ -56,7 +56,7 @@ const store = new Vue.observable({
     appMode: 'piano', // 'piano', 'nasa', 'record'
     showPiano: false,
     showShare: false,
-    showInfo: true,
+    showInfo: false,
     locked: false,
     muted: false,
     fullscreen: false,

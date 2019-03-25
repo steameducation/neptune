@@ -38,8 +38,6 @@
 <script>
 import teoria from 'teoria'
 import store from '@/store.js'
-import utils from '@/utils.js'
-import Draggable from 'gsap/Draggable'
 
 import Fact from '@/components/Fact.vue'
 
@@ -54,6 +52,11 @@ export default {
         index: {
             type: Number,
             required: true,
+        },
+
+        amplitude: {
+            type: Number,
+            default: 1,
         },
     },
 
@@ -141,16 +144,8 @@ export default {
     },
 
     created() {
-        console.log('planet created')
         this.$root.$on('noteOn', this.noteOn)
         this.$root.$on('noteOff', this.noteOff)
-        store.planets[this.index].draggable = Draggable.create(
-            `#planet-${this.name}`,
-            {
-                cursor: 'pointer',
-            }
-        )[0]
-        this.$emit('updateDragBounds')
     },
 
     methods: {
@@ -160,17 +155,6 @@ export default {
 
         noteOn(index) {
             if (index !== this.index) return
-
-            // First determine amplitude
-            const y =
-                this.$refs.planetGroup.transform.baseVal[0].matrix.f - this.size
-
-            const height = window.screenfull.isFullscreen
-                ? store.canvas.height
-                : store.canvas.height - 2 * this.size
-            this.amplitude = utils.map(y, 0, height, 1, 0.01)
-            this.amplitude = this.amplitude >= 1 ? 1 : this.amplitude
-            console.log('amplitude', this.amplitude)
 
             // Then play sound
             if (store.appMode === 'piano') this.playPiano()

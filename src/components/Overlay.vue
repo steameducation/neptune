@@ -3,7 +3,7 @@
         <FontAwesomeIcon
             class="btnOverlayClose"
             icon="times"
-            @click="dismiss"
+            @click="dismiss3"
         ></FontAwesomeIcon>
         <slot />
     </div>
@@ -13,15 +13,20 @@
 import store from '@/store.js'
 
 export default {
+    data() {
+        return {
+            dismiss3: null,
+        }
+    },
     mounted() {
         document.addEventListener('keyup', evt => {
             console.log('pressing a key')
-            if (evt.key === 'Escape') this.dismiss()
+            if (evt.key === 'Escape') this.dismiss2()
         })
     },
 
     methods: {
-        dismiss() {
+        dismiss2() {
             store.showInfo = false
             store.showShare = false
         },
@@ -46,7 +51,7 @@ export default {}
 }
 
 .overlay {
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
 }
 </style>
