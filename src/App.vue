@@ -3,17 +3,6 @@
         <div class="stars"></div>
         <div id="canvas">
             <svg viewBox="0 0 1920 1080">
-                <defs>
-                    <filter id="greyscale">
-                        <feColorMatrix
-                            type="matrix"
-                            values="0.33 0.33 0.33 0 0
-                             0.33 0.33 0.33 0 0
-                             0.33 0.33 0.33 0 0
-                             0 0 0 1 0"
-                        />
-                    </filter>
-                </defs>
                 <Sun />
                 <Piano
                     v-show="showPiano && appMode === 'piano'"
@@ -32,7 +21,8 @@
                 />
             </svg>
         </div>
-        <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" />
+        <!-- <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" /> -->
+        <Bottombar ref="bottombar" @lock="lock" />
         <FontAwesomeIcon
             icon="times"
             class="btnFullscreenClose btnFullscreen"
@@ -130,7 +120,6 @@ export default {
 
     watch: {
         appMode(newMode, oldMode) {
-            console.log({ oldMode, newMode })
             if (this.appMode === 'record' && !store.recorder)
                 this.initRecorder()
 
@@ -157,7 +146,6 @@ export default {
 
         lastInteractedPlanetId(oldPlanet, newPlanet) {
             Howler.ctx.resume()
-            console.log('swapping', oldPlanet, newPlanet)
             utils.swap(
                 store.planets,
                 store.planets.length - 1,
@@ -165,10 +153,6 @@ export default {
                     planet => planet.name === this.lastInteractedPlanetId
                 )
             )
-        },
-
-        maxDragHeight() {
-            console.log('maxDragHeight is now', this.maxDragHeight)
         },
 
         locked() {
@@ -200,7 +184,6 @@ export default {
         // this.setPlanetPosition('neptune', 800, 400)
         this.initDraggables()
         this.updateDragBounds()
-        console.log('app finished mounting')
     },
 
     methods: {
@@ -213,14 +196,7 @@ export default {
                         allowEventDefault: true,
                         cursor: 'pointer',
                         onDrag: () => {
-                            if (store.locked) {
-                                console.log('returning because locked')
-                                return
-                            } else {
-                                console.log('store not locked', store.locked)
-                            }
-                            console.log('this drag')
-                            // this.interaction({ name })
+                            if (store.locked) return
                             const y =
                                 document.querySelector(`#planet-${name}`)
                                     .transform.baseVal[0].matrix.f -
@@ -231,12 +207,9 @@ export default {
                                 : store.canvas.height -
                                   2 * store.planets[i].size
 
-                            // console.log({ height, y })
                             const mapped = utils.map(y, 0, height, 1, 0.01)
                             store.planets[i].amplitude =
                                 mapped >= 1 ? 1 : mapped
-                            console.log({ mapped })
-                            console.log('amplitude', store.planets[i].amplitude)
                             this.$root.$emit('amplitude', {
                                 name,
                                 amplitude: mapped,
@@ -248,13 +221,6 @@ export default {
         },
 
         interaction(evt) {
-            console.log('interaction callback', evt)
-            console.log(
-                'lastInteractedPlanetId',
-                this.lastInteractedPlanetId,
-                'evt',
-                this.evt
-            )
             this.lastInteractedPlanetId = evt
         },
 
@@ -263,7 +229,6 @@ export default {
         },
 
         resize() {
-            console.log('resizing')
             debounce(() => {
                 console.log('resizing')
             }, 100)
@@ -381,7 +346,6 @@ export default {
 
                     const dx = this.canvas.width - 2 * r1
                     x1 = Math.floor(Math.random() * dx + r1)
-                    console.log(x1, this.canvas.width, r1)
 
                     const dy =
                         this.canvas.height -
@@ -389,8 +353,6 @@ export default {
                         document.querySelector('.bottombar').clientHeight -
                         20
                     y1 = Math.floor(Math.random() * dy + r1)
-
-                    console.log({ x1, y1 })
 
                     for (let j = 0; j < i; j++) {
                         const x2 = this.planets[j].x

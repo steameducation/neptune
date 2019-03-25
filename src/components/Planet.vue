@@ -177,17 +177,11 @@ export default {
         holding() {
             if (this.appMode === 'piano' || this.appMode === 'nasa') {
                 if (this.holding) {
-                    console.log('toggling fact')
-                    console.log('toggling fact')
                     this.toggleFact()
                 }
             } else if (this.appMode === 'record') {
                 this.toggleRecording()
             }
-        },
-
-        'store.recordings': () => {
-            console.log('recordings changed')
         },
     },
 
@@ -209,18 +203,12 @@ export default {
 
     mounted() {
         Vue.nextTick(() => {
-            console.log('nextTick mounted planet')
-
             store.planets[this.index].draggable.addEventListener(
                 'press',
                 () => {
-                    console.log('press')
-                    this.$emit('interaction', this.name)
                     this.holdingTimeoutId = window.setTimeout(() => {
                         this.holding = true
-                        console.log('holding')
                     }, 300)
-                    console.log('pressed')
                 }
             )
 
@@ -235,7 +223,6 @@ export default {
                 'dragstart',
                 () => {
                     if (this.locked) return
-                    console.log('dragStart')
                     this.dragging = true
                     this.holding = false
                     window.clearTimeout(this.holdingTimeoutId)
@@ -246,7 +233,6 @@ export default {
                 'dragend',
                 () => {
                     if (this.locked) return
-                    console.log('dragEnd')
                     this.dragging = false
                 }
             )
@@ -258,7 +244,6 @@ export default {
     methods: {
         initHammer() {
             const el = document.querySelector(`#planet-${this.name}`)
-            console.log(el)
             var mc = new window.Hammer.Manager(el)
             // mc.add(new window.Hammer.Tap({ event: 'doubletap', taps: 2 }))
             // mc.add(new window.Hammer.Tap({ event: 'singletap' }))
@@ -266,7 +251,6 @@ export default {
             // mc.get('doubletap').recognizeWith('singletap')
             // mc.get('singletap').requireFailure('doubletap')
             mc.on('press pressup', ev => {
-                console.log(ev.type)
                 if (this.appMode === 'piano' || this.appMode === 'nasa') {
                     if (ev.type === 'press') {
                         this.toggleFact()
@@ -299,13 +283,7 @@ export default {
         },
 
         playPiano() {
-            console.log(
-                'playing',
-                this.note,
-                '@',
-                this.amplitude,
-                this.sound.volume()
-            )
+            this.$emit('pianoOn', this.note)
             this.sound.volume(this.amplitude)
             this.sound.play()
             this.playing = true
@@ -331,12 +309,10 @@ export default {
                 store.soundscapes[this.name].fade(0, this.amplitude, 2000)
                 this.playing = true
             } else {
-                console.log('stopping')
                 store.soundscapes[this.name].fade(this.amplitude, 0, 1000)
                 setTimeout(() => {
                     store.soundscapes[this.name].stop()
                 }, 1000)
-                // store.soundscapes[this.name].stop()
                 this.playing = false
             }
         },
@@ -347,7 +323,6 @@ export default {
         },
 
         toggleFact() {
-            console.log('detected double click')
             if (this.showFact)
                 this.factIndex = (this.factIndex + 1) % this.facts.length
             this.showFact = !this.showFact
@@ -365,7 +340,6 @@ export default {
             }
             this.holding = false
             window.clearTimeout(this.holdingTimeoutId)
-            console.log('holding canceled')
         },
     },
 }

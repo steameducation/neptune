@@ -3,7 +3,6 @@
         id="mypiano"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 426.629 243.788"
-        filter="url('#greyscale')"
     >
         <g id="Piano" transform="translate(-1474.033 -84.212)">
             <g
@@ -161,21 +160,18 @@ export default {
             type: Boolean,
             default: false,
         },
-        bw: {
-            type: Boolean,
-            default: false,
-        },
     },
 
     created() {
         if (this.highlight) {
-            this.$root.$on('noteOn', this.pianoOn)
-            this.$root.$on('noteOff', this.pianoOff)
+            this.$root.$on('pianoOn', this.pianoOn)
+            this.$root.$on('pianoOff', this.pianoOff)
         }
     },
 
     methods: {
         pianoOn(note) {
+            console.log({ note })
             return
             if (!this.highlight) return
             this.setHighlight(note, true)

@@ -15,7 +15,6 @@ import store from '@/store.js'
 export default {
     mounted() {
         document.addEventListener('keyup', evt => {
-            console.log('pressing a key')
             if (evt.key === 'Escape') this.dismiss()
         })
     },

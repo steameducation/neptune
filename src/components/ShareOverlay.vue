@@ -43,20 +43,12 @@ export default {
         }
     },
 
-    watch: {
-        exit() {
-            console.log('exit change to', this.exit)
-        },
-    },
-
     mounted() {
         this.exit = false
     },
 
     methods: {
-        getShareUrl() {
-            console.log('posting to backend')
-        },
+        getShareUrl() {},
 
         shareFacebook() {
             window.open(

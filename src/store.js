@@ -62,7 +62,7 @@ const store = new Vue.observable({
     pianoModes: Object.keys(messages.en.modes),
     pianoMode: Object.keys(messages.en.modes)[0],
     appMode: 'piano', // 'piano', 'nasa', 'record'
-    showPiano: false,
+    showPiano: true,
     showShare: false,
     showInfo: false,
     locked: false,
