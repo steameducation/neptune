@@ -215,7 +215,7 @@ export default {
                 'press',
                 () => {
                     console.log('press')
-                    this.$emit('interaction', name)
+                    this.$emit('interaction', this.name)
                     this.holdingTimeoutId = window.setTimeout(() => {
                         this.holding = true
                         console.log('holding')
@@ -310,7 +310,7 @@ export default {
             this.sound.play()
             this.playing = true
             this.sound.on('end', () => {
-                console.log('ended')
+                if (this.sound.playing()) return
                 this.$root.$emit('noteOff', this.index)
             })
         },

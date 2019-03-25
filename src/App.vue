@@ -155,8 +155,9 @@ export default {
             }
         },
 
-        lastInteractedPlanetId() {
+        lastInteractedPlanetId(oldPlanet, newPlanet) {
             Howler.ctx.resume()
+            console.log('swapping', oldPlanet, newPlanet)
             utils.swap(
                 store.planets,
                 store.planets.length - 1,
@@ -164,10 +165,6 @@ export default {
                     planet => planet.name === this.lastInteractedPlanetId
                 )
             )
-            // const planets = new Array.length()
-            // store.planets.forEach(planet => {
-            //     if (planet.name === lastInteractedPlanetId)
-            // })
         },
 
         maxDragHeight() {
@@ -223,7 +220,7 @@ export default {
                                 console.log('store not locked', store.locked)
                             }
                             console.log('this drag')
-                            this.interaction(name)
+                            // this.interaction({ name })
                             const y =
                                 document.querySelector(`#planet-${name}`)
                                     .transform.baseVal[0].matrix.f -
@@ -251,7 +248,13 @@ export default {
         },
 
         interaction(evt) {
-            console.log('interaction callback')
+            console.log('interaction callback', evt)
+            console.log(
+                'lastInteractedPlanetId',
+                this.lastInteractedPlanetId,
+                'evt',
+                this.evt
+            )
             this.lastInteractedPlanetId = evt
         },
 
@@ -267,7 +270,7 @@ export default {
         },
 
         initKeyboardShortcuts() {
-            document.addEventListener('keyup', evt => {
+            document.addEventListener('keypress', evt => {
                 // bottom bar
                 if (evt.key === 'l') store.locked = !store.locked
                 if (evt.key === 'p') store.showPiano = !store.showPiano
