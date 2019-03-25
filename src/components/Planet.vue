@@ -283,13 +283,14 @@ export default {
         },
 
         playPiano() {
-            this.$emit('pianoOn', this.note)
+            this.$root.$emit('pianoOn', this.note)
             this.sound.volume(this.amplitude)
             this.sound.play()
             this.playing = true
             this.sound.on('end', () => {
                 if (this.sound.playing()) return
                 this.$root.$emit('noteOff', this.index)
+                this.$root.$emit('pianoOff', this.note)
             })
         },
 
