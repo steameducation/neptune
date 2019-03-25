@@ -129,15 +129,24 @@ export default {
                 this.initRecorder()
 
             if (oldMode === 'nasa') {
-                Object.keys(store.soundscapes).forEach(soundscapeKey =>
-                    store.soundscapes[soundscapeKey].fade(1, 0, 500)
-                )
+                Object.keys(store.soundscapes).forEach(soundscapeKey => {
+                    if (store.soundscapes[soundscapeKey].playing()) {
+                        store.soundscapes[soundscapeKey].fade(1, 0, 500)
+                        setTimeout(() => {
+                            store.soundscapes[soundscapeKey].stop()
+                        }, 500)
+                    }
+                })
             } else if (oldMode === 'piano') {
-                Object.keys(store.sounds).forEach(soundKey =>
-                    store.sounds[soundKey].fade(1, 0, 500)
-                )
+                Object.keys(store.sounds).forEach(pianoKey => {
+                    if (store.sounds[pianoKey].playing()) {
+                        store.sounds[pianoKey].fade(1, 0, 500)
+                        setTimeout(() => {
+                            store.sounds[pianoKey].stop()
+                        }, 500)
+                    }
+                })
             }
-
         },
 
         maxDragHeight() {

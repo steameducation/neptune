@@ -229,6 +229,8 @@ export default {
                 () => {
                     console.log('dragStart')
                     this.dragging = true
+                    this.holding = false
+                    window.clearTimeout(this.holdingTimeoutId)
                 }
             )
 
@@ -317,10 +319,15 @@ export default {
             if (!this.playing) {
                 store.soundscapes[this.name].volume(this.amplitude)
                 store.soundscapes[this.name].play()
+                store.soundscapes[this.name].fade(0, this.amplitude, 2000)
                 this.playing = true
             } else {
                 console.log('stopping')
-                store.soundscapes[this.name].stop()
+                store.soundscapes[this.name].fade(this.amplitude, 0, 1000)
+                setTimeout(() => {
+                    store.soundscapes[this.name].stop()
+                }, 1000)
+                // store.soundscapes[this.name].stop()
                 this.playing = false
             }
         },
