@@ -66,6 +66,7 @@ import Draggable from 'gsap/Draggable'
 
 import store from '@/store.js'
 import { sample, random, debounce } from 'lodash'
+import { Howler } from 'howler'
 
 import Recorder from '@/recorder.js'
 
@@ -160,6 +161,7 @@ export default {
         },
 
         lastInteractedPlanetId() {
+            Howler.ctx.resume()
             utils.swap(
                 store.planets,
                 store.planets.length - 1,
@@ -216,8 +218,15 @@ export default {
                 store.planets[i].draggable = Draggable.create(
                     `#planet-${name}`,
                     {
+                        allowEventDefault: true,
                         cursor: 'pointer',
                         onDrag: () => {
+                            if (store.locked) {
+                                console.log('returning because locked')
+                                return
+                            } else {
+                                console.log('store not locked', store.locked)
+                            }
                             console.log('this drag')
                             this.interaction(name)
                             const y =

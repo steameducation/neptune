@@ -19,7 +19,12 @@
                 />
             </filter>
         </defs>
-        <g :id="`planet-${name}`" ref="planetGroup" class="planet">
+        <g
+            :id="`planet-${name}`"
+            ref="planetGroup"
+            class="planet"
+            @click="click"
+        >
             <circle
                 :r="size / 2"
                 :fill="color"
@@ -220,20 +225,14 @@ export default {
             store.planets[this.index].draggable.addEventListener(
                 'release',
                 () => {
-                    if (this.appMode === 'piano' || this.appMode === 'nasa') {
-                        if (!this.holding && !this.dragging) this.play()
-                    } else if (this.appMode === 'record' && !this.dragging) {
-                        if (!this.recording) this.play()
-                    }
-                    this.holding = false
-                    window.clearTimeout(this.holdingTimeoutId)
-                    console.log('holding canceled')
+                    this.release()
                 }
             )
 
             store.planets[this.index].draggable.addEventListener(
                 'dragstart',
                 () => {
+                    if (this.locked) return
                     console.log('dragStart')
                     this.dragging = true
                     this.holding = false
@@ -244,6 +243,7 @@ export default {
             store.planets[this.index].draggable.addEventListener(
                 'dragend',
                 () => {
+                    if (this.locked) return
                     console.log('dragEnd')
                     this.dragging = false
                 }
@@ -349,6 +349,21 @@ export default {
             if (this.showFact)
                 this.factIndex = (this.factIndex + 1) % this.facts.length
             this.showFact = !this.showFact
+        },
+
+        click() {
+            if (!store.planets[this.index].draggable.enabled()) this.release()
+        },
+
+        release() {
+            if (this.appMode === 'piano' || this.appMode === 'nasa') {
+                if (!this.holding && !this.dragging) this.play()
+            } else if (this.appMode === 'record' && !this.dragging) {
+                if (!this.recording) this.play()
+            }
+            this.holding = false
+            window.clearTimeout(this.holdingTimeoutId)
+            console.log('holding canceled')
         },
     },
 }
