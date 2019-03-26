@@ -19,7 +19,13 @@
                 />
             </filter>
         </defs>
-        <g :id="`planet-${name}`" ref="planetGroup" class="planet">
+        <g
+            :id="`planet-${name}`"
+            ref="planetGroup"
+            class="planet"
+            @click="click"
+            @touchstart.stop="click"
+        >
             <circle
                 :r="size / 2"
                 :fill="color"
@@ -64,6 +70,7 @@ export default {
             holding: false,
             dragging: false,
             amplitude: 1,
+            noteOns: [],
         }
     },
 
@@ -186,12 +193,12 @@ export default {
         this.$root.$on('amplitude', evt => {
             if (evt.name === this.name) {
                 this.amplitude = evt.amplitude
-                if (this.appMode === 'piano')
-                    store.sounds[this.note].volume(this.amplitude)
+                // if (this.appMode === 'piano')
+                //     store.sounds[this.note].volume(this.amplitude)
                 if (this.appMode === 'nasa')
                     store.soundscapes[this.name].volume(this.amplitude)
-                if (this.appMode === 'record')
-                    store.recordings[this.name].volume = this.amplitude
+                // if (this.appMode === 'record')
+                //     store.recordings[this.name].volume = this.amplitude
             }
         })
     },
@@ -231,6 +238,9 @@ export default {
                     this.dragging = false
                 }
             )
+
+            // NOTE: determine actual amplitude according to position on screen on start
+            this.amplitude = this.$parent.determineAmplitude(this.index) // LOL...
         })
 
         // this.initHammer()
@@ -259,13 +269,13 @@ export default {
                 }
             })
         },
+
         play() {
             this.$root.$emit('noteOn', this.index)
         },
 
         noteOn(index) {
             if (index !== this.index) return
-
             // Then play sound
             if (store.appMode === 'piano') this.playPiano()
             else if (store.appMode === 'nasa') this.playNASA()
@@ -279,13 +289,28 @@ export default {
 
         playPiano() {
             this.$root.$emit('pianoOn', this.note)
+            const v = store.sounds[this.note].volume()
             this.sound.volume(this.amplitude)
+            console.log(
+                'pianoOn',
+                v,
+                store.sounds[this.note].volume(),
+                'should be',
+                this.amplitude
+            )
             this.sound.play()
+            this.noteOns.push(this.note)
             this.playing = true
-            this.sound.on('end', () => {
-                if (this.sound.playing()) return
+            store.sounds[this.note].on('end', () => {
+                if (this.noteOns.length === 0) {
+                    console.log('trying to stop a sound that doesnt exist')
+                    return
+                }
+                let note = this.noteOns.shift()
+                console.log('ending note', { note })
+                if (this.sound.playing() && this.noteOns[0] == note) return
                 this.$root.$emit('noteOff', this.index)
-                this.$root.$emit('pianoOff', this.note)
+                this.$root.$emit('pianoOff', note)
             })
         },
 

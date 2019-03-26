@@ -76,7 +76,7 @@ export default {
 
     methods: {
         pianoOn(note) {
-            console.log('pianoOn', { note })
+            // console.log('pianoOn', { note })
             if (!this.highlight) return
             this.setHighlight(note, true)
         },

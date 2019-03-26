@@ -4,7 +4,7 @@
             <h1>lorem</h1>
             <!-- FIXME: think this is how Google Fonts works, so just requests font for headings when needed, so force request here so that when overlay shows up it is already loaded. fix later somehow more elantly. the images preload too -->
         </div>
-        <div id="canvas">
+        <div id="canvas" ref="canvas">
             <svg viewBox="0 0 1920 1080">
                 <Sun />
                 <Piano
@@ -215,27 +215,28 @@ export default {
                         cursor: 'pointer',
                         onDrag: () => {
                             if (store.locked) return
-                            const y =
-                                document.querySelector(`#planet-${name}`)
-                                    .transform.baseVal[0].matrix.f -
-                                store.planets[i].size
-
-                            const height = window.screenfull.isFullscreen
-                                ? store.canvas.height - store.planets[i].size
-                                : store.canvas.height -
-                                  2 * store.planets[i].size
-
-                            const mapped = utils.map(y, 0, height, 1, 0.01)
-                            store.planets[i].amplitude =
-                                mapped >= 1 ? 1 : mapped
                             this.$root.$emit('amplitude', {
                                 name,
-                                amplitude: mapped,
+                                amplitude: this.determineAmplitude(i),
                             })
                         },
                     }
                 )[0]
             }
+        },
+
+        determineAmplitude(i) {
+            const name = store.planets[i].name
+            const y =
+                document.querySelector(`#planet-${name}`).transform.baseVal[0]
+                    .matrix.f - store.planets[i].size
+
+            const height = window.screenfull.isFullscreen
+                ? store.canvas.height - store.planets[i].size
+                : store.canvas.height - 2 * store.planets[i].size
+
+            const mapped = utils.map(y, 0, height, 1, 0.01)
+            return mapped >= 1 ? 1 : mapped
         },
 
         interaction(evt) {
@@ -289,9 +290,9 @@ export default {
                 return this.canvas.height
             } else {
                 try {
-                    const h1 = document.querySelector('.bottombar').clientHeight
-                    const h2 = document.querySelector('#canvas').clientHeight
-                    let ret = (1 - h1 / h2) * this.canvas.height - 18
+                    const h1 = this.$refs.bottombar.$el.clientHeight
+                    const h2 = this.$refs.canvas.clientHeight
+                    let ret = (1 - h1 / h2) * this.canvas.height
                     return ret
                 } catch (e) {
                     console.log('failing silently', e)
@@ -301,6 +302,7 @@ export default {
         },
 
         updateDragBounds() {
+            console.log('updating drag bounds')
             const maxDragHeight = this.getMaxDragHeight()
             store.planets.forEach(planet => {
                 planet.draggable.applyBounds({
@@ -337,7 +339,7 @@ export default {
                 const dy =
                     this.canvas.height -
                     2 * r -
-                    document.querySelector('.bottombar').clientHeight -
+                    document.querySelector('#bottombar').clientHeight -
                     20
                 const y = random(dy) + r
                 const index = sample(indexes)

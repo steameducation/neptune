@@ -16,14 +16,14 @@
                 <FontAwesomeIcon :icon="['fab', 'twitter']"></FontAwesomeIcon>
                 Twitter
             </div>
-            <a
+            <!-- <a
                 href="https://twitter.com/intent/tweet?screen_name=SteamSpace1&ref_src=twsrc%5Etfw"
                 class="twitter-mention-button"
                 data-size="large"
                 data-text="Just tried the Neptune app. "
                 data-show-count="false"
                 >Tweet to @SteamSpace1</a
-            >
+            > -->
         </div>
     </Overlay>
 </template>

@@ -92,6 +92,7 @@ section {
     padding-top: var(--icon-size);
     height: 60%;
     a {
+        color: var(--active);
         text-decoration: none;
         &:hover {
             text-decoration: underline;
