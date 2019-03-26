@@ -6,78 +6,28 @@
     >
         <g id="Piano" transform="translate(-1474.033 -84.212)">
             <g id="C3" transform="translate(1474.033 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect x="0.5" y="0.5" width="52.329" height="242.788" />
+                <rect width="53.329" height="243.788" />
             </g>
             <g id="D3" transform="translate(1527.362 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect
-                    x="0.5"
-                    y="0.5"
-                    width="52.329"
-                    height="242.788"
-                    fill="none"
-                />
+                <rect width="53.329" height="243.788" />
             </g>
             <g id="E3" transform="translate(1580.69 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect
-                    x="0.5"
-                    y="0.5"
-                    width="52.329"
-                    height="242.788"
-                    fill="none"
-                />
+                <rect width="53.329" height="243.788" />
             </g>
             <g id="F3" transform="translate(1634.019 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect
-                    x="0.5"
-                    y="0.5"
-                    width="52.329"
-                    height="242.788"
-                    fill="none"
-                />
+                <rect width="53.329" height="243.788" />
             </g>
             <g id="G3" transform="translate(1687.348 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect
-                    x="0.5"
-                    y="0.5"
-                    width="52.329"
-                    height="242.788"
-                    fill="none"
-                />
+                <rect width="53.329" height="243.788" />
             </g>
             <g id="A3" transform="translate(1740.676 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect
-                    x="0.5"
-                    y="0.5"
-                    width="52.329"
-                    height="242.788"
-                    fill="none"
-                />
+                <rect width="53.329" height="243.788" />
             </g>
             <g id="B3" transform="translate(1794.005 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect
-                    x="0.5"
-                    y="0.5"
-                    width="52.329"
-                    height="242.788"
-                    fill="none"
-                />
+                <rect width="53.329" height="243.788" />
             </g>
             <g id="C4" transform="translate(1847.333 84.212)" class="white">
-                <rect width="53.329" height="243.788" stroke="none" />
-                <rect
-                    x="0.5"
-                    y="0.5"
-                    width="52.329"
-                    height="242.788"
-                    fill="none"
-                />
+                <rect width="53.329" height="243.788" />
             </g>
             <path
                 id="Db3"
@@ -149,6 +99,9 @@ export default {
 <style lang="scss">
 .white {
     fill: #fff;
+}
+
+path {
     stroke: #707070;
 }
 
