@@ -1,5 +1,5 @@
 <template>
-    <div class="overlay">
+    <div>
         <FontAwesomeIcon
             class="btnOverlayClose"
             icon="times"
@@ -31,13 +31,13 @@ export default {
 <style lang="scss">
 .btnOverlayClose {
     position: absolute;
-    top: 50px;
-    right: 50px;
+    top: calc(0.5 * var(--icon-size));
+    right: calc(0.5 * var(--icon-size));
     border: 1px solid var(--grey);
     border-radius: 50%;
-    width: 40px !important;
-    height: 40px;
-    padding: 10px;
+    width: var(--icon-size) !important;
+    height: var(--icon-size);
+    padding: var(--icon-padding);
     color: white;
     &:hover {
         border: 1px solid var(--active);
@@ -49,12 +49,5 @@ export default {
     &:hover {
         cursor: pointer;
     }
-}
-
-.overlay {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 0;
 }
 </style>

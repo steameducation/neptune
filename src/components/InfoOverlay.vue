@@ -1,51 +1,57 @@
 <template>
     <Overlay>
-        <section class="credits">
+        <section id="credits">
             <div class="wrapper">
-                <h1>NepTUNE</h1>
-                <p>
-                    A simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry’s standard dummy
-                    text ever since the 1500s.
-                </p>
-
-                <p>
-                    It was popularised in the 1960s with the release of Letraset
-                    sheets containing.
-                </p>
-
-                <div class="steamGroup">
-                    <a target="_blank" href="http://steameducation.eu/">
-                        <img
-                            src="/img/logos/space.png"
-                            class="logo steam"
-                            alt=""
-                        />
-                    </a>
-                    <a target="_blank" href="http://steameducation.eu/"
-                        >steameducation.eu</a
-                    >
+                <div class="meta-wrapper">
+                    <h1>NepTUNE</h1>
+                    <p>
+                        A simply dummy text of the printing and typesetting
+                        industry. Lorem Ipsum has been the industry’s standard
+                        dummy text ever since the 1500s.
+                    </p>
+                    <div class="steamGroup">
+                        <a target="_blank" href="http://steameducation.eu/">
+                            <img
+                                src="/img/logos/space.png"
+                                class="logo steam"
+                                alt=""
+                            />
+                        </a>
+                        <a target="_blank" href="http://steameducation.eu/"
+                            >steameducation.eu</a
+                        >
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="furtherCredits">
+        <section id="furtherCredits">
             <div class="wrapper">
-                <h2>Further Credits</h2>
-                <p>
-                    A simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum.
-                </p>
-                <a target="_blank" href="https://digitopia.casadamusica.com/">
-                    <img
-                        src="/img/logos/digitopia.png"
-                        class="logo digitopia"
-                        alt=""
-                    />
-                </a>
-                <a target="_blank" href="http://www.casadamusica.com/"
-                    ><img src="/img/logos/cdm.png" class="logo cdm" alt=""
-                /></a>
+                <div class="meta-wrapper">
+                    <h2>Further Credits</h2>
+                    <p>
+                        A simply dummy text of the printing and typesetting
+                        industry.
+                    </p>
+                    <div class="logos">
+                        <a
+                            target="_blank"
+                            href="https://digitopia.casadamusica.com/"
+                        >
+                            <img
+                                src="/img/logos/digitopia.png"
+                                class="logo digitopia"
+                                alt=""
+                            />
+                        </a>
+                        <a target="_blank" href="http://www.casadamusica.com/"
+                            ><img
+                                src="/img/logos/cdm.png"
+                                class="logo cdm"
+                                alt=""
+                        /></a>
+                    </div>
+                </div>
             </div>
         </section>
     </Overlay>
@@ -58,67 +64,74 @@ export default {
     components: {
         Overlay,
     },
+
+    created() {
+        new Image().src = '/img/logos/cdm.png'
+        new Image().src = '/img/logos/digitopia.png'
+        new Image().src = '/img/logos/space.png'
+    },
 }
 </script>
 
 <style lang="scss">
+.wrapper {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+section {
+    text-align: left;
+    display: flex;
+    font-size: 0.8em;
+}
+
+#credits {
+    padding-top: var(--icon-size);
+    height: 60%;
+    a {
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    .steam {
+        width: 20%;
+    }
+}
+
+#furtherCredits {
+    padding-top: 10px;
+    height: 40%;
+    background: #171411;
+    img {
+        margin-top: 10px;
+        height: 36px;
+    }
+    .cdm {
+        margin-left: 10px;
+    }
+}
+
 .logo {
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 5px;
+    padding: 8px;
     background: white;
 }
 
-.steam {
-    width: 160px;
+p,
+a {
+    font-size: 1em;
 }
 
 .steamGroup {
+    margin-top: 10px;
     img {
         display: block;
         margin: 0 auto;
     }
     text-align: center;
-    margin-bottom: 30px;
-}
-
-.digitopia,
-.cdm {
-    height: 60px;
-}
-
-.cdm {
-    margin-left: 15px;
-}
-
-.wrapper {
-    width: 55%;
-    margin: 0 auto;
-}
-
-section {
-    margin: 0 auto;
-    text-align: left !important;
-    p {
-        margin: 20px 0;
-    }
-}
-
-.credits {
-    // height: 80%;
-    margin-top: 100px;
-    h1 {
-        margin-bottom: 20px;
-    }
-}
-
-.furtherCredits {
-    padding: 10px 0;
-    height: 20%;
-    background: #171411;
-    text-align: left;
-    font-size: 14px;
-    display: flex;
-    flex: 2;
-    margin: 0;
 }
 </style>

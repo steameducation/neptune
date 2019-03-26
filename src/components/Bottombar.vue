@@ -258,6 +258,11 @@ export default {
 </script>
 
 <style lang="scss">
+:root {
+    --icon-size: 36px;
+    --icon-padding: 10px;
+}
+
 #bottombar {
     &.grid {
         display: grid;
@@ -270,7 +275,6 @@ export default {
         position: absolute;
         // grid-gap: 10px;
     }
-    --icon-size: 40px;
     background: rgba(168, 168, 168, 0.2);
     opacity: 0.8;
     border-top: 1px solid var(--greyish);
@@ -311,13 +315,14 @@ export default {
     align-items: center;
     justify-content: center;
     grid-column: span 4;
-    height: calc(1.5 * var(--icon-size));
+    // height: calc(1.5 * var(--icon-size));
+    padding: 5px;
     &:hover {
         cursor: pointer;
     }
     .appMode {
-        width: calc(1.3 * var(--icon-size));
-        height: calc(1.3 * var(--icon-size));
+        width: calc(1.4 * var(--icon-size));
+        height: calc(1.4 * var(--icon-size));
         &.active {
             background: var(--active);
             .appModeIcon:hover {
@@ -329,7 +334,7 @@ export default {
             height: var(--icon-size);
             width: 100%;
             height: 100%;
-            padding: 10px;
+            padding: var(--icon-padding);
             &:hover {
                 color: var(--active);
             }

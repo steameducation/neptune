@@ -1,6 +1,9 @@
 <template>
     <div id="app">
-        <div class="stars"></div>
+        <div class="stars">
+            <h1>lorem</h1>
+            <!-- FIXME: think this is how Google Fonts works, so just requests font for headings when needed, so force request here so that when overlay shows up it is already loaded. fix later somehow more elantly. the images preload too -->
+        </div>
         <div id="canvas">
             <svg viewBox="0 0 1920 1080">
                 <Sun />
@@ -37,10 +40,8 @@
             color="white"
             @click="toggleFullscreen"
         ></FontAwesomeIcon> -->
-        <div v-if="showShare || showInfo" class="overlay">
-            <ShareOverlay v-if="showShare" />
-            <InfoOverlay v-if="showInfo" />
-        </div>
+        <ShareOverlay v-show="showShare" class="overlay" />
+        <InfoOverlay v-show="showInfo" class="overlay" />
     </div>
 </template>
 
@@ -153,6 +154,7 @@ export default {
         },
 
         lastInteractedPlanetId(oldPlanet, newPlanet) {
+            console.log('lastInteractedPlanetId changed')
             Howler.ctx.resume()
             utils.swap(
                 store.planets,
@@ -428,7 +430,8 @@ export default {
 @import 'assets/styles/globals';
 @import 'assets/styles/starry';
 
-#app {
+// #app {
+html {
     // font-family: 'Avenir', Helvetica, Arial, sans-serif;
     font-family: 'Space Mono', monospace;
     -webkit-font-smoothing: antialiased;
@@ -447,7 +450,6 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    border: 1px solid lightgrey;
 }
 
 .stars,
@@ -492,5 +494,9 @@ export default {
     color: var(--active);
     // opacity: 0.94;
     width: 100%;
+}
+
+.stars {
+    font-size: 14px;
 }
 </style>
