@@ -195,6 +195,7 @@ export default {
                 if (this.appMode === 'nasa') {
                     // store.soundscapes[this.name].volume(this.amplitude)
                     const v = store.soundscapes[this.name].volume()
+                    console.log(`fading NASA sound ${v} -> ${this.amplitude}`)
                     store.soundscapes[this.name].fade(v, this.amplitude, 1000)
                 }
                 // if (this.appMode === 'record')

@@ -61,7 +61,7 @@ const store = new Vue.observable({
     ],
     pianoModes: Object.keys(messages.en.modes),
     pianoMode: Object.keys(messages.en.modes)[0],
-    appMode: 'record', // 'piano', 'nasa', 'record'
+    appMode: 'piano', // 'piano', 'nasa', 'record'
     showPiano: true,
     showShare: false,
     showInfo: false,
@@ -117,7 +117,7 @@ store.planets.forEach(planet => {
         autoplay: false,
         volume: 0.6,
         loop: true,
-        html5: true,
+        // html5: true, // commenting because if iOS then cannot change volume midway of playing
     })
 })
 
