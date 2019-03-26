@@ -97,8 +97,11 @@
             class="btnIcon"
             @click="toggleFullscreen"
         >
-            <FontAwesomeIcon icon="expand" class="icon"></FontAwesomeIcon>
-            <!-- <Resize /> -->
+            <!-- <FontAwesomeIcon
+                :icon="fullscreen ? 'compress' : 'expand'"
+                class="icon"
+            ></FontAwesomeIcon> -->
+            <Resize :expand="!fullscreen" />
         </div>
     </div>
 </template>
@@ -125,6 +128,7 @@ import {
     faArrowCircleLeft,
     faArrowCircleRight,
     faExpand,
+    faCompress,
     faTimes,
     faMicrophone,
     faSatellite,
@@ -147,6 +151,7 @@ library.add(
     faArrowCircleLeft,
     faArrowCircleRight,
     faExpand,
+    faCompress,
     faTimes,
     faMicrophone,
     faSatellite,
@@ -165,6 +170,10 @@ export default {
     },
 
     computed: {
+        fullscreen() {
+            return store.fullscreen
+        },
+
         pianoMode() {
             return store.pianoMode
         },

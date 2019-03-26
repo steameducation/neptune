@@ -31,12 +31,12 @@
         </div>
         <!-- <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" /> -->
         <Bottombar ref="bottombar" @lock="lock" />
-        <FontAwesomeIcon
+        <!-- <FontAwesomeIcon
             icon="times"
             class="btnFullscreenClose btnFullscreen"
             color="white"
             @click="toggleFullscreen"
-        ></FontAwesomeIcon>
+        ></FontAwesomeIcon> -->
         <div v-if="showShare || showInfo" class="overlay">
             <ShareOverlay v-if="showShare" />
             <InfoOverlay v-if="showInfo" />
