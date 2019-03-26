@@ -19,6 +19,14 @@
                     :name="planet.name"
                     @interaction="interaction"
                 />
+                <!-- FIXME: -->
+                <circle
+                    id="ball"
+                    cx="300"
+                    cy="300"
+                    r="100"
+                    fill="transparent"
+                ></circle>
             </svg>
         </div>
         <!-- <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" /> -->
@@ -184,6 +192,11 @@ export default {
         // this.setPlanetPosition('neptune', 800, 400)
         this.initDraggables()
         this.updateDragBounds()
+
+        // FIXME: a weird way to fix dragging in chrome android.. not sure why
+        // this is happen. will need to figure it out latter
+        Draggable.create('#ball')
+        document.querySelector('#ball').remove()
     },
 
     methods: {
@@ -193,7 +206,7 @@ export default {
                 store.planets[i].draggable = Draggable.create(
                     `#planet-${name}`,
                     {
-                        allowEventDefault: true,
+                        // allowEventDefault: true,
                         cursor: 'pointer',
                         onDrag: () => {
                             if (store.locked) return
@@ -449,6 +462,10 @@ export default {
     left: 0;
     right: 0;
     height: 100%;
+}
+
+#canvas svg {
+    z-index: 10000;
 }
 
 .grid {

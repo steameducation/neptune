@@ -307,19 +307,22 @@ export default {
         cursor: pointer;
     }
     .appMode {
-        // width: calc(1.3 * var(--icon-size));
-        // height: calc(1.3 * var(--icon-size));
+        width: calc(1.3 * var(--icon-size));
+        height: calc(1.3 * var(--icon-size));
         &.active {
             background: var(--active);
+            .appModeIcon:hover {
+                color: white;
+            }
         }
         .appModeIcon {
             width: var(--icon-size);
             height: var(--icon-size);
+            width: 100%;
+            height: 100%;
             padding: 10px;
-            display: flex;
             &:hover {
                 color: var(--active);
-                fill: var(--active);
             }
         }
     }
@@ -369,6 +372,9 @@ export default {
             }
             border-color: var(--active); // other hover alternative
         }
+    }
+    *:focus {
+        outline: none;
     }
 }
 #btnLanguage {

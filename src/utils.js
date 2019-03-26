@@ -10,7 +10,6 @@ export default class {
     }
 
     static modulo(x, m) {
-        console.log({ x, m })
         return ((x % m) + m) % m
     }
 }

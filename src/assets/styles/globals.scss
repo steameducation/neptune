@@ -9,13 +9,21 @@
 
 * {
     -webkit-tap-highlight-color: transparent !important;
-    &:focus {
-        outline: none !important;
-    }
+    // &:focus {
+    //     outline: none !important;
+    // }
 }
 
 * {
     box-sizing: border-box;
+}
+
+*:focus {
+    outline: none !important;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i');

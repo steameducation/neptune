@@ -96,6 +96,9 @@ const notes = [
     'C4',
 ]
 
+import { Howler } from 'howler'
+Howler.html5Poolsize = 30
+
 // Load note sounds
 notes.forEach(note => {
     store.sounds[note] = new Howl({

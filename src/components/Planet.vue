@@ -19,17 +19,12 @@
                 />
             </filter>
         </defs>
-        <g
-            :id="`planet-${name}`"
-            ref="planetGroup"
-            class="planet"
-            @click="click"
-        >
+        <g :id="`planet-${name}`" ref="planetGroup" class="planet">
             <circle
                 :r="size / 2"
                 :fill="color"
-                :filter="`url(#shadow-${name})`"
                 :class="{ hasRecording: hasRecording }"
+                :filter="`url(#shadow-${name})`"
             ></circle>
             <text :y="size / 2 + 30" class="planetLabel">
                 {{ $t(name) }}
