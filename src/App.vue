@@ -177,10 +177,12 @@ export default {
         this.$root.$on('recordStart', this.recordStart)
         this.$root.$on('recordStop', this.recordStop)
         this.initKeyboardShortcuts()
-        window.screenfull.on('change', () => {
-            store.fullscreen = window.screenfull.isFullscreen
-            this.updateDragBounds()
-        })
+        if (window.screenfull.enabled) {
+            window.screenfull.on('change', () => {
+                store.fullscreen = window.screenfull.isFullscreen
+                this.updateDragBounds()
+            })
+        }
 
         if (this.appMode === 'record') this.initRecorder()
     },
@@ -228,9 +230,10 @@ export default {
 
         determineAmplitude(i) {
             const name = store.planets[i].name
+            const sel = `#planet-${name}`
             const y =
-                document.querySelector(`#planet-${name}`).transform.baseVal[0]
-                    .matrix.f - store.planets[i].size
+                document.querySelector(sel).transform.baseVal.getItem(0).matrix
+                    .f - store.planets[i].size
 
             const height = window.screenfull.isFullscreen
                 ? store.canvas.height - store.planets[i].size
@@ -419,6 +422,10 @@ export default {
 
         initRecorder() {
             console.log('initting recorder')
+            if (!navigator.mediaDevices) {
+                console.warn('No navigator.mediaDevices')
+                return
+            }
             store.recorder = new Recorder(5000) // max timeout of 5 seconds
         },
     },

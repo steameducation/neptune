@@ -114,10 +114,6 @@ export default {
             return 'magenta'
         },
 
-        matrix() {
-            return this.$refs.planetGroup.transform.baseVal[0].matrix
-        },
-
         size() {
             return this.planet.size
         },
