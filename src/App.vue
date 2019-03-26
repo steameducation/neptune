@@ -59,7 +59,7 @@ import utils from '@/utils.js'
 import Draggable from 'gsap/Draggable'
 
 import store from '@/store.js'
-import { sample, random, debounce } from 'lodash'
+import { sample, random } from 'lodash'
 import { Howler } from 'howler'
 
 import Recorder from '@/recorder.js'
@@ -153,7 +153,7 @@ export default {
             }
         },
 
-        lastInteractedPlanetId(oldPlanet, newPlanet) {
+        lastInteractedPlanetId() {
             console.log('lastInteractedPlanetId changed')
             Howler.ctx.resume()
             utils.swap(
@@ -181,14 +181,15 @@ export default {
             store.fullscreen = window.screenfull.isFullscreen
             this.updateDragBounds()
         })
+
+        if (this.appMode === 'record') this.initRecorder()
+    },
+
+    mounted() {
         window.addEventListener('resize', () => {
             this.updateDragBounds()
         })
 
-        window.utils = utils
-    },
-
-    mounted() {
         // this.positionPlanetsHorizontally()
         this.positionPlanetsSequentially()
         // this.setPlanetPosition('neptune', 800, 400)
@@ -247,11 +248,7 @@ export default {
             store.locked = evt
         },
 
-        resize() {
-            debounce(() => {
-                console.log('resizing')
-            }, 100)
-        },
+        resize() {},
 
         initKeyboardShortcuts() {
             document.addEventListener('keypress', evt => {
@@ -286,19 +283,19 @@ export default {
         },
 
         getMaxDragHeight() {
-            if (this.fullscreen) {
+            // if (this.fullscreen) {
+            //     return this.canvas.height
+            // } else {
+            try {
+                const h1 = this.$refs.bottombar.$el.clientHeight
+                const h2 = this.$refs.canvas.clientHeight
+                let ret = (1 - h1 / h2) * this.canvas.height
+                return ret
+            } catch (e) {
+                console.log('failing silently', e)
                 return this.canvas.height
-            } else {
-                try {
-                    const h1 = this.$refs.bottombar.$el.clientHeight
-                    const h2 = this.$refs.canvas.clientHeight
-                    let ret = (1 - h1 / h2) * this.canvas.height
-                    return ret
-                } catch (e) {
-                    console.log('failing silently', e)
-                    return this.canvas.height
-                }
             }
+            // }
         },
 
         updateDragBounds() {

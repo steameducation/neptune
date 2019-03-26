@@ -23,8 +23,8 @@
             :id="`planet-${name}`"
             ref="planetGroup"
             class="planet"
-            @click="click"
             @touchstart.stop="click"
+            @mousedown="click"
         >
             <circle
                 :r="size / 2"
@@ -71,6 +71,7 @@ export default {
             dragging: false,
             amplitude: 1,
             noteOns: [],
+            hasTouch: false,
         }
     },
 
@@ -195,8 +196,11 @@ export default {
                 this.amplitude = evt.amplitude
                 // if (this.appMode === 'piano')
                 //     store.sounds[this.note].volume(this.amplitude)
-                if (this.appMode === 'nasa')
-                    store.soundscapes[this.name].volume(this.amplitude)
+                if (this.appMode === 'nasa') {
+                    // store.soundscapes[this.name].volume(this.amplitude)
+                    const v = store.soundscapes[this.name].volume()
+                    store.soundscapes[this.name].fade(v, this.amplitude, 1000)
+                }
                 // if (this.appMode === 'record')
                 //     store.recordings[this.name].volume = this.amplitude
             }
@@ -349,7 +353,9 @@ export default {
             this.showFact = !this.showFact
         },
 
-        click() {
+        click(e) {
+            if (e.type === 'touchstart') this.hasTouch = true
+            if (this.hasTouch && e.type !== 'touchstart') return
             if (!store.planets[this.index].draggable.enabled()) this.release()
         },
 

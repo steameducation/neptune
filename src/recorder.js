@@ -47,6 +47,8 @@ export default class Recorder {
             const audioUrl = URL.createObjectURL(audioBlob)
             const audio = new Audio(audioUrl)
             audio.loop = false
+            audio.pause()
+            audio.currentTime = 0
             this.arr[this.key] = audio
         })
     }
