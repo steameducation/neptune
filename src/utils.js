@@ -8,4 +8,9 @@ export default class {
         a.splice(y, 1, a.splice(x, 1, a[y])[0])
         return a
     }
+
+    static modulo(x, m) {
+        console.log({ x, m })
+        return ((x % m) + m) % m
+    }
 }

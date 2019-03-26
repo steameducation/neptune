@@ -1,23 +1,23 @@
 <template>
-    <div class="bottombar grid">
-        <div class="btnMute" @click="toggleMute">
+    <div id="bottombar" class="grid">
+        <div id="btnMute" class="btnIcon" @click="toggleMute">
             <FontAwesomeIcon
                 class="arrow icon"
                 :icon="muted ? 'volume-mute' : 'volume-up'"
             ></FontAwesomeIcon>
         </div>
 
-        <div class="btnLanguage icon" @click="toggleLanguage">
+        <div id="btnLanguage" class="btnIcon" @click="toggleLanguage">
             <div>{{ locale.toUpperCase() }}</div>
         </div>
 
-        <div class="pianoMode" :class="{ hide: appMode !== 'piano' }">
+        <div id="pianoMode" :class="{ hide: appMode !== 'piano' }">
             <FontAwesomeIcon
                 icon="arrow-circle-left"
                 class="arrow icon"
                 @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
-            <div class="pianoModeText">
+            <div id="pianoModeText">
                 {{ pianoModeText }}
             </div>
             <FontAwesomeIcon
@@ -27,38 +27,44 @@
             ></FontAwesomeIcon>
         </div>
 
-        <div class="appModes">
+        <div id="appModes">
             <div
-                class="appModePiano"
+                id="appModePiano"
+                class="appMode"
                 :class="{ active: appMode === 'piano' }"
                 @click="changeMode('piano')"
             >
-                <Piano class="modeIcon" :highlight="false" />
+                <Piano class="appModeIcon" :highlight="false" />
             </div>
+
             <div
-                class="appModeNASA"
+                id="appModeNASA"
+                class="appMode"
                 :class="{ active: appMode === 'nasa' }"
                 @click="changeMode('nasa')"
             >
                 <FontAwesomeIcon
+                    class="appModeIcon icon"
                     icon="satellite"
-                    class="modeIcon fa-lg icon"
                 ></FontAwesomeIcon>
             </div>
+
             <div
-                class="appModeRecord"
+                id="appModeRecord"
+                class="appMode"
                 :class="{ active: appMode === 'record' }"
                 @click="changeMode('record')"
             >
                 <FontAwesomeIcon
-                    class="modeIcon icon"
+                    class="appModeIcon icon"
                     icon="microphone"
                 ></FontAwesomeIcon>
             </div>
         </div>
 
         <div
-            class="btnPiano"
+            id="btnPiano"
+            class="btnIcon"
             :class="{ active: showPiano, hide: appMode !== 'piano' }"
             @click="togglePiano"
         >
@@ -66,7 +72,8 @@
         </div>
 
         <div
-            class="btnLock"
+            id="btnLock"
+            class="btnIcon"
             :class="{ active: locked }"
             @click="$emit('lock', !locked)"
         >
@@ -76,21 +83,22 @@
             ></FontAwesomeIcon>
         </div>
 
-        <div class="btnShare" @click="toggleShare">
+        <div id="btnShare" class="btnIcon" @click="toggleShare">
             <FontAwesomeIcon icon="link" class="icon"></FontAwesomeIcon>
         </div>
 
-        <div class="btnInfo" @click="toggleInfo">
+        <div id="btnInfo" class="btnIcon" @click="toggleInfo">
             <FontAwesomeIcon icon="info" class="icon"></FontAwesomeIcon>
         </div>
 
         <div
             v-show="isFullscreenCapable"
-            class="btnFullscreen"
+            id="btnFullscreen"
+            class="btnIcon"
             @click="toggleFullscreen"
         >
-            <!-- <FontAwesomeIcon icon="expand" color="white"></FontAwesomeIcon> -->
-            <Resize />
+            <FontAwesomeIcon icon="expand" class="icon"></FontAwesomeIcon>
+            <!-- <Resize /> -->
         </div>
     </div>
 </template>
@@ -148,6 +156,7 @@ library.add(
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
 import { Howler } from 'howler'
+import utils from '@/utils.js'
 
 export default {
     components: {
@@ -209,6 +218,7 @@ export default {
         },
 
         toggleShare() {
+            // TODO:
             // store.showShare = !store.showShare
         },
 
@@ -216,14 +226,11 @@ export default {
             window.screenfull.toggle()
         },
 
-        changePianoMode(dir) {
+        changePianoMode(step) {
             const idx = store.pianoModes.findIndex(
                 pianoMode => pianoMode === store.pianoMode
             )
-            const newIdx =
-                idx + dir < 0
-                    ? store.pianoModes.length - 1
-                    : (idx + dir) % store.pianoModes.length
+            const newIdx = utils.modulo(idx + step, store.pianoModes.length)
             store.pianoMode = store.pianoModes[newIdx]
         },
 
@@ -242,46 +249,45 @@ export default {
 </script>
 
 <style lang="scss">
-.grid {
-    display: grid;
-    grid-template-columns: repeat(14, 1fr);
-    grid-gap: 10px;
-    justify-items: center;
-    align-items: center;
-    width: 100%;
-    height: 100px;
-    bottom: 0;
-    position: absolute;
-}
-
-.bottombar {
+#bottombar {
+    &.grid {
+        display: grid;
+        grid-template-columns: repeat(14, 1fr);
+        justify-items: center;
+        align-items: center;
+        width: 100%;
+        height: calc(max(100px, 20%));
+        bottom: 0;
+        position: absolute;
+        // grid-gap: 10px;
+    }
+    --icon-size: 40px;
     background: rgba(168, 168, 168, 0.2);
-    border-top: 1px solid var(--greyish);
     opacity: 0.8;
+    border-top: 1px solid var(--greyish);
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
 }
 
-.pianoMode {
+#pianoMode {
     grid-column: span 3;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    .pianoModeText {
+    #pianoModeText {
         background: var(--white);
         border-radius: 15px;
-        width: 50%;
-        color: var(--greyish);
-        height: 26px;
-        font-size: 12px;
-        line-height: 26px;
         width: 100%;
+        color: var(--greyish);
+        height: calc(0.5 * var(--icon-size));
+        line-height: calc(0.5 * var(--icon-size));
+        font-size: 11px;
     }
     .arrow {
-        width: 25px;
-        height: 25px;
+        width: calc(0.5 * var(--icon-size));
+        height: calc(0.5 * var(--icon-size));
         margin: 0 8px;
         color: var(--grey);
         &:hover {
@@ -291,40 +297,24 @@ export default {
     }
 }
 
-.appModePiano,
-.appModeRecord,
-.appModeNASA {
-    &.active {
-        .modeIcon {
-            &:hover {
-                color: white;
-            }
-        }
-    }
-}
-
-.appModes {
+#appModes {
     display: flex;
     align-items: center;
     justify-content: center;
     grid-column: span 4;
-    height: 65px;
+    height: calc(1.5 * var(--icon-size));
     &:hover {
         cursor: pointer;
     }
-    div {
-        width: 65px;
-        height: 55px;
-        // background: var(--white);
+    .appMode {
+        // width: calc(1.3 * var(--icon-size));
+        // height: calc(1.3 * var(--icon-size));
         &.active {
             background: var(--active);
-            &:hover {
-                // color: white !important;
-            }
         }
-        .modeIcon {
-            width: 100%;
-            height: 100%;
+        .appModeIcon {
+            width: var(--icon-size);
+            height: var(--icon-size);
             padding: 10px;
             display: flex;
             &:hover {
@@ -332,13 +322,8 @@ export default {
                 fill: var(--active);
             }
         }
-        .appModeRecord svg,
-        .appModeNASA svg {
-            width: 100%;
-            height: 50%;
-        }
     }
-    .appModePiano {
+    #appModePiano {
         border-top-left-radius: 30px;
         border-bottom-left-radius: 30px;
         --border-color: var(--greyish);
@@ -346,13 +331,10 @@ export default {
         border-bottom: 1px solid var(--border-color);
         border-left: 1px solid var(--border-color);
     }
-    .appModeNASA {
+    #appModeNASA {
         border: 1px solid var(--greyish);
     }
-    .appModeRecord {
-        img {
-            padding: 10px;
-        }
+    #appModeRecord {
         border-top-right-radius: 30px;
         border-bottom-right-radius: 30px;
         border-top: 1px solid var(--greyish);
@@ -361,22 +343,16 @@ export default {
     }
 }
 
-.btnMute,
-.btnLanguage,
-.btnPiano,
-.btnLock,
-.btnShare,
-.btnFullscreen,
-.btnInfo {
+.btnIcon {
     display: flex;
     align-items: center;
     justify-content: center;
     fill: var(--white);
     border: 1px solid var(--greyish);
     border-radius: 50%;
-    width: 55px;
-    height: 55px;
-    padding: 15px;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    padding: 10px;
     svg {
         width: 100%;
         height: 100%;
@@ -392,16 +368,19 @@ export default {
                 fill: var(--active);
             }
             border-color: var(--active); // other hover alternative
-            // svg {
-            //     color: var(--active);
-            //     fill: var(--active); // because maximize
-            // }
         }
     }
 }
+#btnLanguage {
+    font-size: 11px;
+    color: white;
+    &:hover {
+        color: var(--active);
+    }
+}
 
-// NOTE: disable share for now
-.btnShare {
+// TODO: disable share for now
+#btnShare {
     &:hover {
         cursor: default;
         border: 1px solid var(--greyish) !important;
@@ -418,19 +397,11 @@ export default {
     fill: grey;
 }
 
-.btnLanguage {
-    // color: var(--white);
-    // }
-    &:hover {
-        color: var(--active);
-    }
+.icon {
+    color: white;
 }
 
 .hide {
     visibility: hidden;
-}
-
-.icon {
-    color: white;
 }
 </style>
