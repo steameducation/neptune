@@ -194,7 +194,10 @@ export default {
         this.updateDragBounds()
 
         // FIXME: a weird way to fix dragging in chrome android.. not sure why
-        // this is happen. will need to figure it out latter
+        // this is happen. will need to figure it out latter. Something to do
+        // with the z-index or similar, since if this isn't used we can pull to
+        // refresh, but with this fix we can't. just if selecting outside of the
+        // svg canvas
         Draggable.create('#ball')
         document.querySelector('#ball').remove()
     },
