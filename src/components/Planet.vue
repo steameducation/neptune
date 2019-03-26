@@ -209,6 +209,8 @@ export default {
             store.planets[this.index].draggable.addEventListener(
                 'press',
                 () => {
+                    console.log('name before emitting', this.name)
+                    this.$emit('interaction', this.name)
                     this.holdingTimeoutId = window.setTimeout(() => {
                         this.holding = true
                     }, 300)

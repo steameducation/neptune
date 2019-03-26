@@ -153,18 +153,6 @@ export default {
             }
         },
 
-        lastInteractedPlanetId() {
-            console.log('lastInteractedPlanetId changed')
-            Howler.ctx.resume()
-            utils.swap(
-                store.planets,
-                store.planets.length - 1,
-                store.planets.findIndex(
-                    planet => planet.name === this.lastInteractedPlanetId
-                )
-            )
-        },
-
         locked() {
             this.planets.forEach(planet => {
                 if (this.locked) planet.draggable.disable()
@@ -185,6 +173,8 @@ export default {
         }
 
         if (this.appMode === 'record') this.initRecorder()
+
+        window.utils = utils
     },
 
     mounted() {
@@ -244,7 +234,21 @@ export default {
         },
 
         interaction(evt) {
+            console.log('interaction!')
+            console.log('lastInteractedPlanetId changed', evt)
+            if (this.lastInteractedPlanetId === evt) {
+                console.log('clicked the same')
+                return
+            }
             this.lastInteractedPlanetId = evt
+            Howler.ctx.resume()
+            utils.swap(
+                store.planets,
+                store.planets.length - 1,
+                store.planets.findIndex(
+                    planet => planet.name === this.lastInteractedPlanetId
+                )
+            )
         },
 
         lock(evt) {
