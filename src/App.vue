@@ -162,6 +162,9 @@ export default {
     },
 
     created() {
+        store.isPwa =
+            new URLSearchParams(window.location.search).get('utm_source') ===
+            'homescreen'
         this.$root.$on('recordStart', this.recordStart)
         this.$root.$on('recordStop', this.recordStop)
         this.initKeyboardShortcuts()

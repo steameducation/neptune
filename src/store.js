@@ -77,7 +77,7 @@ const store = new Vue.observable({
     soundscapes: {},
     recordings: {},
     locales: Object.keys(messages),
-    zIndex: 1000,
+    isPwa: false,
 })
 
 const notes = [

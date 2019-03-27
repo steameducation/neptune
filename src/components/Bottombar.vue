@@ -95,6 +95,7 @@
             v-show="isFullscreenCapable"
             id="btnFullscreen"
             class="btnIcon"
+            :class="{ hide: isPwa }"
             @click="toggleFullscreen"
         >
             <!-- <FontAwesomeIcon
@@ -170,6 +171,10 @@ export default {
     },
 
     computed: {
+        isPwa() {
+            return store.isPwa
+        },
+
         fullscreen() {
             return store.fullscreen
         },
