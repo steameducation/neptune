@@ -79,6 +79,7 @@ const store = new Vue.observable({
     recordings: {},
     locales: Object.keys(messages),
     isPwa: false,
+    isMobile: false,
 })
 
 const notes = [

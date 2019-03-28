@@ -138,6 +138,8 @@ export default {
                 el.classList.remove('active')
             })
 
+            if (this.appMode === 'record' && store.isMobile) return
+
             if (this.appMode === 'record' && !store.recorder)
                 this.initRecorder()
 
@@ -173,6 +175,13 @@ export default {
     },
 
     created() {
+        if (
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                navigator.userAgent
+            )
+        ) {
+            store.isMobile = true
+        }
         window.addEventListener('load', () => {
             console.log('window finished loading')
             store.loaded = true

@@ -250,6 +250,7 @@ export default {
         },
 
         changeMode(appMode) {
+            if (appMode === 'record' && store.isMobile) return
             store.appMode = appMode
         },
 
@@ -276,7 +277,7 @@ export default {
         justify-items: center;
         align-items: center;
         width: 100%;
-        height: calc(max(100px, 20%));
+        // height: calc(max(50px, 20%));
         bottom: 0;
         position: absolute;
         // grid-gap: 10px;
@@ -407,7 +408,8 @@ export default {
 }
 
 // TODO: disable share for now
-#btnShare {
+#btnShare,
+#appModeRecord {
     &:hover {
         cursor: default;
         border: 1px solid var(--greyish) !important;
