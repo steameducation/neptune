@@ -270,6 +270,7 @@ export default {
                 () => {
                     if (this.locked) return
                     this.dragging = false
+                    console.log('DRAG ENDED!')
                 }
             )
 

@@ -100,6 +100,11 @@ const notes = [
 import { Howler } from 'howler'
 Howler.html5Poolsize = 30
 
+// enlarge sizes lol
+store.planets.forEach(planet => {
+    planet.size *= 1.35
+})
+
 // Load note sounds
 notes.forEach(note => {
     store.sounds[note] = new Howl({

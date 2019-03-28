@@ -133,6 +133,11 @@ export default {
 
     watch: {
         appMode(newMode, oldMode) {
+            document.querySelectorAll('circle').forEach(el => {
+                el.classList.remove('hasRecording')
+                el.classList.remove('active')
+            })
+
             if (this.appMode === 'record' && !store.recorder)
                 this.initRecorder()
 
@@ -156,9 +161,6 @@ export default {
                 })
             } else if (oldMode === 'record') {
                 store.recordings = {}
-                document
-                    .querySelectorAll('circle')
-                    .forEach(el => el.classList.remove('hasRecording'))
             }
         },
 
@@ -211,7 +213,7 @@ export default {
         // refresh, but with this fix we can't. just if selecting outside of the
         // svg canvas
         Draggable.create('#ball')
-        document.querySelector('#ball').remove()
+        // document.querySelector('#ball').remove()
     },
 
     methods: {
@@ -463,10 +465,10 @@ export default {
 //     overflow: hidden;
 // }
 
-// html:fullscreen,
-// body:fullscreen {
-//     overflow: hidden;
-// }
+html:fullscreen,
+body:fullscreen {
+    overflow: hidden;
+}
 
 // #app {
 html {
