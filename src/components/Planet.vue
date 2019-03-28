@@ -259,6 +259,7 @@ export default {
                 'dragstart',
                 () => {
                     if (this.locked) return
+                    console.log('drag started')
                     this.dragging = true
                     this.holding = false
                     window.clearTimeout(this.holdingTimeoutId)
