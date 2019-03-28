@@ -209,11 +209,12 @@ export default {
 
         pianoModeText() {
             const mode = this.$t(`modes.${this.pianoMode}`)
-            if (this.pianoMode === 'ionian')
-                return mode + ` (${this.$t('major')})`
-            else if (this.pianoMode === 'aeolian')
-                return mode + ` (${this.$t('minor')})`
-            else return mode
+            // if (this.pianoMode === 'ionian')
+            //     return mode + ` (${this.$t('major')})`
+            // else if (this.pianoMode === 'aeolian')
+            //     return mode + ` (${this.$t('minor')})`
+            // else return mode
+            return mode
         },
     },
 
