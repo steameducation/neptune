@@ -83,7 +83,12 @@
             ></FontAwesomeIcon>
         </div>
 
-        <div id="btnShare" class="btnIcon" @click="toggleShare">
+        <div
+            id="btnShare"
+            class="btnIcon"
+            :class="{ isMobile: isMobile }"
+            @click="toggleShare"
+        >
             <FontAwesomeIcon icon="link" class="icon"></FontAwesomeIcon>
         </div>
 
@@ -173,6 +178,10 @@ export default {
     computed: {
         isPwa() {
             return store.isPwa
+        },
+
+        isMobile() {
+            return store.isMobile
         },
 
         fullscreen() {
@@ -408,7 +417,6 @@ export default {
 }
 
 // TODO: disable share for now
-#btnShare,
 #appModeRecord {
     &:hover {
         cursor: default;
@@ -424,6 +432,25 @@ export default {
         color: grey !important;
     }
     fill: grey;
+}
+
+#btnShare {
+    &.isMobile {
+        &:hover {
+            cursor: default;
+            border: 1px solid var(--greyish) !important;
+            svg {
+                color: grey !important;
+                &:hover {
+                    color: grey !important;
+                }
+            }
+        }
+        svg {
+            color: grey !important;
+        }
+        fill: grey;
+    }
 }
 
 .icon {
