@@ -1,6 +1,6 @@
 <template>
     <Overlay>
-        Your NepTUNE composition is saved at this link:
+        Your NepTune composition is saved at this link:
         <input :value="shareUrl" />
         Copy link
         <div class="shareArea">

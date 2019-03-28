@@ -3,7 +3,7 @@
         <section id="credits">
             <div class="wrapper">
                 <div class="meta-wrapper">
-                    <h1>NepTUNE</h1>
+                    <h1>NepTune</h1>
                     <p>
                         A simply dummy text of the printing and typesetting
                         industry. Lorem Ipsum has been the industry’s standard
