@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" :class="{ hide: !loaded, 'prevent-scrolling': fullscreen }">
         <div class="stars">
             <h1>lorem</h1>
             <!-- FIXME: think this is how Google Fonts works, so just requests font for headings when needed, so force request here so that when overlay shows up it is already loaded. fix later somehow more elantly. the images preload too -->
@@ -84,6 +84,10 @@ export default {
     },
 
     computed: {
+        loaded() {
+            return store.loaded
+        },
+
         planets() {
             return store.planets
         },
@@ -150,6 +154,11 @@ export default {
                         }, 500)
                     }
                 })
+            } else if (oldMode === 'record') {
+                store.recordings = {}
+                document
+                    .querySelectorAll('circle')
+                    .forEach(el => el.classList.remove('hasRecording'))
             }
         },
 
@@ -162,6 +171,11 @@ export default {
     },
 
     created() {
+        window.addEventListener('load', () => {
+            console.log('window finished loading')
+            store.loaded = true
+        })
+
         store.isPwa =
             new URLSearchParams(window.location.search).get('utm_source') ===
             'homescreen'
@@ -203,7 +217,7 @@ export default {
     methods: {
         initDraggables() {
             for (let i = 0; i < store.planets.length; i++) {
-                const name = store.planets[i].name
+                let name = store.planets[i].name
                 store.planets[i].draggable = Draggable.create(
                     `#planet-${name}`,
                     {
@@ -213,7 +227,7 @@ export default {
                             if (store.locked) return
                             this.$root.$emit('amplitude', {
                                 name,
-                                amplitude: this.determineAmplitude(i),
+                                amplitude: this.determineAmplitude(name),
                             })
                         },
                     }
@@ -221,19 +235,21 @@ export default {
             }
         },
 
-        determineAmplitude(i) {
-            const name = store.planets[i].name
+        determineAmplitude(name) {
             const sel = `#planet-${name}`
+            const planet = store.planets.find(planet => planet.name === name)
+            const { size } = planet
             const y =
                 document.querySelector(sel).transform.baseVal.getItem(0).matrix
-                    .f - store.planets[i].size
+                    .f - size
 
             const height = window.screenfull.isFullscreen
-                ? store.canvas.height - store.planets[i].size
-                : store.canvas.height - 2 * store.planets[i].size
+                ? store.canvas.height - size
+                : store.canvas.height - 2 * size
 
             const mapped = utils.map(y, 0, height, 1, 0.01)
-            return mapped >= 1 ? 1 : mapped
+            const ret = mapped >= 1 ? 1 : mapped
+            return ret
         },
 
         interaction(evt) {
@@ -443,9 +459,19 @@ export default {
 @import 'assets/styles/globals';
 @import 'assets/styles/starry';
 
+// .prevent-scrolling {
+//     overflow: hidden;
+// }
+
+// html:fullscreen,
+// body:fullscreen {
+//     overflow: hidden;
+// }
+
 // #app {
 html {
-    // font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    // overflow-x: hidden;
+    background: #000;
     font-family: 'Space Mono', monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -512,4 +538,12 @@ html {
 .stars {
     font-size: 14px;
 }
+
+#pleaserotate-graphic {
+    margin-left: 0;
+}
+
+// .pleaserotate-hiding {
+//     margin: 0;
+// }
 </style>

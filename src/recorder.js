@@ -14,16 +14,38 @@ export default class Recorder {
 
         // Where to save the data once finished recording
         this.data = null
+
+        this.areEventsSet = false
     }
 
     start(arr, key) {
         if (this.recording) throw Error('Already recording...')
 
         this.recording = true
-        console.log('recording!')
+        // console.log('recording!')
 
         this.arr = arr
         this.key = key
+
+        this.mediaRecorderChunks = []
+
+        if (!this.areEventsSet) {
+            this.mediaRecorder.addEventListener('dataavailable', event => {
+                this.mediaRecorderChunks.push(event.data)
+            })
+
+            // When stop recording happens (or max time limit is reached)
+            this.mediaRecorder.addEventListener('stop', () => {
+                const audioBlob = new Blob(this.mediaRecorderChunks)
+                const audioUrl = URL.createObjectURL(audioBlob)
+                const audio = new Audio(audioUrl)
+                audio.loop = false
+                audio.pause()
+                audio.currentTime = 0
+                this.arr[this.key] = audio
+            })
+            this.areEventsSet = true
+        }
 
         // Set timeout
         this.timeoutId = window.setTimeout(() => {
@@ -33,24 +55,9 @@ export default class Recorder {
         }, this.timeoutMS)
 
         // Start recording
-        this.mediaRecorder.start()
-
         // Keep storing the chunks of audio as recording happens
         this.mediaRecorderChunks = []
-        this.mediaRecorder.addEventListener('dataavailable', event => {
-            this.mediaRecorderChunks.push(event.data)
-        })
-
-        // When stop recording happens (or max time limit is reached)
-        this.mediaRecorder.addEventListener('stop', () => {
-            const audioBlob = new Blob(this.mediaRecorderChunks)
-            const audioUrl = URL.createObjectURL(audioBlob)
-            const audio = new Audio(audioUrl)
-            audio.loop = false
-            audio.pause()
-            audio.currentTime = 0
-            this.arr[this.key] = audio
-        })
+        this.mediaRecorder.start()
     }
 
     stop() {
@@ -58,6 +65,6 @@ export default class Recorder {
         window.clearTimeout(this.timeoutId)
         this.recording = false
         this.mediaRecorder.stop()
-        console.log('stopped recording')
+        // console.log('stopped recording')
     }
 }

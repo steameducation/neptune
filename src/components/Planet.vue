@@ -31,7 +31,16 @@
                 :fill="color"
                 :class="{ hasRecording: hasRecording }"
                 :filter="`url(#shadow-${name})`"
-            ></circle>
+            >
+                <animate
+                    v-if="isRecording"
+                    attributeType="XML"
+                    attributeName="fill"
+                    values="#800;#f00;#800"
+                    dur="0.8s"
+                    repeatCount="indefinite"
+                />
+            </circle>
             <text :y="size / 2 + 30" class="planetLabel">
                 {{ $t(name) }}
             </text>
@@ -72,6 +81,7 @@ export default {
             amplitude: 1,
             noteOns: [],
             hasTouch: false,
+            hasRecording: false,
         }
     },
 
@@ -82,6 +92,10 @@ export default {
 
         index() {
             return this.planet.index
+        },
+
+        recording() {
+            return store.recordings[this.name]
         },
 
         // x() {
@@ -101,17 +115,22 @@ export default {
         // },
 
         floodColor() {
-            if (this.appMode === 'piano' || this.appMode === 'nasa') {
+            if (
+                this.appMode === 'piano' ||
+                this.appMode === 'nasa' ||
+                this.appMode === 'record'
+            ) {
                 if (!this.playing) return this.color
                 else return 'var(--active)'
-            } else if (this.appMode === 'record') {
-                if (this.holding) {
-                    return 'red'
-                } else {
-                    return 'blue'
-                }
             }
-            return 'magenta'
+            // else if (this.appMode === 'record') {
+            //     if (this.holding) {
+            //         return 'red'
+            //     } else {
+            //         return 'blue'
+            //     }
+            // }
+            return this.color
         },
 
         size() {
@@ -126,13 +145,13 @@ export default {
             return store.appMode
         },
 
-        recording() {
-            return store.recordings[this.name]
+        isRecording() {
+            return this.holding && store.appMode === 'record'
         },
 
-        hasRecording() {
-            return this.recording != null
-        },
+        // hasRecording() {
+        //     return store.recordings[this.name] !== undefined
+        // },
 
         note() {
             const idx = this.index === 7 ? 0 : this.index
@@ -182,6 +201,14 @@ export default {
                 this.toggleRecording()
             }
         },
+
+        isRecording() {
+            console.log('recording is now', this.isRecording)
+        },
+
+        hasRecording() {
+            // console.log('hasRecording changed', this.hasRecording)
+        },
     },
 
     created() {
@@ -198,8 +225,12 @@ export default {
                     console.log(`fading NASA sound ${v} -> ${this.amplitude}`)
                     store.soundscapes[this.name].fade(v, this.amplitude, 1000)
                 }
-                // if (this.appMode === 'record')
-                //     store.recordings[this.name].volume = this.amplitude
+                if (this.appMode === 'record')
+                    try {
+                        store.recordings[this.name].volume = this.amplitude
+                    } catch (e) {
+                        console.warn('couldnt set amplitude for recording')
+                    }
             }
         })
     },
@@ -243,7 +274,7 @@ export default {
             )
 
             // NOTE: determine actual amplitude according to position on screen on start
-            this.amplitude = this.$parent.determineAmplitude(this.index) // LOL...
+            this.amplitude = this.$parent.determineAmplitude(this.name) // LOL...
         })
 
         // this.initHammer()
@@ -280,6 +311,7 @@ export default {
         noteOn(index) {
             if (index !== this.index) return
             // Then play sound
+            if (store.appMode === 'record' && !this.hasRecording) return
             if (store.appMode === 'piano') this.playPiano()
             else if (store.appMode === 'nasa') this.playNASA()
             else if (store.appMode === 'record') this.playRecord()
@@ -318,10 +350,24 @@ export default {
         },
 
         toggleRecording() {
-            if (!store.recorder.recording) {
+            // console.log('toggleRe')
+            if (this.isRecording) {
+                // console.log('starting recording in planet')
                 store.recorder.start(store.recordings, this.name)
             } else {
                 store.recorder.stop()
+                this.hasRecording = true
+                this.playing = false
+                setTimeout(() => {
+                    if (store.recordings[this.name])
+                        store.recordings[this.name].addEventListener(
+                            'ended',
+                            () => {
+                                console.log('ended')
+                                this.playing = false
+                            }
+                        )
+                }, 1000)
                 // store.recordings[this.name].loop = true
             }
         },
@@ -342,8 +388,16 @@ export default {
         },
 
         playRecord() {
-            this.playing = true
-            if (store.recordings[this.name]) store.recordings[this.name].play()
+            if (!this.playing) {
+                if (store.recordings[this.name])
+                    store.recordings[this.name].play()
+            } else {
+                if (store.recordings[this.name])
+                    store.recordings[this.name].pause()
+                if (store.recordings[this.name])
+                    store.recordings[this.name].currentTime = 0
+            }
+            this.playing = !this.playing
         },
 
         toggleFact() {
@@ -389,5 +443,9 @@ svg {
     &:hover {
         cursor: pointer;
     }
+}
+
+.hasRecording {
+    stroke: red;
 }
 </style>

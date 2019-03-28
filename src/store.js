@@ -13,7 +13,7 @@ const store = new Vue.observable({
         {
             name: 'mercury',
             color: '#FF8D02',
-            size: 48,
+            size: 68,
             index: 0, // need index since the order of the planets in the array will change
         },
         {
@@ -67,6 +67,7 @@ const store = new Vue.observable({
     showInfo: false,
     locked: false,
     muted: false,
+    loaded: false,
     fullscreen: false,
     recording: () => {
         return this.recorder.recording

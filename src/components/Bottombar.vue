@@ -299,6 +299,7 @@ export default {
         background: var(--white);
         border-radius: 15px;
         width: 100%;
+        max-width: 150px;
         color: var(--greyish);
         height: calc(0.5 * var(--icon-size));
         line-height: calc(0.5 * var(--icon-size));
