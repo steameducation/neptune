@@ -61,7 +61,10 @@ export default {
         },
 
         textY() {
-            return -this.boxHeight - this.padding * 2
+            return -this.boxHeight - this.$parent.size / 2
+            // return -this.boxHeight
+            // return -this.boxHeight - this.padding * 2
+            // return -1.5 * this.boxHeight + this.padding * 3
         },
 
         textWidth() {

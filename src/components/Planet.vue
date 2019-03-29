@@ -251,6 +251,7 @@ export default {
             store.planets[this.index].draggable.addEventListener(
                 'release',
                 () => {
+                    console.log('releasing')
                     this.release()
                 }
             )

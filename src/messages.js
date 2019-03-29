@@ -25,16 +25,8 @@ export default {
                 {
                     fact: 'A year lasts only 88 Earth days on Mercury.',
                 },
-                {
-                    fact:
-                        'The Romans knew of seven bright objects in the sky: the Sun, the Moon, and the five brightest planets',
-                },
             ],
             venus: [
-                {
-                    fact:
-                        'Venus is a Roman goddess, whose functions encompassed love, beauty, desire, sex, fertility, prosperity and victory.',
-                },
                 {
                     fact:
                         'Venus rotates very slowly: the planet takes 243 Earth days to complete 1 rotation around its axis.',
@@ -47,7 +39,7 @@ export default {
                 },
                 {
                     fact:
-                        'The Earth was formed approximately 4.54 billion years ago and is the only known planet to support life.',
+                        'Earth formed approximately 4.54 billion years ago and is the only known planet to support life.',
                 },
             ],
             mars: [
@@ -63,7 +55,16 @@ export default {
                     fact: 'David Bowie has an album called “Life on Mars”.',
                 },
             ],
-            jupiter: [],
+            jupiter: [
+                {
+                    fact:
+                        'Jupiter is two times more massive than all the other planets combined.',
+                },
+                {
+                    fact:
+                        "On Jupiter you would feel the force of gravity about 2.4 times stronger than on Earth's surface",
+                },
+            ],
             saturn: [
                 {
                     fact:
@@ -145,7 +146,7 @@ export default {
                 },
                 {
                     fact:
-                        'The Earth was formed approximately 4.54 billion years ago and is the only known planet to support life.',
+                        'Earth formed approximately 4.54 billion years ago and is the only known planet to support life.',
                 },
             ],
             mars: [
@@ -161,7 +162,16 @@ export default {
                     fact: 'David Bowie has an album called “Life on Mars”.',
                 },
             ],
-            jupiter: [],
+            jupiter: [
+                {
+                    fact:
+                        'Jupiter is two times more massive than all the other planets combined.',
+                },
+                {
+                    fact:
+                        "On Jupiter you would feel the force of gravity about 2.4 times stronger than on Earth's surface",
+                },
+            ],
             saturn: [
                 {
                     fact:

@@ -20,16 +20,11 @@
                     v-for="planet in planets"
                     :key="planet.name"
                     :name="planet.name"
+                    class="myPlanet"
                     @interaction="interaction"
                 />
                 <!-- FIXME: -->
-                <circle
-                    id="ball"
-                    cx="300"
-                    cy="300"
-                    r="100"
-                    fill="transparent"
-                ></circle>
+                <circle id="ball" cx="300" cy="300" r="50" fill="red"></circle>
             </svg>
         </div>
         <!-- <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" /> -->
@@ -222,6 +217,7 @@ export default {
         // refresh, but with this fix we can't. just if selecting outside of the
         // svg canvas
         Draggable.create('#ball')
+        Draggable.create('.myPlanet')
         // document.querySelector('#ball').remove()
     },
 
