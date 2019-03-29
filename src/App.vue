@@ -216,9 +216,9 @@ export default {
         // with the z-index or similar, since if this isn't used we can pull to
         // refresh, but with this fix we can't. just if selecting outside of the
         // svg canvas
-        Draggable.create('#ball')
+        // Draggable.create('#ball')
         Draggable.create('.myPlanet')
-        // document.querySelector('#ball').remove()
+        document.querySelector('#ball').remove()
     },
 
     methods: {
