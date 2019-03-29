@@ -12,7 +12,7 @@
                     <div class="steamGroup">
                         <a target="_blank" href="http://steameducation.eu/">
                             <img
-                                src="/img/logos/space.png"
+                                src="img/logos/space.png"
                                 class="logo steam"
                                 alt=""
                             />
@@ -39,14 +39,14 @@
                             href="https://digitopia.casadamusica.com/"
                         >
                             <img
-                                src="/img/logos/digitopia.png"
+                                src="img/logos/digitopia.png"
                                 class="logo digitopia"
                                 alt=""
                             />
                         </a>
                         <a target="_blank" href="http://www.casadamusica.com/"
                             ><img
-                                src="/img/logos/cdm.png"
+                                src="img/logos/cdm.png"
                                 class="logo cdm"
                                 alt=""
                         /></a>
@@ -66,9 +66,9 @@ export default {
     },
 
     created() {
-        new Image().src = '/img/logos/cdm.png'
-        new Image().src = '/img/logos/digitopia.png'
-        new Image().src = '/img/logos/space.png'
+        new Image().src = 'img/logos/cdm.png'
+        new Image().src = 'img/logos/digitopia.png'
+        new Image().src = 'img/logos/space.png'
     },
 }
 </script>

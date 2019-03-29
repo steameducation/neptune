@@ -22,44 +22,77 @@ export default {
         minor: 'menor',
         facts: {
             mercury: [
-                { fact: 'Um facto sobre Mercúrio' },
-                { fact: 'Outro facto sobre Mercúrio' },
-                { fact: 'Ainda outro facto sobre Mercúrio' },
+                {
+                    fact: 'A year lasts only 88 Earth days on Mercury.',
+                },
+                {
+                    fact:
+                        'The Romans knew of seven bright objects in the sky: the Sun, the Moon, and the five brightest planets',
+                },
             ],
             venus: [
-                { fact: 'Um facto sobre Vénus' },
-                { fact: 'Outro facto sobre Vénus' },
-                { fact: 'Ainda outro facto sobre Vénus' },
+                {
+                    fact:
+                        'Venus is a Roman goddess, whose functions encompassed love, beauty, desire, sex, fertility, prosperity and victory.',
+                },
+                {
+                    fact:
+                        'Venus rotates very slowly: the planet takes 243 Earth days to complete 1 rotation around its axis.',
+                },
             ],
             earth: [
-                { fact: 'Um facto sobre Terra' },
-                { fact: 'Outro facto sobre Terra' },
-                { fact: 'Ainda outro facto sobre Terra' },
+                {
+                    fact:
+                        'The Earth is the only planet in our solar system not to be named after a Greek or Roman deity.',
+                },
+                {
+                    fact:
+                        'The Earth was formed approximately 4.54 billion years ago and is the only known planet to support life.',
+                },
             ],
             mars: [
-                { fact: 'Um facto sobre Marte' },
-                { fact: 'Outro facto sobre Marte' },
-                { fact: 'Ainda outro facto sobre Marte' },
+                {
+                    fact:
+                        'The planet is named after Mars, the Roman god of war.',
+                },
+                {
+                    fact:
+                        'Mars has seasons like Earth, but they last twice as long.',
+                },
+                {
+                    fact: 'David Bowie has an album called “Life on Mars”.',
+                },
             ],
-            jupiter: [
-                { fact: 'Um facto sobre Júpiter' },
-                { fact: 'Outro facto sobre Júpiter' },
-                { fact: 'Ainda outro facto sobre Júpiter' },
-            ],
+            jupiter: [],
             saturn: [
-                { fact: 'Um facto sobre Saturno' },
-                { fact: 'Outro facto sobre Saturno' },
-                { fact: 'Ainda outro facto sobre Saturno' },
+                {
+                    fact:
+                        'Saturn is so big that Earth could fit into it whooping 755 times!',
+                },
+                {
+                    fact:
+                        'The circumstances on Saturn are simply too hostile for the emergence of life.',
+                },
             ],
             uranus: [
-                { fact: 'Um facto sobre Urano' },
-                { fact: 'Outro facto sobre Urano' },
-                { fact: 'Ainda outro facto sobre Urano' },
+                {
+                    fact:
+                        'Uranus’ poles lies west and east, equator South to north',
+                },
+                {
+                    fact:
+                        'Uranus’ moons are named after characters created by William Shakespeare and Alexander Pope',
+                },
             ],
             neptune: [
-                { fact: 'Um facto sobre Neptuno' },
-                { fact: 'Outro facto sobre Neptuno' },
-                { fact: 'Ainda outro facto sobre Neptuno' },
+                {
+                    fact:
+                        'It takes Neptune almost 165 Earth years to circle around the sun.',
+                },
+                {
+                    fact:
+                        'Galilei was the first person who saw Neptune although he did not recognize it as a planet.',
+                },
             ],
         },
     },
@@ -87,44 +120,77 @@ export default {
         minor: 'minor',
         facts: {
             mercury: [
-                { fact: 'A fact about Mercury' },
-                { fact: 'Another fact about Mercury' },
-                { fact: 'Yet another fact about Mercury' },
+                {
+                    fact: 'A year lasts only 88 Earth days on Mercury.',
+                },
+                {
+                    fact:
+                        'The Romans knew of seven bright objects in the sky: the Sun, the Moon, and the five brightest planets',
+                },
             ],
             venus: [
-                { fact: 'A fact about Venus' },
-                { fact: 'Another fact about Venus' },
-                { fact: 'Yet another fact about Venus' },
+                {
+                    fact:
+                        'Venus is a Roman goddess, whose functions encompassed love, beauty, desire, sex, fertility, prosperity and victory.',
+                },
+                {
+                    fact:
+                        'Venus rotates very slowly: the planet takes 243 Earth days to complete 1 rotation around its axis.',
+                },
             ],
             earth: [
-                { fact: 'A fact about Earth' },
-                { fact: 'Another fact about Earth' },
-                { fact: 'Yet another fact about Earth' },
+                {
+                    fact:
+                        'The Earth is the only planet in our solar system not to be named after a Greek or Roman deity.',
+                },
+                {
+                    fact:
+                        'The Earth was formed approximately 4.54 billion years ago and is the only known planet to support life.',
+                },
             ],
             mars: [
-                { fact: 'A fact about Mars' },
-                { fact: 'Another fact about Mars' },
-                { fact: 'Yet another fact about Mars' },
+                {
+                    fact:
+                        'The planet is named after Mars, the Roman god of war.',
+                },
+                {
+                    fact:
+                        'Mars has seasons like Earth, but they last twice as long.',
+                },
+                {
+                    fact: 'David Bowie has an album called “Life on Mars”.',
+                },
             ],
-            jupiter: [
-                { fact: 'A fact about Jupiter' },
-                { fact: 'Another fact about Jupiter' },
-                { fact: 'Yet another fact about Jupiter' },
-            ],
+            jupiter: [],
             saturn: [
-                { fact: 'A fact about Saturn' },
-                { fact: 'Another fact about Saturn' },
-                { fact: 'Yet another fact about Saturn' },
+                {
+                    fact:
+                        'Saturn is so big that Earth could fit into it whooping 755 times!',
+                },
+                {
+                    fact:
+                        'The circumstances on Saturn are simply too hostile for the emergence of life.',
+                },
             ],
             uranus: [
-                { fact: 'A fact about Uranus' },
-                { fact: 'Another fact about Uranus' },
-                { fact: 'Yet another fact about Uranus' },
+                {
+                    fact:
+                        'Uranus’ poles lies west and east, equator South to north',
+                },
+                {
+                    fact:
+                        'Uranus’ moons are named after characters created by William Shakespeare and Alexander Pope',
+                },
             ],
             neptune: [
-                { fact: 'A fact about Neptune' },
-                { fact: 'Another fact about Neptune' },
-                { fact: 'Yet another fact about Neptune' },
+                {
+                    fact:
+                        'It takes Neptune almost 165 Earth years to circle around the sun.',
+                },
+                {
+                    fact:
+                        'Galilei was the first person who saw Neptune although he did not recognize it as a planet.',
+                },
             ],
         },
     },
