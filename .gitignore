@@ -1,5 +1,7 @@
 Todo.md
 
+*.sqlite
+
 .DS_Store
 node_modules
 /dist
