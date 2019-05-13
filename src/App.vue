@@ -56,8 +56,6 @@ import Draggable from 'gsap/Draggable'
 import store from '@/store.js'
 import { api } from '@/store.js'
 
-import Shake from 'shake.js'
-
 import { sample, random } from 'lodash'
 import { Howler } from 'howler'
 
@@ -201,8 +199,6 @@ export default {
         }
 
         if (this.appMode === 'record') this.initRecorder()
-
-        window.utils = utils
     },
 
     mounted() {
@@ -213,10 +209,9 @@ export default {
         })
 
         // this.positionPlanetsRandomly()
-        // this.positionPlanetsHorizontally()
-        this.positionPlanetsSequentially()
+        this.positionPlanetsHorizontally()
+        // this.positionPlanetsSequentially()
 
-        // this.setPlanetPosition('neptune', 800, 400)
         this.initDraggables()
         this.updateDragBounds()
 
@@ -258,24 +253,45 @@ export default {
 
     methods: {
         initShake() {
-            new Shake({ threshold: 15, timeout: 1000 }).start()
+            new window.Shake({ threshold: 15, timeout: 1000 }).start()
             window.addEventListener('shake', this.shaked, false)
         },
 
         shaked() {
-            alert('got shaked')
+            const randomPianoMode =
+                store.pianoModes[
+                    Math.floor(Math.random() * store.pianoModes.length)
+                ]
+            store.pianoMode = randomPianoMode
+            store.planets.forEach(planet => {
+                this.setPlanetPosition(planet.name, 100, 200)
+            })
+            // this.positionPlanetsHorizontally()
         },
 
         loadUUID(uuid) {
             api.get(`compositions/${uuid}`)
                 .then(response => {
                     // TODO: make this a direct mapping
-                    const data = response.data.data
+                    const { data } = response.data
                     store.pianoMode = data.pianoMode
                     store.showPiano = data.showPiano
+                    // store.planets.forEach(planet => planet.draggable.kill())
                     store.planets = data.planets
+                    //     store.planets.forEach(planet =>
+                    //         this.setPlanetPosition(
+                    //             planet.name,
+                    //             planet.x,
+                    //             planet.y
+                    //         )
+                    //     )
+                    //     // this.initDraggables()
+                    // }, 5000)
                     store.planets.forEach(planet => {
-                        this.setPlanetPosition(planet.name, planet.x, planet.y)
+                        window.TweenLite.set(`#planet-${planet.name}`, {
+                            x: planet.x,
+                            y: planet.y,
+                        })
                     })
                 })
                 .catch(error => {
