@@ -264,7 +264,6 @@ export default {
                 ]
             store.pianoMode = randomPianoMode
             this.positionPlanetsHorizontally()
-            // this.updateDraggables()
         },
 
         loadUUID(uuid) {
@@ -275,21 +274,17 @@ export default {
                     store.pianoMode = data.pianoMode
                     store.showPiano = data.showPiano
                     store.planets = data.planets
-                    this.updateDraggables()
+                    store.planets.forEach(planet => {
+                        window.TweenLite.set(`#planet-${planet.name}`, {
+                            x: planet.x,
+                            y: planet.y,
+                        })
+                    })
                 })
                 .catch(error => {
                     console.error(`Couldn't load UUID ${uuid} from database.`)
                     console.log({ error })
                 })
-        },
-
-        updateDraggables() {
-            store.planets.forEach(planet => {
-                window.TweenLite.set(`#planet-${planet.name}`, {
-                    x: planet.x,
-                    y: planet.y,
-                })
-            })
         },
 
         initDraggables() {
