@@ -311,6 +311,7 @@ export default {
 
         noteOn(index) {
             if (index !== this.index) return
+            console.log('noteOn', index, this.note)
             // Then play sound
             if (store.appMode === 'record' && !this.hasRecording) return
             if (store.appMode === 'piano') this.playPiano()

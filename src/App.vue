@@ -59,6 +59,9 @@ import { api } from '@/store.js'
 import { sample, random } from 'lodash'
 import { Howler } from 'howler'
 
+import WebMidi from 'webmidi'
+import teoria from 'teoria'
+
 import Recorder from '@/recorder.js'
 
 import isUUID from 'validator/lib/isUUID'
@@ -199,6 +202,8 @@ export default {
         }
 
         if (this.appMode === 'record') this.initRecorder()
+
+        this.initMidi()
     },
 
     mounted() {
@@ -233,6 +238,8 @@ export default {
             this.loadUUID(possibleUUID)
         }
 
+        window.teoria = teoria
+
         const compress = true
         // Create a compressor node
         if (compress) {
@@ -252,6 +259,43 @@ export default {
     },
 
     methods: {
+        initMidi() {
+            WebMidi.enable(err => {
+                if (err) {
+                    console.log('WebMidi could not be enabled.', err)
+                } else {
+                    console.log('WebMidi enabled!')
+                    console.log(WebMidi.inputs)
+                    const input = WebMidi.inputs[0]
+                    input.addListener('noteon', 'all', e => {
+                        console.log(e.note.name + e.note.octave)
+                        const sNote = `${e.note.name}${e.note.octave}`
+                        console.log({ sNote })
+                        let note = teoria.note(sNote)
+                        if (sNote.includes('#')) {
+                            note = teoria
+                                .note(sNote)
+                                .enharmonics()
+                                .find(en => en.accidentalValue() === -1) // find the one with just one flat
+                            console.log('note converted to', note)
+                        }
+                        // Iterate through planets to check if any has a .note() that is the same as the MIDI note on
+                        this.$children.forEach(component => {
+                            if (component.$options.name === 'Planet') {
+                                if (component.note === note.scientific()) {
+                                    console.log(
+                                        'found a planet with proper note and index',
+                                        component.index
+                                    )
+                                    this.$root.$emit('noteOn', component.index)
+                                }
+                            }
+                        })
+                    })
+                }
+            })
+        },
+
         initShake() {
             new window.Shake({ threshold: 15, timeout: 1000 }).start()
             window.addEventListener('shake', this.shaked, false)
