@@ -338,6 +338,7 @@ export default {
                             y: planet.y,
                         })
                     })
+                    this.initDraggables()
                 })
                 .catch(error => {
                     console.error(`Couldn't load UUID ${uuid} from database.`)
