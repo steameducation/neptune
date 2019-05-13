@@ -260,40 +260,6 @@ export default {
 
         toggleSequence() {
             store.sequencing = !store.sequencing
-            if (store.sequencing) {
-                const maxDuration = '5000'
-                const width = this.$root.$children[0].canvas.width
-                const timestamps = store.planets.map(planet => {
-                    const x0 =
-                        document
-                            .querySelector(`#planet-${planet.name}`)
-                            .transform.baseVal.getItem(0).matrix.e -
-                        planet.size / 2
-                    return {
-                        timestamp: utils.map(x0, 0, width, 0, maxDuration),
-                        index: planet.index,
-                    }
-                })
-                timestamps.sort((p1, p2) => {
-                    if (p1.timestamp > p2.timestamp) return 1
-                    else return -1
-                })
-                console.log({ timestamps })
-
-                // NOTE: doing this with timeout since Howler doesn't allow for scheduling!
-                timestamps.forEach(ts => {
-                    setTimeout(() => {
-                        console.log('playing', ts.index, 'at', ts.timestamp)
-                        this.$root.$emit('noteOn', ts.index)
-                    }, ts.timestamp)
-                })
-
-                setTimeout(() => {
-                    store.sequencing = false
-                }, maxDuration)
-            } else {
-                console.log('stopping sequencing')
-            }
         },
 
         toggleFullscreen() {
@@ -309,7 +275,6 @@ export default {
         },
 
         changeMode(appMode) {
-            if (appMode === 'record' && store.isMobile) return
             store.appMode = appMode
         },
 
@@ -467,22 +432,22 @@ export default {
 }
 
 // TODO: disable share for now
-#appModeRecord {
-    &:hover {
-        cursor: default;
-        border: 1px solid var(--greyish) !important;
-        svg {
-            color: grey !important;
-            &:hover {
-                color: grey !important;
-            }
-        }
-    }
-    svg {
-        color: grey !important;
-    }
-    fill: grey;
-}
+// #appModeRecord {
+//     &:hover {
+//         cursor: default;
+//         border: 1px solid var(--greyish) !important;
+//         svg {
+//             color: grey !important;
+//             &:hover {
+//                 color: grey !important;
+//             }
+//         }
+//     }
+//     svg {
+//         color: grey !important;
+//     }
+//     fill: grey;
+// }
 
 #btnShare {
     &.isMobile {

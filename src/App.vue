@@ -82,8 +82,7 @@ export default {
         return {
             maxDragHeight: 0,
             lastInteractedPlanetId: 'mercury',
-            isLoading: false,
-            fullPage: true,
+            timeouts: [],
         }
     },
 
@@ -133,11 +132,68 @@ export default {
         locked() {
             return store.locked
         },
+
+        sequencing() {
+            return store.sequencing
+        },
     },
 
     watch: {
+        sequencing() {
+            console.log('sequencing changed to', this.sequencing)
+            if (!store.sequencing) {
+                this.timeouts.forEach(timeout => clearTimeout(timeout))
+                return
+            }
+
+            this.timeouts = []
+            if (store.sequencing) {
+                const maxDuration = '5000'
+                const width = this.$root.$children[0].canvas.width
+                const timestamps = store.planets.map(planet => {
+                    const x0 =
+                        document
+                            .querySelector(`#planet-${planet.name}`)
+                            .transform.baseVal.getItem(0).matrix.e -
+                        planet.size / 2
+                    return {
+                        timestamp: utils.map(x0, 0, width, 0, maxDuration),
+                        index: planet.index,
+                    }
+                })
+                timestamps.sort((p1, p2) => {
+                    if (p1.timestamp > p2.timestamp) return 1
+                    else return -1
+                })
+                console.log({ timestamps })
+
+                // NOTE: doing this with timeout since Howler doesn't allow for scheduling!
+                timestamps.forEach(ts => {
+                    this.timeouts.push(
+                        setTimeout(() => {
+                            console.log('playing', ts.index, 'at', ts.timestamp)
+                            this.$root.$emit('noteOn', ts.index)
+                        }, ts.timestamp)
+                    )
+                })
+
+                this.timeouts.push(
+                    setTimeout(() => {
+                        store.sequencing = false
+                    }, maxDuration)
+                )
+            } else {
+                console.log('stopping sequencing')
+            }
+        },
+
         loaded() {
-            if (this.loaded) document.querySelector('.loading').remove()
+            if (this.loaded) {
+                document.querySelector('.loading').remove()
+                setTimeout(() => {
+                    // store.sequencing = true
+                }, 1000)
+            }
         },
 
         appMode(newMode, oldMode) {
@@ -146,7 +202,7 @@ export default {
                 el.classList.remove('active')
             })
 
-            if (this.appMode === 'record' && store.isMobile) return
+            if (store.sequencing) store.sequencing = false
 
             if (this.appMode === 'record' && !store.recorder)
                 this.initRecorder()
@@ -160,6 +216,7 @@ export default {
                         setTimeout(() => {
                             sound.stop()
                             this.$root.$emit('noteClear')
+                            this.$root.$emit('pianoClear')
                         }, dur)
                     }
                 })
@@ -171,6 +228,7 @@ export default {
                         setTimeout(() => {
                             sound.stop()
                             this.$root.$emit('noteClear')
+                            this.$root.$emit('pianoClear')
                         }, dur)
                     }
                 })
