@@ -238,6 +238,10 @@ export default {
         },
 
         locked() {
+            document
+                .getElementById('#btnLock')
+                .dispatchEvent(new Event('mouseleave'))
+
             this.planets.forEach(planet => {
                 if (this.locked) planet.draggable.disable()
                 else planet.draggable.enable()
@@ -271,6 +275,8 @@ export default {
 
         this.initMidi()
         window.WebMidi = WebMidi
+
+        this.removeHoverFromCss()
     },
 
     mounted() {
@@ -326,6 +332,44 @@ export default {
     },
 
     methods: {
+        removeHoverFromCss() {
+            // NOTE: More info here: https://stackoverflow.com/questions/23885255/how-to-remove-ignore-hover-css-style-on-touch-devices
+            function hasTouch() {
+                return (
+                    'ontouchstart' in document.documentElement ||
+                    navigator.maxTouchPoints > 0 ||
+                    navigator.msMaxTouchPoints > 0
+                )
+            }
+
+            if (hasTouch()) {
+                // remove all :hover stylesheets
+                try {
+                    // prevent exception on browsers not supporting DOM styleSheets properly
+                    for (var si in document.styleSheets) {
+                        var styleSheet = document.styleSheets[si]
+                        if (!styleSheet.rules) continue
+
+                        for (
+                            var ri = styleSheet.rules.length - 1;
+                            ri >= 0;
+                            ri--
+                        ) {
+                            if (!styleSheet.rules[ri].selectorText) continue
+
+                            if (
+                                styleSheet.rules[ri].selectorText.match(
+                                    ':hover'
+                                )
+                            ) {
+                                styleSheet.deleteRule(ri)
+                            }
+                        }
+                    }
+                } catch (ex) {}
+            }
+        },
+
         midiNoteOnListener(e) {
             console.log(e.note.name + e.note.octave)
             const sNote = `${e.note.name}${e.note.octave}`
@@ -389,14 +433,42 @@ export default {
                     const { data } = response.data
                     store.pianoMode = data.pianoMode
                     store.showPiano = data.showPiano
-                    store.planets = data.planets
+                    // store.planets = data.planets
+                    store.planets.forEach(storePlanet => {
+                        const dataPlanet = data.planets.find(
+                            planet => planet.name === storePlanet.name
+                        )
+                        storePlanet.x = dataPlanet.x
+                        storePlanet.y = dataPlanet.y
+                    })
                     store.planets.forEach(planet => {
                         window.TweenLite.set(`#planet-${planet.name}`, {
                             x: planet.x,
                             y: planet.y,
                         })
                     })
-                    this.initDraggables()
+                    this.updateDragBounds()
+
+                    // const planetNames = store.planets.map(planet => {
+                    //     return { name: planet.name, index: planet.index }
+                    // })
+                    // planetNames.sort((p1, p2) => {
+                    //     if (p1.index > p2.index) return 1
+                    //     else return -1
+                    // })
+                    // console.log({ planetNames })
+                    // planetNames.forEach(planet => {
+                    //     const { name } = planet
+                    //     this.$children.forEach(component => {
+                    //         if (
+                    //             component.$options.name === 'Planet' &&
+                    //             component.$vnode.key === name
+                    //         ) {
+                    //             console.log('setting listeners for', name)
+                    //             component.setListeners()
+                    //         }
+                    //     })
+                    // })
                 })
                 .catch(error => {
                     console.error(`Couldn't load UUID ${uuid} from database.`)
@@ -645,7 +717,7 @@ body:fullscreen {
 }
 
 html {
-    background: #000;
+    // background: #000;
     font-family: 'Space Mono', monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

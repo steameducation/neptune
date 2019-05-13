@@ -248,6 +248,13 @@ export default {
 
     mounted() {
         Vue.nextTick(() => {
+            this.setListeners()
+        })
+        // this.initHammer()
+    },
+
+    methods: {
+        setListeners() {
             store.planets[this.index].draggable.addEventListener(
                 'press',
                 () => {
@@ -284,13 +291,9 @@ export default {
             )
 
             // NOTE: determine actual amplitude according to position on screen on start
-            this.amplitude = this.$parent.determineAmplitude(this.planet.name) // LOL...
-        })
+            // this.amplitude = this.$parent.determineAmplitude(this.planet.name) // LOL...
+        },
 
-        // this.initHammer()
-    },
-
-    methods: {
         initHammer() {
             const el = document.querySelector(`#planet-${this.name}`)
             var mc = new window.Hammer.Manager(el)
@@ -423,6 +426,7 @@ export default {
         },
 
         click(e) {
+            console.log('click!')
             if (e.type === 'touchstart') this.hasTouch = true
             if (this.hasTouch && e.type !== 'touchstart') return
             if (!store.planets[this.index].draggable.enabled()) this.release()
