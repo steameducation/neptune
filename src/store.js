@@ -4,6 +4,8 @@ import { Howl } from 'howler'
 
 import messages from '@/messages.js'
 
+import axios from 'axios'
+
 const store = new Vue.observable({
     canvas: {
         width: 1920,
@@ -62,7 +64,7 @@ const store = new Vue.observable({
     pianoModes: Object.keys(messages.en.modes),
     pianoMode: Object.keys(messages.en.modes)[0],
     appMode: 'piano', // 'piano', 'nasa', 'record'
-    showPiano: true,
+    showPiano: false,
     showShare: false,
     showInfo: false,
     locked: false,
@@ -126,6 +128,45 @@ store.planets.forEach(planet => {
         loop: true,
         // html5: true, // commenting because if iOS then cannot change volume midway of playing
     })
+})
+
+// TODO: move this to a better place?
+export function planetsToJson() {
+    let ret = []
+    store.planets.forEach(planet => {
+        const { name, size, color, index } = planet
+        const el = document.querySelector(`#planet-${name}`)
+        // const x = el.transform.baseVal.getItem(0).matrix.e - size
+        // const y = el.transform.baseVal.getItem(0).matrix.f - size
+        const x = el.transform.baseVal.getItem(0).matrix.e
+        const y = el.transform.baseVal.getItem(0).matrix.f
+        ret.push({
+            name: planet.name,
+            x,
+            y,
+            size,
+            color,
+            index,
+        })
+    })
+    return ret
+}
+
+// TODO: move this to a better place?
+export function compositionToJson() {
+    return {
+        pianoMode: store.pianoMode,
+        planets: planetsToJson(),
+    }
+}
+
+export const api = axios.create({
+    baseURL: 'http://localhost:5000',
+    // withCredentials: true,
+    timeout: 5000,
+    // headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    // },
 })
 
 export default store

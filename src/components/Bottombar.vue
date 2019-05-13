@@ -17,9 +17,7 @@
                 class="arrow icon"
                 @click="changePianoMode(-1)"
             ></FontAwesomeIcon>
-            <div id="pianoModeText">
-                {{ pianoModeText }}
-            </div>
+            <div id="pianoModeText">{{ pianoModeText }}</div>
             <FontAwesomeIcon
                 icon="arrow-circle-right"
                 class="arrow icon"
@@ -106,7 +104,7 @@
             <!-- <FontAwesomeIcon
                 :icon="fullscreen ? 'compress' : 'expand'"
                 class="icon"
-            ></FontAwesomeIcon> -->
+      ></FontAwesomeIcon>-->
             <Resize :expand="!fullscreen" />
         </div>
     </div>
@@ -242,8 +240,7 @@ export default {
         },
 
         toggleShare() {
-            // TODO:
-            // store.showShare = !store.showShare
+            store.showShare = !store.showShare
         },
 
         toggleFullscreen() {

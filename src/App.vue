@@ -6,7 +6,7 @@
         </div>
         <div id="canvas" ref="canvas">
             <svg viewBox="0 0 1920 1080">
-                <Sun />
+                <Sun></Sun>
                 <Piano
                     v-show="showPiano && appMode === 'piano'"
                     :width="pianoWidth"
@@ -15,14 +15,14 @@
                     :y="-12 + 25"
                     :highlight="true"
                     opacity="0.4"
-                />
+                ></Piano>
                 <Planet
                     v-for="planet in planets"
                     :key="planet.name"
                     :name="planet.name"
                     class="myPlanet"
                     @interaction="interaction"
-                />
+                ></Planet>
                 <!-- FIXME: -->
                 <circle id="ball" cx="300" cy="300" r="50" fill="red"></circle>
             </svg>
@@ -34,7 +34,7 @@
             class="btnFullscreenClose btnFullscreen"
             color="white"
             @click="toggleFullscreen"
-        ></FontAwesomeIcon> -->
+    ></FontAwesomeIcon>-->
         <ShareOverlay v-show="showShare" class="overlay" />
         <InfoOverlay v-show="showInfo" class="overlay" />
     </div>
@@ -54,10 +54,14 @@ import utils from '@/utils.js'
 import Draggable from 'gsap/Draggable'
 
 import store from '@/store.js'
+import { api } from '@/store.js'
+
 import { sample, random } from 'lodash'
 import { Howler } from 'howler'
 
 import Recorder from '@/recorder.js'
+
+import isUUID from 'validator/lib/isUUID'
 
 export default {
     name: 'App',
@@ -178,7 +182,6 @@ export default {
             store.isMobile = true
         }
         window.addEventListener('load', () => {
-            console.log('window finished loading')
             store.loaded = true
         })
 
@@ -205,30 +208,89 @@ export default {
             this.updateDragBounds()
         })
 
+        // this.positionPlanetsRandomly()
         // this.positionPlanetsHorizontally()
         this.positionPlanetsSequentially()
+
         // this.setPlanetPosition('neptune', 800, 400)
         this.initDraggables()
         this.updateDragBounds()
 
         // FIXME: a weird way to fix dragging in chrome android.. not sure why
-        // this is happen. will need to figure it out latter. Something to do
+        // this is happen. will need to figure it out later. Something to do
         // with the z-index or similar, since if this isn't used we can pull to
         // refresh, but with this fix we can't. just if selecting outside of the
         // svg canvas
         // Draggable.create('#ball')
         Draggable.create('.myPlanet')
         document.querySelector('#ball').remove()
+
+        const parts = window.location.href.split('/')
+        const possibleUUID = parts.pop() || parts.pop() // handle potential trailing slash
+        if (isUUID(possibleUUID, 4)) {
+            console.log(
+                'Starting app with an UUID. Going to check if exists in database'
+            )
+            this.loadUUID(possibleUUID)
+        }
+
+        // Create a compressor node
+        const ctx = Howler.ctx
+        const compressor = ctx.createDynamicsCompressor()
+        compressor.threshold.setValueAtTime(-50, ctx.currentTime)
+        compressor.knee.setValueAtTime(40, ctx.currentTime)
+        compressor.ratio.setValueAtTime(12, ctx.currentTime)
+        compressor.attack.setValueAtTime(0, ctx.currentTime)
+        compressor.release.setValueAtTime(0.25, ctx.currentTime)
+
+        // connect the AudioBufferSourceNode to the destination
+        source.connect(ctx.destination)
+
+        button.onclick = function() {
+            var active = button.getAttribute('data-active')
+            if (active == 'false') {
+                button.setAttribute('data-active', 'true')
+                button.innerHTML = 'Remove compression'
+
+                source.disconnect(ctx.destination)
+                source.connect(compressor)
+                compressor.connect(ctx.destination)
+            } else if (active == 'true') {
+                button.setAttribute('data-active', 'false')
+                button.innerHTML = 'Add compression'
+
+                source.disconnect(compressor)
+                compressor.disconnect(ctx.destination)
+                source.connect(ctx.destination)
+            }
+        }
     },
 
     methods: {
+        loadUUID(uuid) {
+            api.get(`compositions/${uuid}`)
+                .then(response => {
+                    // TODO: make this a direct mapping
+                    const data = response.data.data
+                    store.pianoMode = data.pianoMode
+                    store.showPiano = data.showPiano
+                    store.planets = data.planets
+                    store.planets.forEach(planet => {
+                        this.setPlanetPosition(planet.name, planet.x, planet.y)
+                    })
+                })
+                .catch(error => {
+                    console.error(`Couldn't load UUID ${uuid} from database.`)
+                    console.log({ error })
+                })
+        },
+
         initDraggables() {
             for (let i = 0; i < store.planets.length; i++) {
                 let name = store.planets[i].name
                 store.planets[i].draggable = Draggable.create(
                     `#planet-${name}`,
                     {
-                        // allowEventDefault: true,
                         cursor: 'pointer',
                         onDrag: () => {
                             if (store.locked) return
@@ -260,10 +322,7 @@ export default {
         },
 
         interaction(evt) {
-            console.log('interaction!')
-            console.log('lastInteractedPlanetId changed', evt)
             if (this.lastInteractedPlanetId === evt) {
-                console.log('clicked the same')
                 return
             }
             this.lastInteractedPlanetId = evt
@@ -294,9 +353,6 @@ export default {
                     if (!evt.shiftKey) this.$refs.bottombar.changePianoMode(1)
                     else this.$refs.bottombar.changePianoMode(-1)
                 }
-                // if (evt.key === 's') store.showShare = !store.showShare
-                // if (evt.key === 'f') store.fullscreen = !store.fullscreen
-
                 // app modes
                 if (evt.key === 't') this.$refs.bottombar.toggleLanguage()
                 if (evt.key === '1') store.appMode = 'piano'
@@ -316,9 +372,6 @@ export default {
         },
 
         getMaxDragHeight() {
-            // if (this.fullscreen) {
-            //     return this.canvas.height
-            // } else {
             try {
                 const h1 = this.$refs.bottombar.$el.clientHeight
                 const h2 = this.$refs.canvas.clientHeight
@@ -328,11 +381,9 @@ export default {
                 console.log('failing silently', e)
                 return this.canvas.height
             }
-            // }
         },
 
         updateDragBounds() {
-            console.log('updating drag bounds')
             const maxDragHeight = this.getMaxDragHeight()
             store.planets.forEach(planet => {
                 planet.draggable.applyBounds({
@@ -353,10 +404,6 @@ export default {
         },
 
         setPlanetPosition(name, x, y) {
-            // x and y attr
-            // Vue.set(this.planets[i], 'x', x)
-            // Vue.set(this.planets[i], 'y', y)
-
             // with transforms
             const planet = document.querySelector(`#planet-${name}`)
             planet.setAttribute('transform', `matrix(1,0,0,1,${x},${y})`)
@@ -374,9 +421,14 @@ export default {
                 const y = random(dy) + r
                 const index = sample(indexes)
                 indexes = indexes.filter(el => el !== index)
+                const sunWidth = document
+                    .querySelector('#sun')
+                    .getBoundingClientRect().width
                 const x =
-                    index * (this.canvas.width / this.planets.length) +
-                    this.canvas.width / this.planets.length / 2
+                    index *
+                        ((this.canvas.width - sunWidth) / this.planets.length) +
+                    this.canvas.width / this.planets.length / 2 +
+                    sunWidth
                 this.setPlanetPosition(this.planets[i].name, x, y)
             }
         },
@@ -400,7 +452,7 @@ export default {
                     const dy =
                         this.canvas.height -
                         2 * r1 -
-                        document.querySelector('.bottombar').clientHeight -
+                        document.querySelector('#bottombar').clientHeight -
                         20
                     y1 = Math.floor(Math.random() * dy + r1)
 
@@ -466,24 +518,17 @@ export default {
 @import 'assets/styles/globals';
 @import 'assets/styles/starry';
 
-// .prevent-scrolling {
-//     overflow: hidden;
-// }
-
 html:fullscreen,
 body:fullscreen {
     overflow: hidden;
 }
 
-// #app {
 html {
-    // overflow-x: hidden;
     background: #000;
     font-family: 'Space Mono', monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    // margin-top: 60px;
     --ratio: calc(16 / 9); // TODO: this should be inferred from image
     --percentage: 100; // percentage of viewport to use (better than using 100%)
     width: calc(var(--percentage) * 1vw);
@@ -496,6 +541,8 @@ html {
     bottom: 0;
     left: 0;
     right: 0;
+    border: 1px solid var(--greyish);
+    border-radius: 2px;
 }
 
 .stars,
@@ -538,7 +585,6 @@ html {
 .overlay {
     background: black;
     color: var(--active);
-    // opacity: 0.94;
     width: 100%;
 }
 
@@ -549,8 +595,4 @@ html {
 #pleaserotate-graphic {
     margin-left: 0;
 }
-
-// .pleaserotate-hiding {
-//     margin: 0;
-// }
 </style>

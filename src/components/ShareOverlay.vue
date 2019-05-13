@@ -9,12 +9,12 @@
                 <FontAwesomeIcon
                     :icon="['fab', 'facebook-f']"
                     @click="shareFacebook"
-                ></FontAwesomeIcon>
-                Facebook
+                ></FontAwesomeIcon
+                >Facebook
             </div>
             <div class="btnTwitter">
-                <FontAwesomeIcon :icon="['fab', 'twitter']"></FontAwesomeIcon>
-                Twitter
+                <FontAwesomeIcon :icon="['fab', 'twitter']"></FontAwesomeIcon
+                >Twitter
             </div>
             <!-- <a
                 href="https://twitter.com/intent/tweet?screen_name=SteamSpace1&ref_src=twsrc%5Etfw"
@@ -23,13 +23,15 @@
                 data-text="Just tried the Neptune app. "
                 data-show-count="false"
                 >Tweet to @SteamSpace1</a
-            > -->
+      >-->
         </div>
     </Overlay>
 </template>
 
 <script>
 import Overlay from '@/components/Overlay'
+import store from '@/store.js'
+import { api, compositionToJson } from '@/store.js'
 
 export default {
     components: {
@@ -38,9 +40,34 @@ export default {
 
     data() {
         return {
-            shareUrl: 'https://neptune.com/cwypcvB',
+            shareUrl: '',
             exit: false,
         }
+    },
+
+    computed: {
+        showShare() {
+            return store.showShare
+        },
+    },
+
+    watch: {
+        showShare() {
+            if (this.showShare) {
+                const json = compositionToJson()
+                console.log(JSON.stringify(json))
+
+                api.post('compositions', json)
+                    .then(response => {
+                        const { uuid } = response.data
+                        this.shareUrl = uuid
+                    })
+                    .catch(error => {
+                        console.error('Error saving composition to database')
+                        console.log(error)
+                    })
+            }
+        },
     },
 
     mounted() {

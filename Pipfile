@@ -11,6 +11,8 @@ flake8 = "*"
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
+flask-cors = "*"
+flask-limiter = "*"
 
 [requires]
 python_version = "3.7"
