@@ -662,7 +662,7 @@ html {
     bottom: 0;
     left: 0;
     right: 0;
-    border: 1px solid var(--greyish);
+    // border: 1px solid var(--greyish);
     border-radius: 2px;
 }
 
