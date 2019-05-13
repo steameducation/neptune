@@ -56,6 +56,8 @@ import Draggable from 'gsap/Draggable'
 import store from '@/store.js'
 import { api } from '@/store.js'
 
+import Shake from 'shake.js'
+
 import { sample, random } from 'lodash'
 import { Howler } from 'howler'
 
@@ -204,6 +206,8 @@ export default {
     },
 
     mounted() {
+        this.initShake()
+
         window.addEventListener('resize', () => {
             this.updateDragBounds()
         })
@@ -234,39 +238,34 @@ export default {
             this.loadUUID(possibleUUID)
         }
 
+        const compress = true
         // Create a compressor node
-        const ctx = Howler.ctx
-        const compressor = ctx.createDynamicsCompressor()
-        compressor.threshold.setValueAtTime(-50, ctx.currentTime)
-        compressor.knee.setValueAtTime(40, ctx.currentTime)
-        compressor.ratio.setValueAtTime(12, ctx.currentTime)
-        compressor.attack.setValueAtTime(0, ctx.currentTime)
-        compressor.release.setValueAtTime(0.25, ctx.currentTime)
+        if (compress) {
+            // NOTE: https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound/39651062#39651062
+            // using default tone.js values
+            const compressor = Howler.ctx.createDynamicsCompressor()
+            compressor.ratio.setValueAtTime(12, Howler.ctx.currentTime)
+            compressor.threshold.setValueAtTime(-24, Howler.ctx.currentTime)
+            compressor.release.setValueAtTime(0.25, Howler.ctx.currentTime)
+            compressor.attack.setValueAtTime(0.003, Howler.ctx.currentTime)
+            compressor.knee.setValueAtTime(30, Howler.ctx.currentTime)
 
-        // connect the AudioBufferSourceNode to the destination
-        source.connect(ctx.destination)
-
-        button.onclick = function() {
-            var active = button.getAttribute('data-active')
-            if (active == 'false') {
-                button.setAttribute('data-active', 'true')
-                button.innerHTML = 'Remove compression'
-
-                source.disconnect(ctx.destination)
-                source.connect(compressor)
-                compressor.connect(ctx.destination)
-            } else if (active == 'true') {
-                button.setAttribute('data-active', 'false')
-                button.innerHTML = 'Add compression'
-
-                source.disconnect(compressor)
-                compressor.disconnect(ctx.destination)
-                source.connect(ctx.destination)
-            }
+            // Apply compressor in between Howler masterGain and destination
+            Howler.masterGain.connect(compressor)
+            // compressor.connect(Howler.ctx.destination)
         }
     },
 
     methods: {
+        initShake() {
+            new Shake({ threshold: 15, timeout: 1000 }).start()
+            window.addEventListener('shake', this.shaked, false)
+        },
+
+        shaked() {
+            alert('got shaked')
+        },
+
         loadUUID(uuid) {
             api.get(`compositions/${uuid}`)
                 .then(response => {
@@ -316,9 +315,10 @@ export default {
                 ? store.canvas.height - size
                 : store.canvas.height - 2 * size
 
-            const mapped = utils.map(y, 0, height, 1, 0.01)
+            const mapped = utils.map(y, 0, height, 1, 0)
             const ret = mapped >= 1 ? 1 : mapped
-            return ret
+            // console.log(`ret is ${ret} but going to return ${ret * ret}`)
+            return ret * ret
         },
 
         interaction(evt) {
