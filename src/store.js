@@ -69,7 +69,6 @@ const store = new Vue.observable({
     showInfo: false,
     locked: false,
     muted: false,
-    loaded: false,
     sequencing: false,
     fullscreen: false,
     recording: () => {
@@ -83,6 +82,8 @@ const store = new Vue.observable({
     locales: Object.keys(messages),
     isPwa: false,
     isMobile: false,
+    allNoteSoundsLoaded: false,
+    allPlanetSoundsLoaded: false,
 })
 
 const notes = [
@@ -110,23 +111,36 @@ store.planets.forEach(planet => {
 })
 
 // Load note sounds
+let noteSoundsLoaded = 0
 notes.forEach(note => {
     store.sounds[note] = new Howl({
         src: `sounds/piano/${note}.mp3`,
         autoplay: false,
         volume: 0.6,
         loop: false,
-        onend: function() {},
+        onload: () => {
+            noteSoundsLoaded++
+            if (noteSoundsLoaded === notes.length) {
+                store.allNoteSoundsLoaded = true
+            }
+        },
     })
 })
 
 // Load planet's sounds (soundscapes)
+let planetSoundsLoaded = 0
 store.planets.forEach(planet => {
     store.soundscapes[planet.name] = new Howl({
         src: `sounds/nasa/${planet.name}.mp3`,
         autoplay: false,
         volume: 0.6,
         loop: true,
+        onload: () => {
+            planetSoundsLoaded++
+            if (planetSoundsLoaded === store.planets.length) {
+                store.allPlanetSoundsLoaded = true
+            }
+        },
         // html5: true, // commenting because if iOS then cannot change volume midway of playing
     })
 })

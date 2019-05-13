@@ -82,12 +82,14 @@ export default {
         return {
             maxDragHeight: 0,
             lastInteractedPlanetId: 'mercury',
+            isLoading: false,
+            fullPage: true,
         }
     },
 
     computed: {
         loaded() {
-            return store.loaded
+            return store.allNoteSoundsLoaded && store.allPlanetSoundsLoaded
         },
 
         planets() {
@@ -134,6 +136,10 @@ export default {
     },
 
     watch: {
+        loaded() {
+            if (this.loaded) document.querySelector('.loading').remove()
+        },
+
         appMode(newMode, oldMode) {
             document.querySelectorAll('circle').forEach(el => {
                 el.classList.remove('hasRecording')
@@ -184,9 +190,6 @@ export default {
         ) {
             store.isMobile = true
         }
-        window.addEventListener('load', () => {
-            store.loaded = true
-        })
 
         store.isPwa =
             new URLSearchParams(window.location.search).get('utm_source') ===

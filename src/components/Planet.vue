@@ -26,6 +26,9 @@
             @touchstart.stop="click"
             @mousedown="click"
         >
+            <!-- NOTE: Use :filter="`url(#shadow-${name})`" to debug outer circle for improved interaction -->
+            <circle :r="size / 2 + 20" fill="none" pointer-events="visible" />
+
             <circle
                 :r="size / 2"
                 :fill="color"
@@ -41,7 +44,8 @@
                     repeatCount="indefinite"
                 />
             </circle>
-            <text :y="size / 2 + 30" class="planetLabel">
+
+            <text ref="label" :y="size / 2 + 30" class="planetLabel">
                 {{ $t(name) }}
             </text>
             <Fact v-show="showFact" :fact="fact" :size="size" />
@@ -86,6 +90,10 @@ export default {
     },
 
     computed: {
+        labelHeight() {
+            return this.$refs.label.clientHeight
+        },
+
         planet() {
             return store.planets.find(planet => planet.name === this.name)
         },
