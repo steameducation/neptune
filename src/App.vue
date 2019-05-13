@@ -263,10 +263,8 @@ export default {
                     Math.floor(Math.random() * store.pianoModes.length)
                 ]
             store.pianoMode = randomPianoMode
-            store.planets.forEach(planet => {
-                this.setPlanetPosition(planet.name, 100, 200)
-            })
-            // this.positionPlanetsHorizontally()
+            this.positionPlanetsHorizontally()
+            // this.updateDraggables()
         },
 
         loadUUID(uuid) {
@@ -276,28 +274,22 @@ export default {
                     const { data } = response.data
                     store.pianoMode = data.pianoMode
                     store.showPiano = data.showPiano
-                    // store.planets.forEach(planet => planet.draggable.kill())
                     store.planets = data.planets
-                    //     store.planets.forEach(planet =>
-                    //         this.setPlanetPosition(
-                    //             planet.name,
-                    //             planet.x,
-                    //             planet.y
-                    //         )
-                    //     )
-                    //     // this.initDraggables()
-                    // }, 5000)
-                    store.planets.forEach(planet => {
-                        window.TweenLite.set(`#planet-${planet.name}`, {
-                            x: planet.x,
-                            y: planet.y,
-                        })
-                    })
+                    this.updateDraggables()
                 })
                 .catch(error => {
                     console.error(`Couldn't load UUID ${uuid} from database.`)
                     console.log({ error })
                 })
+        },
+
+        updateDraggables() {
+            store.planets.forEach(planet => {
+                window.TweenLite.set(`#planet-${planet.name}`, {
+                    x: planet.x,
+                    y: planet.y,
+                })
+            })
         },
 
         initDraggables() {
@@ -423,6 +415,7 @@ export default {
             // with transforms
             const planet = document.querySelector(`#planet-${name}`)
             planet.setAttribute('transform', `matrix(1,0,0,1,${x},${y})`)
+            window.TweenLite.set(`#planet-${name}`, { x, y })
         },
 
         positionPlanetsHorizontally() {
