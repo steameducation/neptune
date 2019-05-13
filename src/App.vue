@@ -204,6 +204,7 @@ export default {
         if (this.appMode === 'record') this.initRecorder()
 
         this.initMidi()
+        window.WebMidi = WebMidi
     },
 
     mounted() {
@@ -259,6 +260,32 @@ export default {
     },
 
     methods: {
+        midiNoteOnListener(e) {
+            console.log(e.note.name + e.note.octave)
+            const sNote = `${e.note.name}${e.note.octave}`
+            console.log({ sNote })
+            let note = teoria.note(sNote)
+            if (sNote.includes('#')) {
+                note = teoria
+                    .note(sNote)
+                    .enharmonics()
+                    .find(en => en.accidentalValue() === -1) // find the one with just one flat
+                console.log('note converted to', note)
+            }
+            // Iterate through planets to check if any has a .note() that is the same as the MIDI note on
+            this.$children.forEach(component => {
+                if (component.$options.name === 'Planet') {
+                    if (component.note === note.scientific()) {
+                        console.log(
+                            'found a planet with proper note and index',
+                            component.index
+                        )
+                        this.$root.$emit('noteOn', component.index)
+                    }
+                }
+            })
+        },
+
         initMidi() {
             WebMidi.enable(err => {
                 if (err) {
@@ -266,30 +293,9 @@ export default {
                 } else {
                     console.log('WebMidi enabled!')
                     console.log(WebMidi.inputs)
-                    const input = WebMidi.inputs[0]
-                    input.addListener('noteon', 'all', e => {
-                        console.log(e.note.name + e.note.octave)
-                        const sNote = `${e.note.name}${e.note.octave}`
-                        console.log({ sNote })
-                        let note = teoria.note(sNote)
-                        if (sNote.includes('#')) {
-                            note = teoria
-                                .note(sNote)
-                                .enharmonics()
-                                .find(en => en.accidentalValue() === -1) // find the one with just one flat
-                            console.log('note converted to', note)
-                        }
-                        // Iterate through planets to check if any has a .note() that is the same as the MIDI note on
-                        this.$children.forEach(component => {
-                            if (component.$options.name === 'Planet') {
-                                if (component.note === note.scientific()) {
-                                    console.log(
-                                        'found a planet with proper note and index',
-                                        component.index
-                                    )
-                                    this.$root.$emit('noteOn', component.index)
-                                }
-                            }
+                    WebMidi.inputs.forEach(input => {
+                        input.addListener('noteon', 'all', e => {
+                            this.midiNoteOnListener(e)
                         })
                     })
                 }
