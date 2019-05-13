@@ -222,6 +222,7 @@ export default {
     },
 
     created() {
+        this.$root.$on('noteClear', this.noteClear)
         this.$root.$on('noteOn', this.noteOn)
         this.$root.$on('noteOff', this.noteOff)
         this.$root.$on('amplitude', evt => {
@@ -325,6 +326,10 @@ export default {
             if (store.appMode === 'piano') this.playPiano()
             else if (store.appMode === 'nasa') this.playNASA()
             else if (store.appMode === 'record') this.playRecord()
+        },
+
+        noteClear() {
+            this.$root.$emit('noteOff', this.index)
         },
 
         noteOff(index) {

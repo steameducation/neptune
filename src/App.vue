@@ -151,22 +151,27 @@ export default {
             if (this.appMode === 'record' && !store.recorder)
                 this.initRecorder()
 
+            const dur = 500 // 500 miliseconds for fadeout when changing modes
             if (oldMode === 'nasa') {
                 Object.keys(store.soundscapes).forEach(soundscapeKey => {
-                    if (store.soundscapes[soundscapeKey].playing()) {
-                        store.soundscapes[soundscapeKey].fade(1, 0, 500)
+                    const sound = store.soundscapes[soundscapeKey]
+                    if (sound.playing()) {
+                        sound.fade(sound.volume(), 0, dur)
                         setTimeout(() => {
-                            store.soundscapes[soundscapeKey].stop()
-                        }, 500)
+                            sound.stop()
+                            this.$root.$emit('noteClear')
+                        }, dur)
                     }
                 })
             } else if (oldMode === 'piano') {
                 Object.keys(store.sounds).forEach(pianoKey => {
-                    if (store.sounds[pianoKey].playing()) {
-                        store.sounds[pianoKey].fade(1, 0, 500)
+                    const sound = store.sounds[pianoKey]
+                    if (sound.playing()) {
+                        sound.fade(sound.volume(), 0, dur)
                         setTimeout(() => {
-                            store.sounds[pianoKey].stop()
-                        }, 500)
+                            sound.stop()
+                            this.$root.$emit('noteClear')
+                        }, dur)
                     }
                 })
             } else if (oldMode === 'record') {

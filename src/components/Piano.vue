@@ -71,6 +71,7 @@ export default {
         if (this.highlight) {
             this.$root.$on('pianoOn', this.pianoOn)
             this.$root.$on('pianoOff', this.pianoOff)
+            this.$root.$on('pianoClear', this.pianoClear)
         }
     },
 
@@ -85,6 +86,26 @@ export default {
             console.log('pianoOff', { note })
             if (!this.highlight) return
             this.setHighlight(note, false)
+        },
+
+        pianoClear() {
+            console.log('pianoClear')
+            if (!this.highlight) return
+            const notes = [
+                'C3',
+                'Db3',
+                'D3',
+                'Eb3',
+                'E3',
+                'F3',
+                'Gb3',
+                'G3',
+                'Ab3',
+                'A3',
+                'Bb3',
+                'B3',
+            ]
+            notes.forEach(note => this.setHighlight(note, false))
         },
 
         setHighlight(note, bool) {
