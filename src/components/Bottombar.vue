@@ -1,9 +1,16 @@
 <template>
     <div id="bottombar" class="grid">
-        <div id="btnMute" class="btnIcon" @click="toggleMute">
+        <!-- <div id="btnMute" class="btnIcon" @click="toggleMute">
             <FontAwesomeIcon
                 class="arrow icon"
                 :icon="muted ? 'volume-mute' : 'volume-up'"
+            ></FontAwesomeIcon>
+        </div> -->
+
+        <div id="btnSequence" class="btnIcon" @click="toggleSequence">
+            <FontAwesomeIcon
+                class="arrow icon"
+                :icon="sequencing ? 'pause' : 'play'"
             ></FontAwesomeIcon>
         </div>
 
@@ -136,6 +143,8 @@ import {
     faTimes,
     faMicrophone,
     faSatellite,
+    faPlay,
+    faPause,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faFacebookF, faTwitter } from '@fortawesome/fontawesome-free-brands'
@@ -160,7 +169,9 @@ library.add(
     faMicrophone,
     faSatellite,
     faFacebookF,
-    faTwitter
+    faTwitter,
+    faPlay,
+    faPause
 )
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
@@ -184,6 +195,10 @@ export default {
 
         fullscreen() {
             return store.fullscreen
+        },
+
+        sequencing() {
+            return store.sequencing
         },
 
         pianoMode() {
@@ -241,6 +256,44 @@ export default {
 
         toggleShare() {
             store.showShare = !store.showShare
+        },
+
+        toggleSequence() {
+            store.sequencing = !store.sequencing
+            if (store.sequencing) {
+                const maxDuration = '5000'
+                const width = this.$root.$children[0].canvas.width
+                const timestamps = store.planets.map(planet => {
+                    const x0 =
+                        document
+                            .querySelector(`#planet-${planet.name}`)
+                            .transform.baseVal.getItem(0).matrix.e -
+                        planet.size / 2
+                    return {
+                        timestamp: utils.map(x0, 0, width, 0, maxDuration),
+                        index: planet.index,
+                    }
+                })
+                timestamps.sort((p1, p2) => {
+                    if (p1.timestamp > p2.timestamp) return 1
+                    else return -1
+                })
+                console.log({ timestamps })
+
+                // NOTE: doing this with timeout since Howler doesn't allow for scheduling!
+                timestamps.forEach(ts => {
+                    setTimeout(() => {
+                        console.log('playing', ts.index, 'at', ts.timestamp)
+                        this.$root.$emit('noteOn', ts.index)
+                    }, ts.timestamp)
+                })
+
+                setTimeout(() => {
+                    store.sequencing = false
+                }, maxDuration)
+            } else {
+                console.log('stopping sequencing')
+            }
         },
 
         toggleFullscreen() {

@@ -275,7 +275,7 @@ export default {
             )
 
             // NOTE: determine actual amplitude according to position on screen on start
-            this.amplitude = this.$parent.determineAmplitude(this.name) // LOL...
+            this.amplitude = this.$parent.determineAmplitude(this.planet.name) // LOL...
         })
 
         // this.initHammer()
@@ -325,6 +325,7 @@ export default {
         },
 
         playPiano() {
+            this.amplitude = this.$parent.determineAmplitude(this.planet.name)
             this.$root.$emit('pianoOn', this.note)
             const v = store.sounds[this.note].volume()
             this.sound.volume(this.amplitude)

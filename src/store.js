@@ -70,6 +70,7 @@ const store = new Vue.observable({
     locked: false,
     muted: false,
     loaded: false,
+    sequencing: false,
     fullscreen: false,
     recording: () => {
         return this.recorder.recording
