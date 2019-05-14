@@ -189,7 +189,7 @@ export default {
 
         loaded() {
             if (this.loaded) {
-                store.showShare = false // NOTE: Hack so that twitter button gets properly styled
+                // store.showShare = false // NOTE: Hack so that twitter button gets properly styled
                 setTimeout(() => {
                     document.querySelector('.loading').remove()
                     setTimeout(() => {
@@ -283,9 +283,9 @@ export default {
     },
 
     mounted() {
-        setTimeout(() => {
-            store.showShare = false // NOTE: Hack so that twitter button gets properly styled
-        }, 500)
+        // setTimeout(() => {
+        //     store.showShare = false // NOTE: Hack so that twitter button gets properly styled
+        // }, 500)
 
         this.initShake()
 

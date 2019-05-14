@@ -21,9 +21,9 @@
         </defs>
         <g
             :id="`planet-${name}`"
-            @shake="shaked"
             ref="planetGroup"
             class="planet"
+            @shake="shaked"
             @touchstart.stop="click"
             @mousedown="click"
         >

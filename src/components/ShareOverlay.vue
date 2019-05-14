@@ -113,9 +113,9 @@ export default {
 
     mounted() {
         this.exit = false
-        // setTimeout(() => {
-        //     store.showShare = false // NOTE: Hack so that twitter button gets properly styled
-        // }, 1000)
+        setTimeout(() => {
+            store.showShare = false // NOTE: Hack so that twitter button gets properly styled
+        }, 1000)
     },
 
     methods: {
@@ -152,7 +152,7 @@ export default {
     line-height: 2;
     margin: 0 auto;
     font-size: 1em;
-    #shareDiv:hover {
+    &:hover {
         text-decoration: underline;
         cursor: pointer;
     }
