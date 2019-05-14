@@ -106,7 +106,7 @@ section {
 #furtherCredits {
     padding-top: 10px;
     height: 40%;
-    background: #171411;
+    // background-color: #171411;
     img {
         margin-top: 10px;
         height: 36px;

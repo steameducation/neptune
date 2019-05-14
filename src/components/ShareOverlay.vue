@@ -1,54 +1,61 @@
 <template>
     <Overlay class="shareOverlay">
-        <p>{{ $t('shareHeader') }}</p>
-        <div id="shareDiv">
-            <span id="shareUrl" @click="click">{{ shareUrl }}</span>
-        </div>
-        <br />
+        <div class="overlayContent">
+            <p>{{ $t('shareHeader') }}</p>
+            <div id="shareDiv">
+                <span id="shareUrl" @click="click">{{ shareUrl }}</span>
+            </div>
+            <br />
+
+            <!-- <button
+            class="copyButton"
+            data-clipboard-target="#foo1"
+            data-clipboard-action="copy"
+        >
+            Copy Text
+        </button>
 
         <div class="clipboard">
             Copy link
             <FontAwesomeIcon
                 icon="clipboard"
                 class="clipboardIcon"
-                data-clipboard-target="#shareUrl"
+                data-clipboard-target="#foo1"
                 data-clipboard-action="copy"
             ></FontAwesomeIcon>
-        </div>
+        </div> -->
 
-        <div class="shareArea">
-            Share it on
-            <div class="shareButtons">
-                <a
-                    href="https://www.facebook.com/sharer/sharer.php?u="
-                    target="_blank"
-                >
-                    Facebook
-                </a>
+            <!-- <div id="foo1" data-clipboard-text="foobarbaconeggs">lorem</div> -->
 
-                <a
-                    href="https://twitter.com/intent/tweet?screen_name=SteamSpace1&ref_src=twsrc%5Etfw"
-                    class="twitter-mention-button"
-                    data-size="large"
-                    :data-text="twitterDataText"
-                    data-show-count="false"
-                    >Tweet to @SteamSpace1</a
-                >
+            <div class="shareArea">
+                <p>Share your NepTune composition!</p>
+                <div class="shareButtons">
+                    <div class="facebook">
+                        <button class="btnFacebook" @click="facebook">
+                            <FontAwesomeIcon
+                                :icon="['fab', 'facebook-square']"
+                            ></FontAwesomeIcon
+                            >&nbsp;&nbsp;Share
+                        </button>
+                    </div>
 
-                <!-- <div class="btnFacebook">
-                    <FontAwesomeIcon
-                        :icon="['fab', 'facebook-f']"
-                        @click="shareFacebook"
-                    ></FontAwesomeIcon
-                    >&nbsp;Facebook
-                </div>
-
-                <div class="btnTwitter">
+                    <div class="twitter">
+                        <a
+                            href="https://twitter.com/intent/tweet?screen_name=SteamSpace1&ref_src=twsrc%5Etfw"
+                            class="twitter-mention-button"
+                            data-size="xlarge"
+                            :data-text="twitterDataText"
+                            data-show-count="false"
+                            >Tweet to @SteamSpace1</a
+                        >
+                        <!--<div class="btnTwitter">
                     <FontAwesomeIcon
                         :icon="['fab', 'twitter']"
                     ></FontAwesomeIcon
                     >&nbsp;Twitter
                 </div> -->
+                    </div>
+                </div>
             </div>
         </div>
     </Overlay>
@@ -106,18 +113,15 @@ export default {
 
     mounted() {
         this.exit = false
-        // new window.Clipboard('.clipboardIcon')
     },
 
     methods: {
-        getShareUrl() {},
-
-        shareFacebook() {
-            window.open(
-                'https://www.facebook.com/sharer/sharer.php?u=http://stackoverflow.com',
-                'pop',
-                'width=600, height=400, scrollbars=no'
-            )
+        facebook() {
+            const baseFacebookUrl =
+                'https://www.facebook.com/sharer/sharer.php?u='
+            const url = `${baseFacebookUrl}http://neptune.nunoh.com`
+            console.log({ url })
+            window.open(url, 'pop', 'width=600, height=400, scrollbars=no')
         },
 
         click() {
@@ -155,20 +159,58 @@ export default {
 }
 
 .shareButtons {
-    display: inline;
+    display: flex;
+    margin-top: 20px;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    margin: 20px;
+}
+
+.facebook,
+.twitter {
+    margin: 10px;
+    align-self: center;
+    justify-self: center;
+    // border: 1px solid red;
+}
+
+.btnFacebook:hover {
+    cursor: pointer !important;
+    background: rgba(58, 87, 155, 1);
+}
+
+.btnFacebook {
+    background: rgba(58, 87, 155, 0.9);
+    border-radius: 5px;
+    color: white;
+    width: 100px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+}
+
+.btnTwitter {
+    margin-right: 10px;
 }
 
 .btnFacebook,
 .btnTwitter {
-    border: 1px solid red;
-    width: 300px;
     line-height: 2.5;
-    border-radius: 30px;
 }
 
 .clipboard {
     .clipboardIcon {
         fill: red;
     }
+}
+
+.overlayContent {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
 }
 </style>

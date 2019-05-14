@@ -35,8 +35,8 @@
             color="white"
             @click="toggleFullscreen"
     ></FontAwesomeIcon>-->
-        <ShareOverlay v-show="showShare" class="overlay" />
-        <InfoOverlay v-show="showInfo" class="overlay" />
+        <ShareOverlay v-show="showShare" class="overlay stars" />
+        <InfoOverlay v-show="showInfo" class="overlay stars" />
     </div>
 </template>
 
@@ -369,7 +369,9 @@ export default {
                             }
                         }
                     }
-                } catch (ex) {}
+                } catch (ex) {
+                    // console.log('do nothing')
+                }
             }
         },
 
@@ -780,7 +782,7 @@ html {
 }
 
 .overlay {
-    background: black;
+    background-color: rgba(0, 0, 0, 0.93);
     color: var(--active);
     width: 100%;
 }

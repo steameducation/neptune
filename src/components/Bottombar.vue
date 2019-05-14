@@ -148,7 +148,11 @@ import {
     faClipboard,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { faFacebookF, faTwitter } from '@fortawesome/fontawesome-free-brands'
+import {
+    faFacebookF,
+    faTwitter,
+    faFacebookSquare,
+} from '@fortawesome/fontawesome-free-brands'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(
@@ -170,6 +174,7 @@ library.add(
     faMicrophone,
     faSatellite,
     faFacebookF,
+    faFacebookSquare,
     faTwitter,
     faPlay,
     faPause,
