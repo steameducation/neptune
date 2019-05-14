@@ -5,6 +5,7 @@
         viewBox="0 0 358.027 937.357"
         x="0"
         :y="y"
+        @click="play"
     >
         <defs>
             <filter
@@ -17,7 +18,7 @@
             >
                 <feOffset input="SourceAlpha" />
                 <feGaussianBlur stdDeviation="49.5" result="blur" />
-                <feFlood flood-color="#ffc20f" />
+                <feFlood :flood-color="floodColor" />
                 <feComposite operator="in" in2="blur" />
                 <feComposite in="SourceGraphic" />
             </filter>
@@ -43,8 +44,33 @@ export default {
         }
     },
 
+    computed: {
+        floodColor() {
+            return '#ffc20f'
+            // if (store.sounds['C3'].playing()) {
+            //     return '#ffc20f'
+            // } else {
+            //     return 'red'
+            // }
+        },
+    },
+
     mounted() {
         this.y = store.canvas.height / 2 - this.height / 2
     },
+
+    methods: {
+        play() {
+            store.sounds['C3'].play()
+        },
+    },
 }
 </script>
+
+<style lang="scss">
+#sun {
+    &:hover {
+        cursor: pointer;
+    }
+}
+</style>

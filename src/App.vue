@@ -189,6 +189,7 @@ export default {
 
         loaded() {
             if (this.loaded) {
+                store.showShare = false // NOTE: Hack so that twitter button gets properly styled
                 document.querySelector('.loading').remove()
                 setTimeout(() => {
                     // store.sequencing = true
@@ -566,6 +567,9 @@ export default {
                 if (evt.key === 'h') this.$root.$emit('noteOn', 5)
                 if (evt.key === 'j') this.$root.$emit('noteOn', 6)
                 if (evt.key === 'k') this.$root.$emit('noteOn', 7)
+
+                // sequencing
+                if (evt.key === ' ') store.sequencing = !store.sequencing
             })
         },
 

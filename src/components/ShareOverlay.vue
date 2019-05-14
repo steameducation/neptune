@@ -1,5 +1,5 @@
 <template>
-    <Overlay class="shareOverlay">
+    <Overlay class="shareOverlay" keepalive>
         <div class="overlayContent">
             <p>{{ $t('shareHeader') }}</p>
             <div id="shareDiv">
@@ -73,7 +73,7 @@ export default {
 
     data() {
         return {
-            shareUUID: '34acfac9-4c50-4454-9f77-45c7478b4000',
+            shareUUID: '',
             exit: false,
         }
     },
