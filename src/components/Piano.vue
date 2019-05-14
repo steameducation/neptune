@@ -83,7 +83,6 @@ export default {
         },
 
         pianoOff(note) {
-            console.log('pianoOff', { note })
             if (!this.highlight) return
             this.setHighlight(note, false)
         },

@@ -309,6 +309,9 @@ export default {
                 'Starting app with an UUID. Going to check if exists in database'
             )
             this.loadUUID(possibleUUID)
+            // setTimeout(() => {
+            //     store.sequencing = true
+            // }, 10000)
         }
 
         window.teoria = teoria
@@ -490,6 +493,7 @@ export default {
                                 amplitude: this.determineAmplitude(name),
                             })
                         },
+                        throwProps: true,
                     }
                 )[0]
             }

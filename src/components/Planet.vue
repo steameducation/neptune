@@ -202,6 +202,17 @@ export default {
     },
 
     watch: {
+        showFact() {
+            console.log('showingFact', this.$children[0].boxY)
+            if (this.showFact) {
+                setTimeout(() => {
+                    store.planets.forEach(planet =>
+                        planet.draggable.applyBounds()
+                    )
+                }, 10)
+            }
+        },
+
         holding() {
             if (this.appMode === 'piano' || this.appMode === 'nasa') {
                 if (this.holding) {
@@ -357,11 +368,10 @@ export default {
             this.playing = true
             store.sounds[this.note].on('end', () => {
                 if (this.noteOns.length === 0) {
-                    console.log('trying to stop a sound that doesnt exist')
+                    // console.log('trying to stop a sound that doesnt exist')
                     return
                 }
                 let note = this.noteOns.shift()
-                console.log('ending note', { note })
                 if (this.sound.playing() && this.noteOns[0] == note) return
                 this.$root.$emit('noteOff', this.index)
                 this.$root.$emit('pianoOff', note)

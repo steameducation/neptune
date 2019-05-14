@@ -4,6 +4,7 @@
         :width="boxWidth"
         :height="boxHeight"
         :viewBox="`0 0 ${boxWidth} ${boxHeight}`"
+        transform="translate(0, 200)"
     >
         <path
             class="fact"

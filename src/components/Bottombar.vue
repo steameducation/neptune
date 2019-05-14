@@ -145,6 +145,7 @@ import {
     faSatellite,
     faPlay,
     faPause,
+    faClipboard,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faFacebookF, faTwitter } from '@fortawesome/fontawesome-free-brands'
@@ -171,7 +172,8 @@ library.add(
     faFacebookF,
     faTwitter,
     faPlay,
-    faPause
+    faPause,
+    faClipboard
 )
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
