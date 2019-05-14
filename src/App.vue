@@ -195,7 +195,7 @@ export default {
                     setTimeout(() => {
                         // store.sequencing = true
                     }, 1000)
-                }, 100)
+                }, 200)
             }
         },
 
@@ -283,6 +283,11 @@ export default {
     },
 
     mounted() {
+
+        setTimeout(() => {
+            store.showShare = false // NOTE: Hack so that twitter button gets properly styled
+        }, 500)
+
         this.initShake()
 
         window.addEventListener('resize', () => {

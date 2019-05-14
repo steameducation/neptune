@@ -438,43 +438,6 @@ export default {
     }
 }
 
-// TODO: disable share for now
-// #appModeRecord {
-//     &:hover {
-//         cursor: default;
-//         border: 1px solid var(--greyish) !important;
-//         svg {
-//             color: grey !important;
-//             &:hover {
-//                 color: grey !important;
-//             }
-//         }
-//     }
-//     svg {
-//         color: grey !important;
-//     }
-//     fill: grey;
-// }
-
-#btnShare {
-    &.isMobile {
-        &:hover {
-            cursor: default;
-            border: 1px solid var(--greyish) !important;
-            svg {
-                color: grey !important;
-                &:hover {
-                    color: grey !important;
-                }
-            }
-        }
-        svg {
-            color: grey !important;
-        }
-        fill: grey;
-    }
-}
-
 .icon {
     color: white;
 }

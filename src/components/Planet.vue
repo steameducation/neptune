@@ -379,7 +379,7 @@ export default {
         },
 
         toggleRecording() {
-            // console.log('toggleRe')
+            console.log('toggleRecording')
             if (this.isRecording) {
                 // console.log('starting recording in planet')
                 store.recorder.start(store.recordings, this.name)

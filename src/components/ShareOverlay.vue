@@ -2,8 +2,8 @@
     <Overlay class="shareOverlay" keepalive>
         <div class="overlayContent">
             <p>{{ $t('shareHeader') }}</p>
-            <div id="shareDiv">
-                <span id="shareUrl" @click="click">{{ shareUrl }}</span>
+            <div id="shareDiv" @click="click">
+                {{ shareUrl }}
             </div>
             <br />
 
@@ -118,8 +118,6 @@ export default {
         // }, 1000)
     },
 
-    updated() {},
-
     methods: {
         facebook() {
             const baseFacebookUrl =
@@ -132,11 +130,6 @@ export default {
         click() {
             window.location.href = this.shareUrl
         },
-
-        copyToClipboard() {
-            document.querySelector('#shareUrl').select()
-            document.execCommand('copy')
-        },
     },
 }
 </script>
@@ -147,36 +140,27 @@ export default {
 }
 
 #shareDiv {
-    margin-top: 10px !important;
+    padding: 0 10px;
+    // margin-top: 10px !important;
+    // margin-bottom: 10px !important;
+    margin: 10px 0 30px !important;
     background: white;
     border-radius: 20px;
     border: 10px solid var(--accent) !important;
-    // background: red;
     color: var(--accent);
-    width: 600px;
+    display: inline-block;
     line-height: 2;
     margin: 0 auto;
-    font-size: 16px;
-    #shareUrl:hover {
+    font-size: 1em;
+    #shareDiv:hover {
         text-decoration: underline;
         cursor: pointer;
     }
 }
 
-.shareButtons {
-    display: flex;
-    margin-top: 20px;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    margin: 20px;
-}
-
 .facebook,
 .twitter {
-    margin: 10px;
+    margin: 8px;
     align-self: center;
     justify-self: center;
     // border: 1px solid red;
@@ -192,7 +176,7 @@ export default {
     border-radius: 5px;
     color: white;
     width: 100px;
-    font-size: 14px;
+    font-size: 0.9em;
     font-weight: bold;
     border: none;
 }
