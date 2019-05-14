@@ -283,7 +283,6 @@ export default {
     },
 
     mounted() {
-
         setTimeout(() => {
             store.showShare = false // NOTE: Hack so that twitter button gets properly styled
         }, 500)
@@ -340,6 +339,34 @@ export default {
             Howler.masterGain.connect(compressor)
             // compressor.connect(Howler.ctx.destination)
         }
+
+        function absorbEvent_(event) {
+            var e = event || window.event
+            e.preventDefault && e.preventDefault()
+            e.stopPropagation && e.stopPropagation()
+            e.cancelBubble = true
+            e.returnValue = false
+            return false
+        }
+
+        function preventLongPressMenu(node) {
+            console.log('preventing long press menu')
+            node.ontouchstart = absorbEvent_
+            node.ontouchmove = absorbEvent_
+            node.ontouchend = absorbEvent_
+            node.ontouchcancel = absorbEvent_
+        }
+
+        // NOTE: very werid bug.. release is being triggered after ~300ms-500ms on its own just after a click on mobile devices
+        // For more info check:
+        // - https://greensock.com/forums/topic/16979-draggable-onrelease-fires-in-mobile-device-after-a-moment/
+        // - https://stackoverflow.com/questions/3413683/disabling-the-context-menu-on-long-taps-on-android
+        function init() {
+            console.log('iniT!')
+            const elems = document.querySelectorAll('.planet')
+            elems.forEach(elem => preventLongPressMenu(elem))
+        }
+        init()
     },
 
     methods: {
@@ -437,6 +464,12 @@ export default {
                 ]
             store.pianoMode = randomPianoMode
             this.positionPlanetsHorizontally()
+            store.recordings = {}
+            this.$children.forEach(component => {
+                if (component.$options.name === 'Planet') {
+                    component.hasRecording = false
+                }
+            })
         },
 
         loadUUID(uuid) {

@@ -21,6 +21,7 @@
         </defs>
         <g
             :id="`planet-${name}`"
+            @shake="shaked"
             ref="planetGroup"
             class="planet"
             @touchstart.stop="click"
@@ -276,6 +277,10 @@ export default {
     },
 
     methods: {
+        shaked() {
+            console.log('plaenet got shaken')
+        },
+
         setListeners() {
             store.planets[this.index].draggable.addEventListener(
                 'press',
