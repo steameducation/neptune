@@ -5,8 +5,8 @@
                 :id="`shadow-${name}`"
                 x="-50%"
                 y="-50%"
-                width="400%"
-                height="400%"
+                width="1000%"
+                height="1000%"
             >
                 <feDropShadow
                     dx="0"
@@ -32,6 +32,7 @@
             <circle
                 :r="size / 2"
                 :fill="color"
+                class="planetCircle"
                 :class="{ hasRecording: hasRecording }"
                 :filter="`url(#shadow-${name})`"
             >
@@ -43,9 +44,17 @@
                     dur="0.8s"
                     repeatCount="indefinite"
                 />
+                <!-- <animate
+                    v-if="playing"
+                    attributeType="XML"
+                    attributeName="stroke-width"
+                    values="3;4"
+                    dur="0.8s"
+                    repeatCount="indefinite"
+                /> -->
             </circle>
 
-            <text ref="label" :y="size / 2 + 30" class="planetLabel">
+            <text ref="label" :y="size / 2 + 30" :class="{ playing: playing }">
                 {{ $t(name) }}
             </text>
             <Fact v-show="showFact" :fact="fact" :size="size" />
@@ -187,8 +196,10 @@ export default {
         },
 
         stdDeviation() {
-            if (!this.playing) return 5
-            else return 15
+            return 25
+            // else return 15
+            // if (!this.playing) return 5
+            // else return 15
         },
 
         fact() {
@@ -466,6 +477,9 @@ svg {
         text-anchor: middle;
         fill: #707070;
         font-size: 24px;
+        &.playing {
+            fill: var(--active);
+        }
     }
 }
 
@@ -477,5 +491,11 @@ svg {
 
 .hasRecording {
     stroke: red;
+}
+
+.planetCircle {
+    stroke: var(--active);
+    stroke-width: 0px;
+    opacity: 0.93;
 }
 </style>
