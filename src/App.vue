@@ -190,10 +190,12 @@ export default {
         loaded() {
             if (this.loaded) {
                 store.showShare = false // NOTE: Hack so that twitter button gets properly styled
-                document.querySelector('.loading').remove()
                 setTimeout(() => {
-                    // store.sequencing = true
-                }, 1000)
+                    document.querySelector('.loading').remove()
+                    setTimeout(() => {
+                        // store.sequencing = true
+                    }, 1000)
+                }, 100)
             }
         },
 

@@ -113,7 +113,12 @@ export default {
 
     mounted() {
         this.exit = false
+        // setTimeout(() => {
+        //     store.showShare = false // NOTE: Hack so that twitter button gets properly styled
+        // }, 1000)
     },
+
+    updated() {},
 
     methods: {
         facebook() {
