@@ -9,8 +9,8 @@
                 height="1000%"
             >
                 <feDropShadow
-                    dx="0"
-                    dy="0"
+                    dx="1"
+                    dy="1"
                     :stdDeviation="stdDeviation"
                     v-bind="{
                         'flood-color': floodColor,
@@ -55,7 +55,12 @@
                 /> -->
             </circle>
 
-            <text ref="label" :y="size / 2 + 30" :class="{ playing: playing }">
+            <text
+                ref="label"
+                :y="size / 2 + 30"
+                :class="{ playing: playing }"
+                :fill="color"
+            >
                 {{ $t(name) }}
             </text>
             <Fact v-show="showFact" :fact="fact" :size="size" />
@@ -96,6 +101,11 @@ export default {
             noteOns: [],
             hasTouch: false,
             hasRecording: false,
+            stdDeviationObj: {
+                max: 30,
+                min: 5,
+                val: 5,
+            },
         }
     },
 
@@ -133,6 +143,7 @@ export default {
         // },
 
         floodColor() {
+            // return `var(--active)`
             if (
                 this.appMode === 'piano' ||
                 this.appMode === 'nasa' ||
@@ -197,7 +208,8 @@ export default {
         },
 
         stdDeviation() {
-            return 25
+            return this.stdDeviationObj.val
+            // return 25
             // else return 15
             // if (!this.playing) return 5
             // else return 15
@@ -214,6 +226,13 @@ export default {
     },
 
     watch: {
+        playing() {
+            const val = this.playing
+                ? this.stdDeviationObj.max
+                : this.stdDeviationObj.min
+            window.TweenLite.to(this.stdDeviationObj, 0.2, { val })
+        },
+
         showFact() {
             console.log('showingFact', this.$children[0].boxY)
             if (this.showFact) {
@@ -256,7 +275,6 @@ export default {
                 if (this.appMode === 'nasa') {
                     // store.soundscapes[this.name].volume(this.amplitude)
                     const v = store.soundscapes[this.name].volume()
-                    console.log(`fading NASA sound ${v} -> ${this.amplitude}`)
                     store.soundscapes[this.name].fade(v, this.amplitude, 1000)
                 }
                 if (this.appMode === 'record')
@@ -471,7 +489,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 svg {
     overflow: visible;
     circle.hasRecording {
@@ -482,6 +500,7 @@ svg {
         text-anchor: middle;
         fill: #707070;
         font-size: 24px;
+        transition: fill 0.2s;
         &.playing {
             fill: var(--active);
         }
@@ -501,6 +520,6 @@ svg {
 .planetCircle {
     stroke: var(--active);
     stroke-width: 0px;
-    opacity: 0.93;
+    opacity: 0.97;
 }
 </style>

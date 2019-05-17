@@ -88,7 +88,11 @@ export default {
 
     computed: {
         loaded() {
-            return store.allNoteSoundsLoaded && store.allPlanetSoundsLoaded
+            return (
+                store.allNoteSoundsLoaded &&
+                store.allPlanetSoundsLoaded &&
+                store.allSunSoundsLoaded
+            )
         },
 
         planets() {
@@ -147,44 +151,7 @@ export default {
             }
 
             this.timeouts = []
-            if (store.sequencing) {
-                const maxDuration = '5000'
-                const width = this.$root.$children[0].canvas.width
-                const timestamps = store.planets.map(planet => {
-                    const x0 =
-                        document
-                            .querySelector(`#planet-${planet.name}`)
-                            .transform.baseVal.getItem(0).matrix.e -
-                        planet.size / 2
-                    return {
-                        timestamp: utils.map(x0, 0, width, 0, maxDuration),
-                        index: planet.index,
-                    }
-                })
-                timestamps.sort((p1, p2) => {
-                    if (p1.timestamp > p2.timestamp) return 1
-                    else return -1
-                })
-                console.log({ timestamps })
-
-                // NOTE: doing this with timeout since Howler doesn't allow for scheduling!
-                timestamps.forEach(ts => {
-                    this.timeouts.push(
-                        setTimeout(() => {
-                            console.log('playing', ts.index, 'at', ts.timestamp)
-                            this.$root.$emit('noteOn', ts.index)
-                        }, ts.timestamp)
-                    )
-                })
-
-                this.timeouts.push(
-                    setTimeout(() => {
-                        store.sequencing = false
-                    }, maxDuration)
-                )
-            } else {
-                console.log('stopping sequencing')
-            }
+            if (store.sequencing) this.setTimeouts()
         },
 
         loaded() {
@@ -241,10 +208,6 @@ export default {
         },
 
         locked() {
-            document
-                .getElementById('#btnLock')
-                .dispatchEvent(new Event('mouseleave'))
-
             this.planets.forEach(planet => {
                 if (this.locked) planet.draggable.disable()
                 else planet.draggable.enable()
@@ -350,7 +313,6 @@ export default {
         }
 
         function preventLongPressMenu(node) {
-            console.log('preventing long press menu')
             node.ontouchstart = absorbEvent_
             node.ontouchmove = absorbEvent_
             node.ontouchend = absorbEvent_
@@ -362,7 +324,6 @@ export default {
         // - https://greensock.com/forums/topic/16979-draggable-onrelease-fires-in-mobile-device-after-a-moment/
         // - https://stackoverflow.com/questions/3413683/disabling-the-context-menu-on-long-taps-on-android
         function init() {
-            console.log('iniT!')
             const elems = document.querySelectorAll('.planet')
             elems.forEach(elem => preventLongPressMenu(elem))
         }
@@ -370,6 +331,57 @@ export default {
     },
 
     methods: {
+        setTimeouts() {
+            const width = this.$root.$children[0].canvas.width
+            const x0s = store.planets.map(planet => {
+                const x0 =
+                    document
+                        .querySelector(`#planet-${planet.name}`)
+                        .transform.baseVal.getItem(0).matrix.e -
+                    planet.size / 2
+                return {
+                    x0,
+                    // timestamp: utils.map(x0, 0, width, 0, maxDuration),
+                    index: planet.index,
+                }
+            })
+            // Sort by x0
+            x0s.sort((p1, p2) => {
+                if (p1.x0 > p2.x0) return 1
+                else return -1
+            })
+
+            // Add timestamps
+            const maxDuration = 5 * 1000
+            const maxX0 = x0s[x0s.length - 1].x0
+            const duration = utils.map(maxX0, 0, width, 0, maxDuration)
+            const timestamps = x0s.map(el => {
+                return {
+                    x0: el.x0,
+                    index: el.index,
+                    timestamp: utils.map(el.x0, 0, maxX0, 0, duration),
+                }
+            })
+
+            console.log({ timestamps })
+
+            // NOTE: doing this with timeout since Howler doesn't allow for scheduling!
+            timestamps.forEach(ts => {
+                this.timeouts.push(
+                    setTimeout(() => {
+                        console.log('playing', ts.index, 'at', ts.timestamp)
+                        this.$root.$emit('noteOn', ts.index)
+                    }, ts.timestamp)
+                )
+            })
+
+            this.timeouts.push(
+                setTimeout(() => {
+                    this.setTimeouts()
+                }, duration + 500) // leave 0.5 duration for last note before looping
+            )
+        },
+
         removeHoverFromCss() {
             // NOTE: More info here: https://stackoverflow.com/questions/23885255/how-to-remove-ignore-hover-css-style-on-touch-devices
             function hasTouch() {

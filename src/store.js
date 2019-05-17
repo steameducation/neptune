@@ -79,11 +79,13 @@ const store = new Vue.observable({
     sounds: {},
     soundscapes: {},
     recordings: {},
+    sun: [],
     locales: Object.keys(messages),
     isPwa: false,
     isMobile: false,
     allNoteSoundsLoaded: false,
     allPlanetSoundsLoaded: false,
+    allSunSoundsLoaded: false,
 })
 
 const notes = [
@@ -144,6 +146,23 @@ store.planets.forEach(planet => {
         // html5: true, // commenting because if iOS then cannot change volume midway of playing
     })
 })
+
+// Load sun drone sounds
+let sunSoundsLoaded = 0
+for (let i = 0; i < 3; i++) {
+    store.sun[i] = new Howl({
+        src: `sounds/sun/sun${i + 1}.mp3`,
+        autoplay: false,
+        volume: 0.1,
+        loop: true,
+        onload: () => {
+            sunSoundsLoaded++
+            if (sunSoundsLoaded === 3) {
+                store.allSunSoundsLoaded = true
+            }
+        },
+    })
+}
 
 // TODO: move this to a better place?
 export function planetsToJson() {
