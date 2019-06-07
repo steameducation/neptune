@@ -27,14 +27,7 @@
                 <circle id="ball" cx="300" cy="300" r="50" fill="red"></circle>
             </svg>
         </div>
-        <!-- <Bottombar v-show="!fullscreen" ref="bottombar" @lock="lock" /> -->
         <Bottombar ref="bottombar" @lock="lock" />
-        <!-- <FontAwesomeIcon
-            icon="times"
-            class="btnFullscreenClose btnFullscreen"
-            color="white"
-            @click="toggleFullscreen"
-    ></FontAwesomeIcon>-->
         <ShareOverlay v-show="showShare" class="overlay stars" />
         <InfoOverlay v-show="showInfo" class="overlay stars" />
     </div>
@@ -283,8 +276,6 @@ export default {
             //     store.sequencing = true
             // }, 10000)
         }
-
-        window.teoria = teoria
 
         const compress = true
         // Create a compressor node
