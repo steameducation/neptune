@@ -41,22 +41,16 @@ import InfoOverlay from '@/components/InfoOverlay.vue'
 import Piano from '@/components/Piano.vue'
 import Sun from '@/components/Sun.vue'
 
-import Vue from 'vue'
-
 import utils from '@/utils.js'
-import Draggable from 'gsap/Draggable'
-
-import store from '@/store.js'
-import { api } from '@/store.js'
-
-import { sample, random } from 'lodash'
-import { Howler } from 'howler'
-
-import WebMidi from 'webmidi'
-import teoria from 'teoria'
-
+import store, { api } from '@/store.js'
 import Recorder from '@/recorder.js'
 
+import Vue from 'vue'
+import Draggable from 'gsap/Draggable'
+import { sample, random } from 'lodash'
+import { Howler } from 'howler'
+import WebMidi from 'webmidi'
+import teoria from 'teoria'
 import isUUID from 'validator/lib/isUUID'
 
 export default {
@@ -97,7 +91,6 @@ export default {
         },
 
         pianoWidth() {
-            // return 426.629
             return this.canvas.width * 0.2
         },
 
@@ -137,7 +130,6 @@ export default {
 
     watch: {
         sequencing() {
-            console.log('sequencing changed to', this.sequencing)
             if (!store.sequencing) {
                 this.timeouts.forEach(timeout => clearTimeout(timeout))
                 return
@@ -149,12 +141,9 @@ export default {
 
         loaded() {
             if (this.loaded) {
-                // store.showShare = false // NOTE: Hack so that twitter button gets properly styled
                 setTimeout(() => {
                     document.querySelector('.loading').remove()
-                    setTimeout(() => {
-                        // store.sequencing = true
-                    }, 1000)
+                    setTimeout(() => {}, 1000)
                 }, 200)
             }
         },
@@ -222,7 +211,9 @@ export default {
             'homescreen'
         this.$root.$on('recordStart', this.recordStart)
         this.$root.$on('recordStop', this.recordStop)
+
         this.initKeyboardShortcuts()
+
         if (window.screenfull.enabled) {
             window.screenfull.on('change', () => {
                 store.fullscreen = window.screenfull.isFullscreen
@@ -239,10 +230,6 @@ export default {
     },
 
     mounted() {
-        // setTimeout(() => {
-        //     store.showShare = false // NOTE: Hack so that twitter button gets properly styled
-        // }, 500)
-
         this.initShake()
 
         window.addEventListener('resize', () => {
@@ -272,16 +259,10 @@ export default {
                 'Starting app with an UUID. Going to check if exists in database'
             )
             this.loadUUID(possibleUUID)
-            // setTimeout(() => {
-            //     store.sequencing = true
-            // }, 10000)
         }
 
         const compress = true
-        // Create a compressor node
         if (compress) {
-            // NOTE: https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound/39651062#39651062
-            // using default tone.js values
             const compressor = Howler.ctx.createDynamicsCompressor()
             compressor.ratio.setValueAtTime(30, Howler.ctx.currentTime)
             compressor.threshold.setValueAtTime(-24, Howler.ctx.currentTime)
@@ -497,27 +478,6 @@ export default {
                         })
                     })
                     this.updateDragBounds()
-
-                    // const planetNames = store.planets.map(planet => {
-                    //     return { name: planet.name, index: planet.index }
-                    // })
-                    // planetNames.sort((p1, p2) => {
-                    //     if (p1.index > p2.index) return 1
-                    //     else return -1
-                    // })
-                    // console.log({ planetNames })
-                    // planetNames.forEach(planet => {
-                    //     const { name } = planet
-                    //     this.$children.forEach(component => {
-                    //         if (
-                    //             component.$options.name === 'Planet' &&
-                    //             component.$vnode.key === name
-                    //         ) {
-                    //             console.log('setting listeners for', name)
-                    //             component.setListeners()
-                    //         }
-                    //     })
-                    // })
                 })
                 .catch(error => {
                     console.error(`Couldn't load UUID ${uuid} from database.`)
@@ -559,8 +519,7 @@ export default {
 
             const mapped = utils.map(y, 0, height, 1, 0)
             const ret = mapped >= 1 ? 1 : mapped
-            // console.log(`ret is ${ret} but going to return ${ret * ret}`)
-            return ret * ret
+            return ret ** 4
         },
 
         interaction(evt) {
