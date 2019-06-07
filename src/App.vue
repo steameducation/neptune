@@ -292,10 +292,10 @@ export default {
             // NOTE: https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound/39651062#39651062
             // using default tone.js values
             const compressor = Howler.ctx.createDynamicsCompressor()
-            compressor.ratio.setValueAtTime(12, Howler.ctx.currentTime)
+            compressor.ratio.setValueAtTime(30, Howler.ctx.currentTime)
             compressor.threshold.setValueAtTime(-24, Howler.ctx.currentTime)
-            compressor.release.setValueAtTime(0.25, Howler.ctx.currentTime)
-            compressor.attack.setValueAtTime(0.003, Howler.ctx.currentTime)
+            compressor.release.setValueAtTime(0.1, Howler.ctx.currentTime)
+            compressor.attack.setValueAtTime(0.001, Howler.ctx.currentTime)
             compressor.knee.setValueAtTime(30, Howler.ctx.currentTime)
 
             // Apply compressor in between Howler masterGain and destination
