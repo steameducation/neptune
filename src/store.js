@@ -195,7 +195,7 @@ export function compositionToJson() {
 }
 
 export const api = axios.create({
-    baseURL: 'https://52.18.120.63/neptune/',
+    baseURL: 'https://34.250.203.171/neptune/',
     timeout: 5000,
     // withCredentials: true,
     // headers: {
