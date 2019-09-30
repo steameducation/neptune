@@ -14,4 +14,5 @@ deploy:
   bucket: "steam-neptune"
   local_dir: dist
   region: eu-west-1
+  skip_cleanup: true
   acl: public_read
