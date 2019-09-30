@@ -27,6 +27,11 @@ class NeptuneComposition(db.Model):
         return f"<NeptuneComposition {self.created_at}>"
 
 
+@app.route("/status", methods=["GET"])
+def status():
+    return '', 200
+
+
 # Save new composition
 @app.route("/compositions", methods=["POST"])
 @limiter.limit("10 per minute")
