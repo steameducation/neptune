@@ -88,7 +88,7 @@ export default {
         },
 
         pianoClear() {
-            console.log('pianoClear')
+            // console.log('pianoClear')
             if (!this.highlight) return
             const notes = [
                 'C3',

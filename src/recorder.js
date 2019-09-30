@@ -49,7 +49,7 @@ export default class Recorder {
 
         // Set timeout
         this.timeoutId = window.setTimeout(() => {
-            console.log(`Timing out after ${this.timeoutMS} ms`)
+            // console.log(`Timing out after ${this.timeoutMS} ms`)
             this.recording = false
             this.mediaRecorder.stop()
         }, this.timeoutMS)

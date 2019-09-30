@@ -98,7 +98,7 @@ export default {
                 const json = compositionToJson()
                 console.log(JSON.stringify(json))
 
-                api.post('compositions', json)
+                api.post('/compositions', json)
                     .then(response => {
                         const { uuid } = response.data
                         this.shareUUID = uuid

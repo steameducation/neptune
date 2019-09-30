@@ -88,11 +88,10 @@ export default {
     },
 
     mounted() {
-        console.log('mounted')
-        const val = !this.playing
-            ? this.stdDeviationObj.max
-            : this.stdDeviationObj.min
-        console.log({ val })
+        // const val = !this.playing
+        //     ? this.stdDeviationObj.max
+        //     : this.stdDeviationObj.min
+        // console.log({ val })
         // window.TweenMax.to(this.stdDeviationObj, 0.5, {
         //     val,
         //     onUpdate: () => {
