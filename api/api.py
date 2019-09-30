@@ -12,9 +12,11 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 limiter = Limiter(app, key_func=get_remote_address)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+# basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = '/var/data/neptune'
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "neptune.sqlite")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["APPLICATION_ROOT"] = "/neptune"
 db = SQLAlchemy(app)
 
 
@@ -27,13 +29,13 @@ class NeptuneComposition(db.Model):
         return f"<NeptuneComposition {self.created_at}>"
 
 
-@app.route("/status", methods=["GET"]):
+@app.route("/neptune/status", methods=["GET"])
 def status():
-    return '', 200
+    return 'OK', 200
 
 
 # Save new composition
-@app.route("/compositions", methods=["POST"])
+@app.route("/neptune/compositions", methods=["POST"])
 @limiter.limit("10 per minute")
 @cross_origin()
 def post():
@@ -53,7 +55,7 @@ def post():
 
 
 # Retrieve specific composition
-@app.route("/compositions/<string:uuid>", methods=["GET"])
+@app.route("/neptune/compositions/<string:uuid>", methods=["GET"])
 @limiter.exempt
 @cross_origin()
 def get(uuid):
@@ -73,4 +75,4 @@ def get(uuid):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000, host="0.0.0.0")
+    app.run(debug=False, port=5000, host="0.0.0.0")
