@@ -6,9 +6,10 @@ from flask_limiter.util import get_remote_address
 
 import os
 import datetime
+import shortuuid
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+# cors = CORS(app, resources={r"/*": {"origins": "*"}})
 limiter = Limiter(app, key_func=get_remote_address)
 
 # basedir = os.path.abspath(os.path.dirname(__file__))
