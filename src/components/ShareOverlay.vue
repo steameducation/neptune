@@ -128,7 +128,7 @@ export default {
         },
 
         click() {
-            window.location.href = this.shareUrl
+            window.location.host = this.shareUrl
         },
     },
 }
