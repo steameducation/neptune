@@ -84,7 +84,7 @@ export default {
         },
 
         shareUrl() {
-            return `${window.location.origin}/${this.shareUUID}`
+            return `${window.location.host}/${this.shareUUID}`
         },
 
         twitterDataText() {
@@ -128,7 +128,7 @@ export default {
         },
 
         click() {
-            window.location.host = this.shareUrl
+            window.location.origin = this.shareUrl
         },
     },
 }

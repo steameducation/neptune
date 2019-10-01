@@ -5,7 +5,6 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 import os
-import uuid
 import datetime
 
 app = Flask(__name__)
@@ -21,7 +20,7 @@ db = SQLAlchemy(app)
 
 
 class NeptuneComposition(db.Model):
-    uuid = db.Column(db.String, primary_key="True", default=lambda: str(uuid.uuid4()))
+    uuid = db.Column(db.String, primary_key="True", default=lambda: str(shortuuid.uuid()))
     data = db.Column(db.JSON, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
