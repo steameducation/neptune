@@ -7,12 +7,21 @@ cache:
   # npm: false
 script:
   npm run build
+
+# deploy:
+#   provider: s3
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: $AWS_SECRET_KEY
+#   bucket: "steam-neptune"
+#   local_dir: dist
+#   region: eu-west-1
+#   skip_cleanup: true
+#   acl: public_read
+
 deploy:
-  provider: s3
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_SECRET_KEY
-  bucket: "steam-neptune"
-  local_dir: dist
-  region: eu-west-1
+  provider: pages
   skip_cleanup: true
-  acl: public_read
+  local_dir: dist
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
