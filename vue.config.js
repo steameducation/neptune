@@ -1,5 +1,4 @@
 module.exports = {
-    publicPath: '/neptune/',
     pwa: {
         themeColor: '#F7BC3D',
     },
