@@ -254,12 +254,10 @@ export default {
 
         const parts = window.location.href.split('/')
         const possibleUUID = parts.pop() || parts.pop() // handle potential trailing slash
-        if (isUUID(possibleUUID, 4)) {
-            console.log(
-                'Starting app with an UUID. Going to check if exists in database'
-            )
-            this.loadUUID(possibleUUID)
-        }
+        console.log(
+            'Starting app with an UUID. Going to check if exists in database'
+        )
+        this.loadUUID(possibleUUID)
 
         const compress = true
         if (compress) {
