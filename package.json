@@ -27,7 +27,7 @@
     "teoria": "^2.5.0",
     "tone": "^13.8.25",
     "uuid-validate": "^0.0.3",
-    "validator": "^10.11.0",
+    "validator": "^13.7.0",
     "vue": "^2.6.0",
     "vue-i18n": "^8.14.1",
     "vue-loading-overlay": "^3.2.0",
