@@ -8,7 +8,7 @@ export default class Recorder {
         // This will automatically ask for permission
         this.mediaRecorder = navigator.mediaDevices
             .getUserMedia({ audio: true })
-            .then(stream => {
+            .then((stream) => {
                 this.mediaRecorder = new MediaRecorder(stream)
             })
 
@@ -30,7 +30,7 @@ export default class Recorder {
         this.mediaRecorderChunks = []
 
         if (!this.areEventsSet) {
-            this.mediaRecorder.addEventListener('dataavailable', event => {
+            this.mediaRecorder.addEventListener('dataavailable', (event) => {
                 this.mediaRecorderChunks.push(event.data)
             })
 

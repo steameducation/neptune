@@ -108,13 +108,13 @@ import { Howler } from 'howler'
 Howler.html5Poolsize = 30
 
 // enlarge sizes lol
-store.planets.forEach(planet => {
+store.planets.forEach((planet) => {
     planet.size *= 1.35
 })
 
 // Load note sounds
 let noteSoundsLoaded = 0
-notes.forEach(note => {
+notes.forEach((note) => {
     store.sounds[note] = new Howl({
         src: `sounds/piano/${note}.mp3`,
         autoplay: false,
@@ -131,7 +131,7 @@ notes.forEach(note => {
 
 // Load planet's sounds (soundscapes)
 let planetSoundsLoaded = 0
-store.planets.forEach(planet => {
+store.planets.forEach((planet) => {
     store.soundscapes[planet.name] = new Howl({
         src: `sounds/nasa/${planet.name}.mp3`,
         autoplay: false,
@@ -167,7 +167,7 @@ for (let i = 0; i < 3; i++) {
 // TODO: move this to a better place?
 export function planetsToJson() {
     let ret = []
-    store.planets.forEach(planet => {
+    store.planets.forEach((planet) => {
         const { name, size, color, index } = planet
         const el = document.querySelector(`#planet-${name}`)
         // const x = el.transform.baseVal.getItem(0).matrix.e - size
