@@ -51,7 +51,7 @@ import { sample, random } from 'lodash'
 import { Howler } from 'howler'
 import WebMidi from 'webmidi'
 import teoria from 'teoria'
-import isUUID from 'validator/lib/isUUID'
+// import isUUID from 'validator/lib/isUUID'
 
 export default {
   name: 'App',
