@@ -92,6 +92,7 @@
       id="btnShare"
       class="btnIcon"
       :class="{ isMobile: isMobile }"
+      style="visibility: hidden"
       @click="toggleShare"
     >
       <FontAwesomeIcon icon="link" class="icon"></FontAwesomeIcon>
