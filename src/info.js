@@ -1,6 +1,6 @@
 const info = {
-    en: {
-        neptune: `
+  en: {
+    neptune: `
             <p>
                 NepTune is a web-based app developed in the context of
                 the Strategic Partnership SPACE, funded by the Erasmus+
@@ -48,7 +48,7 @@ const info = {
                 subjects.
             </p>
         `,
-        credits: `
+    credits: `
             Programming, development and design:<br />
             <a
                 class="linkCdm"
@@ -63,9 +63,9 @@ const info = {
                 <li>Testing and Sound Design – Filipe Fernandes</li>
             </ul>
         `,
-    },
-    pt: {
-        neptune: `
+  },
+  pt: {
+    neptune: `
             <p>
                 NepTune é uma aplicação baseada na web e desenvolvida no contexto da Parceria Estratégica SPACE, financiada pelo programa Erasmus+. É, ao mesmo tempo, um instrumento musical e uma ferramenta educativa para alunos e professores, de qualquer nível. Foi conceptualizada pelo consórcio SPACE, composto pelo conjunto de professores, de todas as instituições parceiras, mas também pelos alunos da AP University College Antwerp, do Dundalk Institute of Technology e da Western Norway University of Applied Sciences.
             </p>
@@ -94,7 +94,7 @@ const info = {
                 Para cada um destes modos, ao premir cada um dos planetas será tocado o respectivo som. Com um toque longo, será exibido um facto interesse sobre o mesmo, das várias disciplinas STEAM
             </p>
         `,
-        credits: `
+    credits: `
             Programação, desenvolvimento e design::<br />
             <a
                 class="linkCdm"
@@ -109,7 +109,7 @@ const info = {
                 <li>Testes and Sound Design – Filipe Fernandes</li>
             </ul>
         `,
-    },
+  },
 }
 
 export default info
