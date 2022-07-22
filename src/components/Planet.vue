@@ -63,7 +63,19 @@
       >
         {{ $t(name) }}
       </text>
-      <Fact v-show="showFact" :fact="fact" :size="size" />
+
+      <Fact
+        v-show="showFact"
+        :fact="fact"
+        :size="size"
+        :planetName="name"
+        :factPosition="factPosition"
+      />
+
+      <!-- faster testing for dialog boxes -->
+      <!-- <template v-if="name === 'saturn'">
+        <Fact v-show="true" :fact="fact" :size="size" :planetName="name" />
+      </template> -->
     </g>
   </svg>
 </template>
@@ -101,6 +113,7 @@ export default {
       noteOns: [],
       hasTouch: false,
       hasRecording: false,
+      factPosition: 'top-left',
       stdDeviationObj: {
         max: 30,
         min: 5,
@@ -234,12 +247,15 @@ export default {
     },
 
     showFact() {
-      console.log('showingFact', this.$children[0].boxY)
-      if (this.showFact) {
-        setTimeout(() => {
-          store.planets.forEach((planet) => planet.draggable.applyBounds())
-        }, 10)
-      }
+      // console.log('showingFact', this.$children[0].boxY)
+      // no need to apply bounds if dialog box not out of frame
+      // if (this.showFact) {
+      //   setTimeout(() => {
+      //     store.planets.forEach((planet) => planet.draggable.applyBounds())
+      //   }, 10)
+      // }
+      console.log('toggle show fact')
+      this.$root.$emit('updatePlanetPosition')
     },
 
     holding() {
@@ -316,6 +332,10 @@ export default {
         window.clearTimeout(this.holdingTimeoutId)
       })
 
+      store.planets[this.index].draggable.addEventListener('drag', () => {
+        this.$root.$emit('updatePlanetPosition')
+      })
+
       store.planets[this.index].draggable.addEventListener('dragend', () => {
         if (this.locked) return
         this.dragging = false
@@ -378,10 +398,10 @@ export default {
       this.sound.volume(this.amplitude)
       console.log(
         'pianoOn',
-        v,
-        store.sounds[this.note].volume(),
+        Number(v).toFixed(2),
+        Number(store.sounds[this.note].volume()).toFixed(2),
         'should be',
-        this.amplitude
+        Number(this.amplitude).toFixed(2)
       )
       this.sound.play()
       this.noteOns.push(this.note)

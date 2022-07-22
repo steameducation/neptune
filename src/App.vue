@@ -36,7 +36,7 @@
 <script>
 import Planet from '@/components/Planet.vue'
 import Bottombar from '@/components/Bottombar.vue'
-import ShareOverlay from '@/components/ShareOverlay.vue'
+// import ShareOverlay from '@/components/ShareOverlay.vue'
 import InfoOverlay from '@/components/InfoOverlay.vue'
 import Piano from '@/components/Piano.vue'
 import Sun from '@/components/Sun.vue'
@@ -61,7 +61,7 @@ export default {
     Piano,
     Sun,
     Bottombar,
-    ShareOverlay,
+    // ShareOverlay,
     InfoOverlay,
   },
 
@@ -506,9 +506,13 @@ export default {
         ? store.canvas.height - size
         : store.canvas.height - 2 * size
 
+      console.log('height', height, store.canvas.height)
+
       const mapped = utils.map(y, 0, height, 1, 0)
       const ret = mapped >= 1 ? 1 : mapped
-      return ret ** 4
+
+      // return ret ** 4
+      return ret
     },
 
     interaction(evt) {
