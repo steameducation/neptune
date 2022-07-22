@@ -17,9 +17,14 @@
       :height="textHeight"
       :transform="`translate(${textX} ${textY})`"
     >
-      <p>
-        {{ fact }}
-      </p>
+      <div
+        class="d-flex align-items-center"
+        style="height: 140px; display: flex; align-items: center"
+      >
+        <p>
+          {{ fact }}
+        </p>
+      </div>
     </foreignObject>
   </svg>
 </template>
@@ -73,7 +78,7 @@ export default {
     },
 
     textHeight() {
-      return 1.0 * this.boxHeight
+      return 0.8 * this.boxHeight
     },
   },
 }
@@ -86,6 +91,6 @@ export default {
 
 .factText {
   color: var(--active);
-  font-size: 22px;
+  font-size: 20px;
 }
 </style>
