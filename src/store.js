@@ -194,9 +194,9 @@ export function compositionToJson() {
   }
 }
 
+// NOTE: api not active, since share not active
 export const api = axios.create({
-  // baseURL: 'https://34.250.203.171/neptune/',
-  baseURL: 'https://api.nunoh.com/neptune/',
+  baseURL: process.env.BASE_URL,
   timeout: 5000,
   // withCredentials: true,
   // headers: {
@@ -205,5 +205,3 @@ export const api = axios.create({
 })
 
 export default store
-
-window.store = store
