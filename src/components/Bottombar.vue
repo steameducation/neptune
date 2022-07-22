@@ -68,6 +68,16 @@
     </div>
 
     <div
+      id="btnShare"
+      class="btnIcon"
+      :class="{ isMobile: isMobile }"
+      style="visibility: hidden"
+      @click="toggleShare"
+    >
+      <FontAwesomeIcon icon="link" class="icon"></FontAwesomeIcon>
+    </div>
+
+    <div
       id="btnPiano"
       class="btnIcon"
       :class="{ active: showPiano, hide: appMode !== 'piano' }"
@@ -86,16 +96,6 @@
         :icon="locked ? 'lock' : 'unlock'"
         class="icon"
       ></FontAwesomeIcon>
-    </div>
-
-    <div
-      id="btnShare"
-      class="btnIcon"
-      :class="{ isMobile: isMobile }"
-      style="visibility: hidden"
-      @click="toggleShare"
-    >
-      <FontAwesomeIcon icon="link" class="icon"></FontAwesomeIcon>
     </div>
 
     <div id="btnInfo" class="btnIcon" @click="toggleInfo">

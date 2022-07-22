@@ -28,7 +28,7 @@
       </svg>
     </div>
     <Bottombar ref="bottombar" @lock="lock" />
-    <ShareOverlay v-show="showShare" class="overlay stars" />
+    <!-- <ShareOverlay v-show="showShare" class="overlay stars" /> -->
     <InfoOverlay v-show="showInfo" class="overlay stars" />
   </div>
 </template>
@@ -251,12 +251,17 @@ export default {
     Draggable.create('.myPlanet')
     document.querySelector('#ball').remove()
 
-    const parts = window.location.href.split('/')
-    const possibleUUID = parts.pop() || parts.pop() // handle potential trailing slash
-    console.log(
-      'Starting app with an UUID. Going to check if exists in database'
-    )
-    this.loadUUID(possibleUUID)
+    const checkForUUID = false
+
+    if (checkForUUID) {
+      const parts = window.location.href.split('/')
+      const possibleUUID = parts.pop() || parts.pop() // handle potential trailing slash
+      console.log(
+        'Starting app with an UUID. Going to check if exists in database'
+      )
+
+      this.loadUUID(possibleUUID)
+    }
 
     const compress = true
     if (compress) {
