@@ -33,3 +33,9 @@ if (process.env.NODE_ENV !== 'development') {
     ],
   })
 }
+
+// TODO: enable Google Analytics
+// import VueAnalytics from 'vue-analytics'
+// Vue.use(VueAnalytics, {
+//   id: 'UA-XXX-X',
+// })
