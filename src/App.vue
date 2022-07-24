@@ -1,6 +1,9 @@
 <template>
   <div id="app" :class="{ hide: !loaded, 'prevent-scrolling': fullscreen }">
-    <div class="stars">
+    <div
+      class="stars"
+      style="background: #000 url('/neptune/img/stars.png') repeat top center"
+    >
       <h1>lorem</h1>
       <!-- FIXME: think this is how Google Fonts works, so just requests font for headings when needed, so force request here so that when overlay shows up it is already loaded. fix later somehow more elantly. the images preload too -->
     </div>
