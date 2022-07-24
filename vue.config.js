@@ -2,6 +2,7 @@ module.exports = {
   pwa: {
     themeColor: '#F7BC3D',
   },
+  publicPath: process.env.NODE_ENV === 'production' ? '/neptune/' : '/',
   // need https (even if fake) to test record feature on mobile
   // devServer: {
   //     open: process.platform === 'darwin',
