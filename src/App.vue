@@ -431,7 +431,7 @@ export default {
     },
 
     initShake() {
-      new window.Shake({ threshold: 15, timeout: 1000 }).start()
+      // new window.Shake({ threshold: 15, timeout: 1000 }).start()
       window.addEventListener('shake', this.shaked, false)
     },
 
