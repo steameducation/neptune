@@ -232,10 +232,7 @@ export default {
     this.$root.$on('amplitude', (evt) => {
       if (evt.name === this.name) {
         this.amplitude = evt.amplitude
-        // if (this.appMode === 'piano')
-        //     store.sounds[this.note].volume(this.amplitude)
         if (this.appMode === 'nasa') {
-          // store.soundscapes[this.name].volume(this.amplitude)
           const v = store.soundscapes[this.name].volume()
           store.soundscapes[this.name].fade(v, this.amplitude, 1000)
         }
@@ -253,7 +250,6 @@ export default {
     Vue.nextTick(() => {
       this.setListeners()
     })
-    // this.initHammer()
   },
 
   methods: {
@@ -296,11 +292,7 @@ export default {
     initHammer() {
       const el = document.querySelector(`#planet-${this.name}`)
       var mc = new window.Hammer.Manager(el)
-      // mc.add(new window.Hammer.Tap({ event: 'doubletap', taps: 2 }))
-      // mc.add(new window.Hammer.Tap({ event: 'singletap' }))
       mc.add(new window.Hammer.Press({ time: 300 }))
-      // mc.get('doubletap').recognizeWith('singletap')
-      // mc.get('singletap').requireFailure('doubletap')
       mc.on('press pressup', (ev) => {
         if (this.appMode === 'piano' || this.appMode === 'nasa') {
           if (ev.type === 'press') {

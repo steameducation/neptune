@@ -108,9 +108,13 @@ export default {
     },
 
     setHighlight(note, bool) {
-      const key = this.$el.querySelector(`#${note}`)
-      if (bool) key.classList.add('active')
-      else key.classList.remove('active')
+      if (bool) {
+        console.log('bool on')
+        window.TweenLite.to(`#${note}`, 0.5, { fill: '#F8B763' })
+      } else {
+        console.log('bool off')
+        window.TweenLite.to(`#${note}`, 0.5, { fill: '#fff' })
+      }
     },
   },
 }

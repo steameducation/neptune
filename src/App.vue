@@ -339,8 +339,6 @@ export default {
         }
       })
 
-      console.log({ timestamps })
-
       // NOTE: doing this with timeout since Howler doesn't allow for scheduling!
       timestamps.forEach((ts) => {
         this.timeouts.push(
