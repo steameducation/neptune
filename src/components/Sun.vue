@@ -88,18 +88,6 @@ export default {
   },
 
   mounted() {
-    // const val = !this.playing
-    //     ? this.stdDeviationObj.max
-    //     : this.stdDeviationObj.min
-    // console.log({ val })
-    // window.TweenMax.to(this.stdDeviationObj, 0.5, {
-    //     val,
-    //     onUpdate: () => {
-    //         console.log('updating')
-    //     },
-    //     yoyo: true,
-    //     repeat: -1,
-    // })
     this.y = store.canvas.height / 2 - this.height / 2
   },
 

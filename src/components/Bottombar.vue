@@ -1,12 +1,5 @@
 <template>
   <div id="bottombar" class="grid">
-    <!-- <div id="btnMute" class="btnIcon" @click="toggleMute">
-            <FontAwesomeIcon
-                class="arrow icon"
-                :icon="muted ? 'volume-mute' : 'volume-up'"
-            ></FontAwesomeIcon>
-        </div> -->
-
     <div id="btnSequence" class="btnIcon" @click="toggleSequence">
       <FontAwesomeIcon
         class="arrow icon"
@@ -109,10 +102,6 @@
       :class="{ hide: isPwa }"
       @click="toggleFullscreen"
     >
-      <!-- <FontAwesomeIcon
-                :icon="fullscreen ? 'compress' : 'expand'"
-                class="icon"
-      ></FontAwesomeIcon>-->
       <Resize :expand="!fullscreen" />
     </div>
   </div>

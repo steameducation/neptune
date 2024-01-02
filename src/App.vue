@@ -31,7 +31,6 @@
       </svg>
     </div>
     <Bottombar ref="bottombar" @lock="lock" />
-    <!-- <ShareOverlay v-show="showShare" class="overlay stars" /> -->
     <InfoOverlay v-show="showInfo" class="overlay stars" />
   </div>
 </template>
@@ -434,7 +433,6 @@ export default {
     },
 
     initShake() {
-      // new window.Shake({ threshold: 15, timeout: 1000 }).start()
       window.addEventListener('shake', this.shaked, false)
     },
 

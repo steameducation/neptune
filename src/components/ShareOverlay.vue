@@ -7,26 +7,6 @@
       </div>
       <br />
 
-      <!-- <button
-            class="copyButton"
-            data-clipboard-target="#foo1"
-            data-clipboard-action="copy"
-        >
-            Copy Text
-        </button>
-
-        <div class="clipboard">
-            Copy link
-            <FontAwesomeIcon
-                icon="clipboard"
-                class="clipboardIcon"
-                data-clipboard-target="#foo1"
-                data-clipboard-action="copy"
-            ></FontAwesomeIcon>
-        </div> -->
-
-      <!-- <div id="foo1" data-clipboard-text="foobarbaconeggs">lorem</div> -->
-
       <div class="shareArea">
         <p>Share your NepTune composition!</p>
         <div class="shareButtons">
@@ -48,12 +28,6 @@
               data-show-count="false"
               >Tweet to @SteamSpace1</a
             >
-            <!--<div class="btnTwitter">
-                    <FontAwesomeIcon
-                        :icon="['fab', 'twitter']"
-                    ></FontAwesomeIcon
-                    >&nbsp;Twitter
-                </div> -->
           </div>
         </div>
       </div>
@@ -141,8 +115,6 @@ export default {
 
 #shareDiv {
   padding: 0 10px;
-  // margin-top: 10px !important;
-  // margin-bottom: 10px !important;
   margin: 10px 0 30px !important;
   background: white;
   border-radius: 20px;
@@ -163,7 +135,6 @@ export default {
   margin: 8px;
   align-self: center;
   justify-self: center;
-  // border: 1px solid red;
 }
 
 .btnFacebook:hover {

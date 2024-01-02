@@ -170,8 +170,6 @@ export function planetsToJson() {
   store.planets.forEach((planet) => {
     const { name, size, color, index } = planet
     const el = document.querySelector(`#planet-${name}`)
-    // const x = el.transform.baseVal.getItem(0).matrix.e - size
-    // const y = el.transform.baseVal.getItem(0).matrix.f - size
     const x = el.transform.baseVal.getItem(0).matrix.e
     const y = el.transform.baseVal.getItem(0).matrix.f
     ret.push({

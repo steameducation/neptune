@@ -45,14 +45,6 @@
           dur="0.8s"
           repeatCount="indefinite"
         />
-        <!-- <animate
-                    v-if="playing"
-                    attributeType="XML"
-                    attributeName="stroke-width"
-                    values="3;4"
-                    dur="0.8s"
-                    repeatCount="indefinite"
-                /> -->
       </circle>
 
       <text
@@ -71,11 +63,6 @@
         :planetName="name"
         :factPosition="factPosition"
       />
-
-      <!-- faster testing for dialog boxes -->
-      <!-- <template v-if="name === 'saturn'">
-        <Fact v-show="true" :fact="fact" :size="size" :planetName="name" />
-      </template> -->
     </g>
   </svg>
 </template>
@@ -139,24 +126,7 @@ export default {
       return store.recordings[this.name]
     },
 
-    // x() {
-    //     // TODO:
-    // },
-
-    // y() {
-    //     // TODO:
-    // },
-
-    // amplitude() {
-    //     // TODO:
-    // },
-
-    // playing() {
-    //     // TODO:
-    // },
-
     floodColor() {
-      // return `var(--active)`
       if (
         this.appMode === 'piano' ||
         this.appMode === 'nasa' ||
@@ -165,13 +135,6 @@ export default {
         if (!this.playing) return this.color
         else return 'var(--active)'
       }
-      // else if (this.appMode === 'record') {
-      //     if (this.holding) {
-      //         return 'red'
-      //     } else {
-      //         return 'blue'
-      //     }
-      // }
       return this.color
     },
 
@@ -190,10 +153,6 @@ export default {
     isRecording() {
       return this.holding && store.appMode === 'record'
     },
-
-    // hasRecording() {
-    //     return store.recordings[this.name] !== undefined
-    // },
 
     note() {
       console.log('planet', this.planet)
@@ -222,10 +181,6 @@ export default {
 
     stdDeviation() {
       return this.stdDeviationObj.val
-      // return 25
-      // else return 15
-      // if (!this.playing) return 5
-      // else return 15
     },
 
     fact() {
@@ -247,13 +202,6 @@ export default {
     },
 
     showFact() {
-      // console.log('showingFact', this.$children[0].boxY)
-      // no need to apply bounds if dialog box not out of frame
-      // if (this.showFact) {
-      //   setTimeout(() => {
-      //     store.planets.forEach((planet) => planet.draggable.applyBounds())
-      //   }, 10)
-      // }
       console.log('toggle show fact')
       this.$root.$emit('updatePlanetPosition')
     },
